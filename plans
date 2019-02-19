@@ -1,0 +1,34 @@
+a simple manager of investiments of mine
+
+structs:
+	List
+		Node start
+		int size
+	
+	Budget
+		char* name
+		Paper* start
+		int size
+		Paper* start
+
+	Node
+		struct node* next
+		Budget* budget
+
+	Paper
+		char* code
+		float initialValue
+		float finalValue
+		time_t brought
+		time_t selled
+		struct paper* next
+
+functions:
+	create List/Budget/Node/Paper
+	search Budget/Paper
+	getLast Paper
+	save Paper(on budget)/List(on a file)
+	delete Paper/budget
+	update Paper
+	append Paper
+	read List # on future
