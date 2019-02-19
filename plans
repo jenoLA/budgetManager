@@ -24,11 +24,13 @@ structs:
 		struct paper* next
 
 functions:
-	create List/Budget/Node/Paper
+	create List/Budget/Paper
 	search Budget/Paper
-	getLast Paper
 	save Paper(on budget)/List(on a file)
 	delete Paper/budget
 	update Paper
 	append Paper
 	read List # on future
+
+	main budget loop
+	main paper loop
