@@ -20,23 +20,30 @@ typedef struct
 	int size;
 } List;
 
-initList();
+List* initList()
+{
+	List* tempList = malloc(sizeof(List));
+	tempList->size = 0;
+	return tempList;
+}
 
-initBudget(char* name);
+void initBudget(char* name);
 
-appendBudget(List* list, Budget budget);
+void appendBudget(List* list, Budget budget);
 
-searchBudget(List* list, char* name);
+Budget* searchBudget(List* list, char* name);
 
-appendPaper(Budget budget, Paper paper);
+Paper* createPaper(Budget* budget, char* code, float initialValue);
 
-deleteBudget(List* list, char* name);
+void appendPaper(Budget budget, Paper paper);
 
-deletePaper(Budget budget, char* code);
+void deleteBudget(List* list, char* name);
 
-saveList(List* list);
+void deletePaper(Budget budget, char* code);
 
-readList(); //still thinking about how/where to read
+void saveList(List* list);
+
+void readList(); //still thinking about how/where to read
 
 
 
