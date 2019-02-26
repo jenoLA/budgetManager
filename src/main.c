@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "budget.h"
+#include "paper.h"
 
-void paperLoop(Budget budget);
 
 void budgetLoop(List* list)
 {

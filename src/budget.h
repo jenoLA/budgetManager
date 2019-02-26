@@ -1,6 +1,5 @@
 #include <stdlib.h>
-#include <stdio.h>
-#include "paper.h"
+
 
 typedef struct
 {
@@ -28,20 +27,14 @@ List* initList()
 	return tempList;
 }
 
-void initBudget(char* name);
+Budget* searchBudget(List* list, char* name);
 
 void appendBudget(List* list, Budget budget);
 
-Budget* searchBudget(List* list, char* name);
-
-Paper* createPaper(Budget* budget, char* code, float initialValue);
-
-void appendPaper(Budget budget, Paper paper);
-
 void deleteBudget(List* list, char* name);
 
-void deletePaper(Budget budget, char* code);
-
-void saveList(List* list);
+void initBudget(char* name);
 
 void readList(); //still thinking about how/where to read
+
+void saveList(List* list);
