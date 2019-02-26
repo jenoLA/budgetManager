@@ -8,6 +8,7 @@ typedef struct
 	char* name;
 	int size;
 } Budget;
+
 typedef struct node
 {
 	struct node* next;
@@ -44,6 +45,3 @@ void deletePaper(Budget budget, char* code);
 void saveList(List* list);
 
 void readList(); //still thinking about how/where to read
-
-
-
