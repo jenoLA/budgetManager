@@ -3,8 +3,10 @@
 #include "paper.h"
 
 
-void budgetLoop(List* list)
+int main()
 {
+	List* list = initList();
+
 	char name[20];
 	char option;
 
@@ -46,14 +48,6 @@ void budgetLoop(List* list)
 		//	paperLoop();
 	    }
 	}
-}
 
-int main()
-{
-	List* list = initList();
-	if (list->size == 0)
-		printf("sucess!!\n");
-
-	budgetLoop(list);
 	return 0;
 }
