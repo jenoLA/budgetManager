@@ -1,10 +1,10 @@
-a simple manager of investiments of mine
+My simple manager of investiments
 
 structs:
 	List
 		Node start
 		int size
-	
+
 	Budget
 		char* name
 		Paper* start

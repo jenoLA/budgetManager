@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <ctype.h>
 #include "budget.h"
 #include "paper.h"
 
@@ -7,7 +8,7 @@ int main()
 {
 	List* list = initList();
 
-	char name[20];
+	// char name[64];
 	char option;
 
 	while (1) {
@@ -17,15 +18,9 @@ int main()
 
 		scanf(" %c", &option);
 
-		if (option >= 65 && option <= 90)
-		{
-			option += 32;
-		}
-		if (option == 'q')
-		{
-			break;
-		}
-		else if (option == 'l')
+		option = tolower(option);
+
+		if (option == 'l')
 		{
 			// printBudgets(list);
 		}
@@ -47,6 +42,11 @@ int main()
 		{
 			// paperLoop();
 		}
+		if (option == 'q')
+		{
+			break;
+		}
+
 	}
 
 	return 0;
