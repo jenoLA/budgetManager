@@ -1,7 +1,7 @@
 #include <stdio.h>
-#include <stdbool.h>
 #include <ctype.h>
-#include "../include/budget.h"
+#include <stdbool.h>
+#include "budget.c"
 
 
 int main()
@@ -13,7 +13,7 @@ int main()
 
 	while (true) {
 
-		printf("by now we have the following functionalities\n");
+		printf("By now we have the following functionalities\n");
 		printf("Q)uit, L)ist budgets, N)ew budget*,  E)nter budget,  D)elete budget\n");
 
 		scanf(" %c", &option);
@@ -26,17 +26,17 @@ int main()
 		}
 		else if (option == 'n')
 		{
-			printf("name to the new budget of twenty caracters or least:\n");
+			printf("Type the name to the new budget (max 20 characters):\n");
 			scanf(" %s", &name);
-			newBudget(list, name);
-			printf("done!\n\n");
+			insertBudget(list, newBudget(name));
+			printf("Done!\n\n");
 		}
 		else if (option == 'd')
 		{
-			printf("name of the budget to delete:\n");
+			printf("Type the name of the budget to delete:\n");
 			scanf(" %s", &name);
 			deleteBudget(list, name);
-			printf("done!\n\n");
+			printf("Done!\n\n");
 		}
 		else if (option == 'e')
 		{
@@ -46,7 +46,6 @@ int main()
 		{
 			break;
 		}
-
 	}
 	return 0;
 }

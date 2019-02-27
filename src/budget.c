@@ -3,36 +3,35 @@
 #include <string.h>
 #include "../include/budget.h"
 
-
 List* initList()
 {
-	List* tempList = malloc(sizeof(List));
-	return tempList;
+	List* newList = malloc(sizeof(List));
+	return newList;
 }
 
-void appendBudget(List* list, Budget* budget)
+void insertBudget(List* list, Budget* budget)
 {
-	Budget* lBudget = list->start;
-	while (lBudget->next != NULL)
+	if (list->start != NULL)
 	{
-		lBudget = lBudget->next;
-	}
-	lBudget->next = budget;
-	list->size++;
-}
+		Budget* lBudget = list->start;
+		while (lBudget->next != NULL)
+		{
+			lBudget = lBudget->next;
+		}
 
-void newBudget(List* list, char name[20])
-{
-	Budget* temp = malloc(sizeof(Budget));
-	strcpy(temp->name, name);
-
-	if (list->size == 0)
-	{
-		list->start = temp;
+		lBudget->next = budget;
 		list->size++;
 		return;
 	}
-	appendBudget(list, temp);
+	list->start = budget;
+	list->size++;
+}
+
+Budget* newBudget(char name[20])
+{
+	Budget* temp = malloc(sizeof(Budget));
+	strcpy(temp->name, name);
+	return temp;
 }
 
 Budget* searchBudget(Budget* current, char* name)
@@ -62,7 +61,9 @@ void deleteBudget(List* list, char* name)
 	{
 		Budget* oldHead = list->start;
 		list->start = erase->next;
+
 		free(oldHead);
+
 		list->size--;
 		return;
 	}
@@ -74,9 +75,9 @@ void deleteBudget(List* list, char* name)
 		{
 			before = before->next;
 		}
-		Budget* budget = erase;
-		budget = budget->next;
+		Budget* budget = erase->next;
 		before->next = budget;
+
 		free(erase);
 		list->size--;
 		return;
