@@ -31,10 +31,10 @@ int main()
 		}
 		else if (option == 'd')
 		{
-			// printf("name of the budget to delete:\n");
-			// scanf(" %s", &name);
-			// deleteBudget(list, name);
-			// printf("done!\n\n");
+			printf("name of the budget to delete:\n");
+			scanf(" %s", &name);
+			deleteBudget(list, name);
+			printf("done!\n\n");
 		}
 		else if (option == 'e')
 		{

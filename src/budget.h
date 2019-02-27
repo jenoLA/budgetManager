@@ -31,6 +31,17 @@ List* initList()
 	return tempList;
 }
 
+void appendBudget(List* list, Budget_t* budget)
+{
+	Budget_t* lBudget = list->start;
+	while(lBudget->next != NULL)
+	{
+		lBudget = lBudget->next;
+	}
+	lBudget->next = budget;
+	list->size++;	
+}
+
 void newBudget(List* list, char name[20])
 {
 	Budget_t* temp = malloc(sizeof(Budget_t));
@@ -44,25 +55,60 @@ void newBudget(List* list, char name[20])
 		list->size++;
 		return;
 	}
-	Budget_t* budget = list->start;
-	while(budget->next != NULL)
-	{
-		budget = budget->next;
-	}
-	budget->next = temp;
-	list->size++;
+	appendBudget(list, temp);
 }
-Budget_t* searchBudget(List* list, char* name);
 
-void appendBudget(List* list, Budget_t* budget);
+Budget_t* searchBudget(Budget_t* current, char* name)
+{
+	while(current != NULL) //seria nulo mesmo o current?
+	{
+		if (strcmp(current->name, name) == 0)
+		{
+			return current;
+		}
+		current = current->next;
+	}
+	return NULL;
+}
 
-void deleteBudget(List* list, char* name);
+void deleteBudget(List* list, char* name)
+{
+	Budget_t* erase = searchBudget(list->start, name);
+	if (erase == NULL)
+	{
+		printf("nao localizado nenhum budget com este nome[%s]\n", name);
+		return;
+	}
+	if (list->start == erase)
+	{
+		Budget_t* oldHead = list->start;
+		list->start = erase->next;
+		free(oldHead);
+		list->size--;
+		return;
+	}
 
-void initBudget(char* name);
+	if (erase->next != NULL)
+	{
+		Budget_t* before = list->start;
+		while(before->next != erase)
+		{
+			before = before->next;
+		}
+		Budget_t* budget = erase;
+		budget = budget->next;
+		before->next = budget;
+		free(erase);
+		list->size--;
+		return;
+	}
+	free(erase);
+	list->size--;
+}
 
-void readList();
+void readList(char* path);
 
-void saveList(List* list);
+void saveList(List* list, char* path);
 
 void printBudgets(Budget_t* current)
 {
