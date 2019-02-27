@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <ctype.h>
-#include "budget.h"
+#include "../include/budget.h"
+
 
 int main()
 {

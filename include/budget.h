@@ -1,20 +1,23 @@
 #ifndef _budget_h_
 #define _budget_h_
 
-typedef struct
+#include "../include/paper.h"
+
+
+typedef struct budget_t
 {
 	Paper* start;
 	char* name;
 	int size;
 } Budget;
 
-typedef struct node
+typedef struct node_t
 {
 	struct node* next;
 	Budget budget;
 } Node;
 
-typedef struct
+typedef struct list_t
 {
 	Node* start;
 	int size;

@@ -1,5 +1,8 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "../include/budget.h"
+
 
 List* initList()
 {
@@ -7,9 +10,9 @@ List* initList()
 	return tempList;
 }
 
-void appendBudget(List* list, Budget_t* budget)
+void appendBudget(List* list, Budget* budget)
 {
-	Budget_t* lBudget = list->start;
+	Budget* lBudget = list->start;
 	while (lBudget->next != NULL)
 	{
 		lBudget = lBudget->next;
@@ -20,7 +23,7 @@ void appendBudget(List* list, Budget_t* budget)
 
 void newBudget(List* list, char name[20])
 {
-	Budget_t* temp = malloc(sizeof(Budget_t));
+	Budget* temp = malloc(sizeof(Budget));
 	strcpy(temp->name, name);
 
 	if (list->size == 0)
@@ -32,7 +35,7 @@ void newBudget(List* list, char name[20])
 	appendBudget(list, temp);
 }
 
-Budget_t* searchBudget(Budget_t* current, char* name)
+Budget* searchBudget(Budget* current, char* name)
 {
 	while (current != NULL)
 	{
@@ -47,7 +50,7 @@ Budget_t* searchBudget(Budget_t* current, char* name)
 
 void deleteBudget(List* list, char* name)
 {
-	Budget_t* erase = searchBudget(list->start, name);
+	Budget* erase = searchBudget(list->start, name);
 
 	if (erase == NULL)
 	{
@@ -57,7 +60,7 @@ void deleteBudget(List* list, char* name)
 
 	if (list->start == erase)
 	{
-		Budget_t* oldHead = list->start;
+		Budget* oldHead = list->start;
 		list->start = erase->next;
 		free(oldHead);
 		list->size--;
@@ -66,12 +69,12 @@ void deleteBudget(List* list, char* name)
 
 	if (erase->next != NULL)
 	{
-		Budget_t* before = list->start;
+		Budget* before = list->start;
 		while (before->next != erase)
 		{
 			before = before->next;
 		}
-		Budget_t* budget = erase;
+		Budget* budget = erase;
 		budget = budget->next;
 		before->next = budget;
 		free(erase);
@@ -82,7 +85,7 @@ void deleteBudget(List* list, char* name)
 	list->size--;
 }
 
-void printBudgets(Budget_t* current)
+void printBudgets(Budget* current)
 {
 	while (current != NULL)
 	{
