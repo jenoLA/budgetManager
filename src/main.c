@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdbool.h>
 #include <ctype.h>
 #include "budget.h"
 
@@ -9,7 +10,7 @@ int main()
 	char name[20];
 	char option;
 
-	while (1) {
+	while (true) {
 
 		printf("by now we have the following functionalities\n");
 		printf("Q)uit, L)ist budgets, N)ew budget*,  E)nter budget,  D)elete budget\n");
@@ -46,6 +47,5 @@ int main()
 		}
 
 	}
-
 	return 0;
 }

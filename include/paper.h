@@ -1,3 +1,5 @@
+#ifndef _paper_h_
+#define _paper_h_
 
 typedef struct paper
 {
@@ -19,3 +21,5 @@ void deletePaper(Budget budget, char* code);
 void paperLoop(Budget budget);
 
 void updatePaper(Paper paper, float finalValue, int totalTime);
+
+#endif
