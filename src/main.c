@@ -28,7 +28,6 @@ int main()
 			scanf(" %s", &name);
 			newBudget(list, name);
 			printf("done!\n\n");
-			printf("%s start\n", list->start);
 		}
 		else if (option == 'd')
 		{

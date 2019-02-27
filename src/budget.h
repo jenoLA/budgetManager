@@ -13,7 +13,7 @@ typedef struct paper
 typedef struct budget
 {
 	Paper_t* start;
-	char* name;
+	char name[20];
 	int size;
 	struct budget* next;
 } Budget_t;
@@ -31,8 +31,27 @@ List* initList()
 	return tempList;
 }
 
-void newBudget(List* list, char name[20]);
-
+void newBudget(List* list, char name[20])
+{
+	Budget_t* temp = malloc(sizeof(Budget_t));
+	// temp->name = name;
+	strcpy(temp->name, name);
+	temp->size = 0;
+	temp->next = NULL;
+	if(list->size == 0)
+	{
+		list->start = temp;
+		list->size++;
+		return;
+	}
+	Budget_t* budget = list->start;
+	while(budget->next != NULL)
+	{
+		budget = budget->next;
+	}
+	budget->next = temp;
+	list->size++;
+}
 Budget_t* searchBudget(List* list, char* name);
 
 void appendBudget(List* list, Budget_t* budget);
@@ -41,7 +60,7 @@ void deleteBudget(List* list, char* name);
 
 void initBudget(char* name);
 
-void readList(); //still thinking about how/where to read
+void readList();
 
 void saveList(List* list);
 
