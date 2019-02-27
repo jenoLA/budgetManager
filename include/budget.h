@@ -5,7 +5,7 @@
 typedef struct budget_t
 {
 	Paper* start;
-	char* name;
+	char name[20];
 	int size;
 	struct budget_t* next;
 } Budget;
@@ -24,7 +24,9 @@ void insertBudget(List* list, Budget* budget);
 
 void deleteBudget(List* list, char* name);
 
-void initBudget(char* name);
+Budget* initBudget(char* name);
+
+void printBudgets(Budget* current);
 
 void readList();
 

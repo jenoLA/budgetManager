@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <stdbool.h>
-#include "budget.c"
+#include "../include/budget.h"
 
 
 int main()
@@ -28,7 +28,7 @@ int main()
 		{
 			printf("Type the name to the new budget (max 20 characters):\n");
 			scanf(" %s", &name);
-			insertBudget(list, newBudget(name));
+			insertBudget(list, initBudget(name));
 			printf("Done!\n\n");
 		}
 		else if (option == 'd')

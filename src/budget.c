@@ -3,6 +3,7 @@
 #include <string.h>
 #include "../include/budget.h"
 
+
 List* initList()
 {
 	List* newList = malloc(sizeof(List));
@@ -11,7 +12,7 @@ List* initList()
 
 void insertBudget(List* list, Budget* budget)
 {
-	if (list->start != NULL)
+	if (list->start > 0)
 	{
 		Budget* lBudget = list->start;
 		while (lBudget->next != NULL)
@@ -27,10 +28,11 @@ void insertBudget(List* list, Budget* budget)
 	list->size++;
 }
 
-Budget* newBudget(char name[20])
+Budget* initBudget(char name[20])
 {
 	Budget* temp = malloc(sizeof(Budget));
 	strcpy(temp->name, name);
+	printf(" namezin: %s\n", temp->name);
 	return temp;
 }
 
