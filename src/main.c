@@ -1,14 +1,12 @@
 #include <stdio.h>
 #include <ctype.h>
 #include "budget.h"
-#include "paper.h"
-
 
 int main()
 {
 	List* list = initList();
 
-	// char name[64];
+	char name[20];
 	char option;
 
 	while (1) {
@@ -22,14 +20,15 @@ int main()
 
 		if (option == 'l')
 		{
-			// printBudgets(list);
+			printBudgets(list->start);
 		}
 		else if (option == 'n')
 		{
-			// printf("name to the new budget of twenty caracters or least:\n");
-			// scanf(" %s", &name);
-			// newBudget(list, name);
-			// printf("done!\n\n");
+			printf("name to the new budget of twenty caracters or least:\n");
+			scanf(" %s", &name);
+			newBudget(list, name);
+			printf("done!\n\n");
+			printf("%s start\n", list->start);
 		}
 		else if (option == 'd')
 		{

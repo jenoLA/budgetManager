@@ -1,22 +1,26 @@
 #include <stdlib.h>
+#include <string.h>
 
-
-typedef struct
+typedef struct paper
 {
-	Paper* start;
+	char* code;
+	float initalValue;
+	float finalValue;
+	int totalTime;
+	struct paper* next;
+} Paper_t;
+
+typedef struct budget
+{
+	Paper_t* start;
 	char* name;
 	int size;
-} Budget;
-
-typedef struct node
-{
-	struct node* next;
-	Budget budget;
-} Node;
+	struct budget* next;
+} Budget_t;
 
 typedef struct
 {
-	Node* start;
+	Budget_t* start;
 	int size;
 } List;
 
@@ -27,9 +31,11 @@ List* initList()
 	return tempList;
 }
 
-Budget* searchBudget(List* list, char* name);
+void newBudget(List* list, char name[20]);
 
-void appendBudget(List* list, Budget budget);
+Budget_t* searchBudget(List* list, char* name);
+
+void appendBudget(List* list, Budget_t* budget);
 
 void deleteBudget(List* list, char* name);
 
@@ -38,3 +44,12 @@ void initBudget(char* name);
 void readList(); //still thinking about how/where to read
 
 void saveList(List* list);
+
+void printBudgets(Budget_t* current)
+{
+	while(current != NULL)
+	{
+		printf("budget name: %s\n", current->name);
+		current = current->next;
+	}
+}
