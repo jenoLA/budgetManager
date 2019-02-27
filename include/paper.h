@@ -1,7 +1,7 @@
 #ifndef _paper_h_
 #define _paper_h_
 
-typedef struct paper
+typedef struct paper_t
 {
 	char* code;
 	float initalValue;

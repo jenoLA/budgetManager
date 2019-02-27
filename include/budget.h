@@ -1,6 +1,8 @@
 #ifndef _budget_h_
 #define _budget_h_
 
+#include "../include/paper.h"
+
 typedef struct
 {
 	Paper* start;
@@ -8,9 +10,9 @@ typedef struct
 	int size;
 } Budget;
 
-typedef struct node
+typedef struct node_t
 {
-	struct node* next;
+	struct node_t* next;
 	Budget budget;
 } Node;
 
