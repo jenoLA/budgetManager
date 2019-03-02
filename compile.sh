@@ -1,2 +1,2 @@
 # Using Tiny C Compiler
-tcc src/* -o budget-manager
+gcc src/* -o budget-manager
