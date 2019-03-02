@@ -12,34 +12,34 @@ List* initList()
 }
 
 
-Budget* initBudget(char name[20])
+Budget* initBudget(char* name)
 {
 	Budget* newBudget = malloc(sizeof(Budget));
 	strcpy(newBudget->name, name);
-	printf(" namezin: %s\n", newBudget->name);
+	printf("Initialized budget \"%s\".\n", newBudget->name);
 	return newBudget;
 }
 
 
 void addBudget(List* list, char* name)
 {
-	Budget* budget = initBudget(name);
+	Budget* newBudget = initBudget(name);
 	if (list->start > 0)
 	{
-		Budget* lBudget = list->start;
-		while (lBudget->next != NULL)
+		newBudget* lastBudget = list->start;
+		while (lastBudget->next != NULL)
 		{
-			lBudget = lBudget->next;
+			lastBudget = lastBudget->next;
 		}
 
-		lBudget->next = budget;
+		lastBudget->next = newBudget;
 		list->size++;
 		return;
 	}
-	list->start = budget;
+	list->start = newBudget;
 	list->size++;
 
-	printf("Budget \"%s\" created!\n", name);
+	printf("Budget \"%s\" created.\n", name);
 }
 
 
@@ -59,18 +59,18 @@ Budget* searchBudget(Budget* current, char* name)
 
 void deleteBudget(List* list, char* name)
 {
-	Budget* erase = searchBudget(list->start, name);
+	Budget* eraseBudget = searchBudget(list->start, name);
 
-	if (erase == NULL)
+	if (eraseBudget == NULL)
 	{
-		printf("Não foi localizado nenhum budget com o nome \"%s\"\n", name);
+		printf("Budget \"%s\" not found.\n", name);
 		return;
 	}
 
-	if (list->start == erase)
+	if (list->start == eraseBudget)
 	{
 		Budget* oldHead = list->start;
-		list->start = erase->next;
+		list->start = eraseBudget->next;
 
 		free(oldHead);
 
@@ -78,24 +78,24 @@ void deleteBudget(List* list, char* name)
 		return;
 	}
 
-	if (erase->next != NULL)
+	if (eraseBudget->next != NULL)
 	{
 		Budget* before = list->start;
-		while (before->next != erase)
+		while (before->next != eraseBudget)
 		{
 			before = before->next;
 		}
-		Budget* budget = erase->next;
+		Budget* budget = eraseBudget->next;
 		before->next = budget;
 
-		free(erase);
+		free(eraseBudget);
 		list->size--;
 		return;
 	}
-	free(erase);
+	free(eraseBudget);
 	list->size--;
 
-	printf("Budget \"%s\" deleted!\n", name);
+	printf("Budget \"%s\" deleted.\n", name);
 }
 
 
