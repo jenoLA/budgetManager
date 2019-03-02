@@ -1,21 +1,6 @@
 #ifndef BUDGET_H
 #define BUDGET_H
-#include "../include/paper.h"
 
-
-typedef struct budget_t
-{
-	Paper* start;
-	char name[20];
-	int size;
-	struct budget_t* next;
-} Budget;
-
-typedef struct
-{
-	Budget* start;
-	int size;
-} List;
 
 List* initList();
 
