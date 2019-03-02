@@ -1,5 +1,6 @@
-#ifndef _paper_h_
-#define _paper_h_
+#ifndef PAPER_H
+#define PAPER_H
+
 
 typedef struct paper_t
 {

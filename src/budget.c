@@ -4,14 +4,26 @@
 #include "../include/budget.h"
 
 
+
 List* initList()
 {
 	List* newList = malloc(sizeof(List));
 	return newList;
 }
 
-void insertBudget(List* list, Budget* budget)
+
+Budget* initBudget(char name[20])
 {
+	Budget* newBudget = malloc(sizeof(Budget));
+	strcpy(newBudget->name, name);
+	printf(" namezin: %s\n", newBudget->name);
+	return newBudget;
+}
+
+
+void addBudget(List* list, char* name)
+{
+	Budget* budget = initBudget(name);
 	if (list->start > 0)
 	{
 		Budget* lBudget = list->start;
@@ -26,15 +38,10 @@ void insertBudget(List* list, Budget* budget)
 	}
 	list->start = budget;
 	list->size++;
+
+	printf("Budget \"%s\" created!\n", name);
 }
 
-Budget* initBudget(char name[20])
-{
-	Budget* temp = malloc(sizeof(Budget));
-	strcpy(temp->name, name);
-	printf(" namezin: %s\n", temp->name);
-	return temp;
-}
 
 Budget* searchBudget(Budget* current, char* name)
 {
@@ -48,6 +55,7 @@ Budget* searchBudget(Budget* current, char* name)
 	}
 	return NULL;
 }
+
 
 void deleteBudget(List* list, char* name)
 {
@@ -86,21 +94,27 @@ void deleteBudget(List* list, char* name)
 	}
 	free(erase);
 	list->size--;
+
+	printf("Budget \"%s\" deleted!\n", name);
 }
 
-void printBudgets(Budget* current)
+
+void printBudgets(List* list)
 {
-	while (current != NULL)
+	Budget* current = list->start;
+	for (int i = 1 ; current != NULL ; i++)
 	{
-		printf("budget name: %s\n", current->name);
+		printf("budget %d: %s\n", i, current->name);
 		current = current->next;
 	}
 }
+
 
 // void readList(char* path)
 // {
 
 // }
+
 
 // void saveList(List* list, char* path)
 // {

@@ -1,6 +1,7 @@
-#ifndef _budget_h_
-#define _budget_h_
+#ifndef BUDGET_H
+#define BUDGET_H
 #include "../include/paper.h"
+
 
 typedef struct budget_t
 {
@@ -20,7 +21,7 @@ List* initList();
 
 Budget* searchBudget(Budget* current, char* name);
 
-void insertBudget(List* list, Budget* budget);
+void addBudget(List* list, Budget* budget);
 
 void deleteBudget(List* list, char* name);
 
