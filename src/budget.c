@@ -61,24 +61,22 @@ void deleteBudget(List* list, char* name)
 {
 	Budget* eraseBudget = searchBudget(list->start, name);
 
+	// If it was not found
 	if (eraseBudget == NULL)
 	{
 		printf("Budget \"%s\" not found.\n", name);
-		return;
+		return; // Don't erase, quit
 	}
 
-	if (list->start == eraseBudget)
+	// If it is the first budget
+	else if (eraseBudget == list->start)
 	{
-		Budget* oldHead = list->start;
 		list->start = eraseBudget->next;
-
 		free(oldHead);
-
-		list->size--;
-		return;
 	}
 
-	if (eraseBudget->next != NULL)
+	// If it is between first and last budgets
+	else if (eraseBudget->next != NULL)
 	{
 		Budget* before = list->start;
 		while (before->next != eraseBudget)
@@ -89,12 +87,15 @@ void deleteBudget(List* list, char* name)
 		before->next = budget;
 
 		free(eraseBudget);
-		list->size--;
-		return;
 	}
-	free(eraseBudget);
-	list->size--;
 
+	// If it is the final budget
+	else
+	{
+		free(eraseBudget);
+	}
+
+	list->size--;
 	printf("Budget \"%s\" deleted.\n", name);
 }
 
