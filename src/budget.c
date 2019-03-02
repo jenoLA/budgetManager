@@ -70,31 +70,24 @@ void deleteBudget(List* list, char* name)
 
 	// If it is the first budget
 	else if (eraseBudget == list->start)
-	{
 		list->start = eraseBudget->next;
-		free(oldHead);
-	}
 
 	// If it is between first and last budgets
 	else if (eraseBudget->next != NULL)
 	{
 		Budget* before = list->start;
+
+		// Iterate to get the before budget
 		while (before->next != eraseBudget)
-		{
 			before = before->next;
-		}
-		Budget* budget = eraseBudget->next;
-		before->next = budget;
 
-		free(eraseBudget);
+		// Skip eraseBudget
+		before->next = before->next->next;
+		// before->next = eraseBudget->next;
 	}
 
-	// If it is the final budget
-	else
-	{
-		free(eraseBudget);
-	}
 
+	free(eraseBudget);
 	list->size--;
 	printf("Budget \"%s\" deleted.\n", name);
 }
