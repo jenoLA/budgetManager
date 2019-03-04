@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <stdbool.h>
+#include "../include/struct.h"
 #include "../include/budget.h"
 
 
@@ -35,7 +36,7 @@ int main()
 			deleteBudget(list, name);
 		}
 		else if (option == 'l')
-			printBudgets(list);
+			printBudgets(list->start);
 
 		else if (option == 'q')
 			break;

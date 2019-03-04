@@ -26,7 +26,7 @@ void addBudget(List* list, char* name)
 	Budget* newBudget = initBudget(name);
 	if (list->start > 0)
 	{
-		newBudget* lastBudget = list->start;
+		Budget* lastBudget = list->start;
 		while (lastBudget->next != NULL)
 		{
 			lastBudget = lastBudget->next;
@@ -93,9 +93,8 @@ void deleteBudget(List* list, char* name)
 }
 
 
-void printBudgets(List* list)
+void printBudgets(Budget* current)
 {
-	Budget* current = list->start;
 	for (int i = 1 ; current != NULL ; i++)
 	{
 		printf("budget %d: %s\n", i, current->name);

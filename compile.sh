@@ -3,3 +3,6 @@
 
 # Using Gnu Compiler Collection
 gcc src/* -o budget-manager
+
+# Using Musl wrapper to GCC
+#musl-gcc src/* -o budget-manager

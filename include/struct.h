@@ -1,20 +1,6 @@
-#ifndef PAPER_H
-#define PAPER_H
+#ifndef STRUCT_H
+#define STRUCT_H
 
-
-typedef struct
-{
-	Budget* start;
-	int size;
-} List;
-
-typedef struct budget_t
-{
-	Paper* start;
-	char name[20];
-	int size;
-	struct budget_t* next;
-} Budget;
 
 typedef struct paper_t
 {
@@ -25,6 +11,19 @@ typedef struct paper_t
 	struct paper_t* next;
 } Paper;
 
+typedef struct budget_t
+{
+	Paper* start;
+	char name[20];
+	int size;
+	struct budget_t* next;
+} Budget;
+
+typedef struct
+{
+	Budget* start;
+	int size;
+} List;
 
 
 #endif
