@@ -74,7 +74,14 @@ int main()
 					printf("code of the paper to update: \n");
 					scanf(" %s", &name);
 					Paper* paper = searchPaper(budget->start, name);
-					updatePaper(paper);
+					if (paper)
+					{
+						updatePaper(paper);
+					}
+					else
+					{
+						printf("none paper found with this[%s] code\n", name);
+					}
 				}
 				
 				else if(option == 's')

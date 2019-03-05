@@ -73,7 +73,7 @@ void listPapers(Paper* current)
 	while(current != NULL)
 	{
 		printf("Paper Code: %s\n", current->code);
-		printf("    Initial value: %0.2f in reals\n", current->initialValue);
+		printf("    Initial value: %0.2f reals\n", current->initialValue);
 		printf("    Quantity: %i\n", current->quantity);
 		if (current->isSelled)
 		{
@@ -86,7 +86,11 @@ void listPapers(Paper* current)
 }
 
 // data required within
-void updatePaper()
+void updatePaper(Paper* paper)
 {
-
+	float finalValue;
+	printf("\nfinal value of the paper: \n");
+	scanf("%f", &finalValue);
+	paper->finalValue = finalValue;
+	paper->isSelled = 1;
 }
