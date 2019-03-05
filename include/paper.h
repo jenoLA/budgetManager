@@ -1,17 +1,23 @@
 #ifndef PAPER_H
 #define PAPER_H
+#include "paper.h"
 
+// user will be asked for the required data 
+Paper* createPaper();
 
-// Paper* createPaper(Budget* budget, char* code, float initialValue);
+// requesting char code[6] for better integration with the system
+Paper* searchPaper(Paper* current, char code[6]);
 
-// Paper* searchpaper(char* code);
+// puts on the last position
+void addPaper(Budget* budget, Paper* paper);
 
-// void appendPaper(Budget* budget, Paper* paper);
+void deletePaper(Budget* budget, char code[6]);
 
-// void deletePaper(Budget* budget, char* code);
+// print all the info about the papers
+void listPapers(Paper* current);
 
-// void paperLoop(Budget* budget);
+// data required within
+void updatePaper();
 
-// void updatePaper(Paper* paper, float finalValue, int totalTime);
 
 #endif
