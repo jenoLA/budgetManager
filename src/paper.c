@@ -70,7 +70,19 @@ void deletePaper(Budget* budget, char code[6])
 // print all the info about the papers
 void listPapers(Paper* current)
 {
-
+	while(current != NULL)
+	{
+		printf("Paper Code: %s\n", current->code);
+		printf("    Initial value: %0.2f in reals\n", current->initialValue);
+		printf("    Quantity: %i\n", current->quantity);
+		if (current->isSelled)
+		{
+			printf("    Final value: %0.2f reals\n", current->finalValue);
+			printf("    You have earned: %0.2f reals\n", current->finalValue - current->initialValue);
+		}
+		printf("\n");
+		current = current->next;
+	}
 }
 
 // data required within
