@@ -31,9 +31,17 @@ Paper* createPaper()
 }
 
 // requesting char code[6] for better integration with the system
-Paper* searchPaper(Paper* current, char code[6])
+Paper* searchPaper(Paper* current, char* string)
 {
-	
+	while (current != NULL)
+	{
+		if (strcmp(current->code, string) == 0)
+		{
+			return current;
+		}
+		current = current->next;
+	}
+	return NULL;
 }
 
 // puts on the last position

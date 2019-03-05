@@ -6,7 +6,7 @@
 Paper* createPaper();
 
 // requesting char code[6] for better integration with the system
-Paper* searchPaper(Paper* current, char code[6]);
+Paper* searchPaper(Paper* current, char* string);
 
 // puts on the last position
 void addPaper(Budget* budget, Paper* paper);
