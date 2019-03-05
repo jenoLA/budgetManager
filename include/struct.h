@@ -5,9 +5,10 @@
 typedef struct paper_t
 {
 	char* code;
-	float initalValue;
+	float initialValue;
 	float finalValue;
-	int totalTime; // from beginning till end
+	int quantity;
+	int isSelled;
 	struct paper_t* next;
 } Paper;
 
@@ -24,6 +25,10 @@ typedef struct
 	Budget* start;
 	int size;
 } List;
+
+void readList();
+
+void saveList(List* list);
 
 
 #endif

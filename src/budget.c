@@ -101,15 +101,3 @@ void printBudgets(Budget* current)
 		current = current->next;
 	}
 }
-
-
-// void readList(char* path)
-// {
-
-// }
-
-
-// void saveList(List* list, char* path)
-// {
-
-// }

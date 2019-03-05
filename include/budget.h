@@ -14,8 +14,5 @@ Budget* initBudget(char* name);
 
 void printBudgets(Budget* current);
 
-void readList();
-
-void saveList(List* list);
 
 #endif
