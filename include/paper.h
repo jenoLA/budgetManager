@@ -1,6 +1,6 @@
 #ifndef PAPER_H
 #define PAPER_H
-#include "paper.h"
+#include "struct.h"
 
 // user will be asked for the required data 
 Paper* createPaper();

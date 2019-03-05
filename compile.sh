@@ -2,7 +2,7 @@
 #tcc src/* -o budget-manager
 
 # Using Gnu Compiler Collection
-gcc src/* -o budget-manager
+#gcc src/* -o budget-manager
 
 # Using Musl wrapper to GCC
-#musl-gcc src/* -o budget-manager
+musl-gcc src/* -o budget-manager
