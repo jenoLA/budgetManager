@@ -6,15 +6,9 @@
 Paper* createPaper()
 {
 	Paper* temp = malloc(sizeof(Paper));
-	temp->isSelled = 0;
 	char code[6];
 	printf("name of your new stock: \n");
 	scanf(" %s", &code);
-	// if (strlen(code) > 5)
-	// {
-	// 	printf("invalid stock code, it is allowed just 6 or less characters\n");
-	// 	return NULL;
-	// }
 	strcpy(temp->code, code);
 
 	float initialValue;
@@ -27,6 +21,7 @@ Paper* createPaper()
 	scanf(" %i", &quantity);
 	temp->quantity = quantity;
 	
+	temp->isSelled = 0;
 	return temp;
 }
 
@@ -47,9 +42,9 @@ Paper* searchPaper(Paper* current, char* string)
 // puts on the last position
 void addPaper(Budget* budget, Paper* paper)
 {
-	Paper* current = budget->start;
 	if (budget->size > 0)
 	{
+		Paper* current = budget->start;
 		while(current->next != NULL)
 		{
 			current = current->next;
@@ -62,9 +57,46 @@ void addPaper(Budget* budget, Paper* paper)
 	budget->size++;
 }
 
-void deletePaper(Budget* budget, char code[6])
+void deletePaper(Budget* budget)
 {
+	char code[6];
+	printf("name of the paper to delete: \n");
+	scanf(" %s", &code);
+	Paper* erase = searchPaper(budget->start, code);
 
+	if (erase == NULL)
+	{
+		printf("not found any paper with this[%s] code\n", code);
+		return;
+	}
+
+	if (budget->start == erase)
+	{
+		Paper* oldHead = budget->start;
+		budget->start = erase->next;
+
+		free(oldHead);
+
+		budget->size--;
+		return;
+	}
+
+	if (erase->next != NULL)
+	{
+		Paper* before = budget->start;
+		while (before->next != erase)
+		{
+			before = before->next;
+		}
+		Paper* nextPaper = erase->next;
+		before->next = nextPaper;
+
+		free(erase);
+		budget->size--;
+		return;
+	}
+	free(erase);
+	budget->size--;
 }
 
 // print all the info about the papers

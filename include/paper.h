@@ -11,13 +11,13 @@ Paper* searchPaper(Paper* current, char* string);
 // puts on the last position
 void addPaper(Budget* budget, Paper* paper);
 
-void deletePaper(Budget* budget, char code[6]);
+void deletePaper(Budget* budget);
 
 // print all the info about the papers
 void listPapers(Paper* current);
 
 // data required within
-void updatePaper();
+void updatePaper(Paper* paper);
 
 
 #endif

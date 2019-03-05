@@ -4,7 +4,7 @@
 
 typedef struct paper_t
 {
-	char* code;
+	char code[6];
 	float initialValue;
 	float finalValue;
 	int quantity;

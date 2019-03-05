@@ -91,7 +91,7 @@ int main()
 				
 				else if(option == 'd')
 				{
-					//delete here
+					deletePaper(budget);
 				}
 			}
 		}
