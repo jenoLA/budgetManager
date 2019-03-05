@@ -26,6 +26,7 @@ Paper* createPaper()
 	printf("how much units: \n");
 	scanf(" %i", &quantity);
 	temp->quantity = quantity;
+	
 	return temp;
 }
 
@@ -33,7 +34,22 @@ Paper* createPaper()
 Paper* searchPaper(Paper* current, char code[6]);
 
 // puts on the last position
-void addPaper(Budget* budget, Paper* paper);
+void addPaper(Budget* budget, Paper* paper)
+{
+	Paper* current = budget->start;
+	if (budget->size > 0)
+	{
+		while(current->next != NULL)
+		{
+			current = current->next;
+		}
+		current->next = temp;
+		budget->size++;
+		return;
+	}
+	budget->start = temp;
+	budget->size++;
+}
 
 void deletePaper(Budget* budget, char code[6]);
 
