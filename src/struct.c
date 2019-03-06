@@ -3,27 +3,36 @@
 
 void readList(char* path);
 
-void saveList(List* list)
+void saveList(List* list, char* path)
 {
+	FILE* pf;
+	pf = fopen("arquive/temp.txt", "w+");
+	if (pf == NULL)
+	{
+		printf("something has gone wrong\n");
+	}
 	Budget* current = list->start;
 // using union here seems good
 	while(current != NULL)
 	{
+		fprintf(pf, "\"budget\": \"%s\",\n", current->name);
+		fprintf(pf, "  \"size\": %i,\n", current->size);
 		Paper* pcurrent = current->start;
-		printf("\"budget\": \"%s\"\n", current);
-		printf("  \"size\": \"%i\"\n", current->size);
 		while(pcurrent != NULL)
 		{
-			printf("  \"paper\": \"%s\"\n", pcurrent->code);
-			printf("    \"initialValue\": \"%f\"\n", pcurrent->initialValue);
+			fprintf(pf, "  \"paper\": \"%s\",\n", pcurrent->code);
+			fprintf(pf, "    \"initialValue\": %0.2f,\n", pcurrent->initialValue);
+			fprintf(pf, "    \"selled\": %i,\n", pcurrent->isSelled);
 			if (pcurrent->isSelled == 1)
 			{
-				printf("    \"finalValue\": \"%f\"\n", pcurrent->finalValue);
+				fprintf(pf, "    \"finalValue\": %0.2f,\n", pcurrent->finalValue);
 			}
-			printf("    \"quantity\": \"%i\"\n", pcurrent->quantity);
+			fprintf(pf, "    \"quantity\": %i,\n", pcurrent->quantity);
 			pcurrent = pcurrent->next;
 		}
-		printf("\n");
+		fprintf(pf, "\n");
 		current = current->next;
 	}
+	fclose(pf);
+	printf("\nsaved!!\n\n");
 }

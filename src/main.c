@@ -86,7 +86,7 @@ int main()
 				
 				else if(option == 's')
 				{
-					//save and quit here
+					saveList(list, "../arquive/temp.txt");
 				}
 				
 				else if(option == 'd')

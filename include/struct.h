@@ -28,7 +28,7 @@ typedef struct
 
 void readList();
 
-void saveList(List* list);
+void saveList(List* list, char* path);
 
 
 #endif
