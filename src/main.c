@@ -42,7 +42,9 @@ int main()
 
 		else if (option == 'q')
 		{
-			break;
+			list = readList("arquive/temp.txt");
+			printf("\nlist readed\n");
+			printBudgets(list->start);			
 		}
 
 		else if (option == 's')
