@@ -16,8 +16,8 @@ int main()
 
 	while (true) {
 
-		printf("By now we have the following functionalities:\n");
-		printf("Q)uit, L)ist budgets, N)ew budget,  E)nter budget,  D)elete budget\n");
+		printf("\n====================== Budget Manager ======================\n\n");
+		printf("Q)uit, L)ist budgets, N)ew budget,  E)nter budget,  D)elete budget,  S)ave and quit\n");
 
 		scanf(" %c", &option);
 
@@ -27,7 +27,9 @@ int main()
 		{
 			printf("Type the name to the new budget (max 20 characters):\n");
 			scanf(" %s", &name);
-			addBudget(list, name);
+			Budget* newBudget = initBudget(name);
+			addBudget(list, newBudget);
+			paperMenu(newBudget);
 		}
 		else if (option == 'd')
 		{
@@ -39,61 +41,22 @@ int main()
 			printBudgets(list->start);
 
 		else if (option == 'q')
+		{
 			break;
+		}
+
+		else if (option == 's')
+		{
+			saveList(list, "arquive/temp.txt");
+			break;
+		}
 
 		else if (option == 'e')
 		{
 			printf("name of the budget to enter: \n");
 			scanf(" %s", &name);
 			Budget* budget = searchBudget(list->start, name);
-			while(budget)
-			{
-				printf("\n===================== You are on %s budget =====================\nMenu:\nQ)uit  L)ist papers  A)dd paper   U)pdate paper   S)ave paper and quit  D)elete paper\n", budget->name);
-				scanf(" %c", &option);
-				option = tolower(option);
-				if(option == 'q')
-				{
-					//we will be using free in the future
-					break;
-				}
-				
-				else if(option == 'l')
-				{
-					listPapers(budget->start);
-				}
-				
-				else if(option == 'a')
-				{
-					addPaper(budget, createPaper());
-				}
-				
-				else if(option == 'u')
-				{
-					// change the search to be idiot-proof
-					char name[6];
-					printf("code of the paper to update: \n");
-					scanf(" %s", &name);
-					Paper* paper = searchPaper(budget->start, name);
-					if (paper)
-					{
-						updatePaper(paper);
-					}
-					else
-					{
-						printf("none paper found with this[%s] code\n", name);
-					}
-				}
-				
-				else if(option == 's')
-				{
-					saveList(list, "../arquive/temp.txt");
-				}
-				
-				else if(option == 'd')
-				{
-					deletePaper(budget);
-				}
-			}
+			paperMenu(budget);
 		}
 	}
 	return 0;

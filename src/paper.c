@@ -126,3 +126,47 @@ void updatePaper(Paper* paper)
 	paper->finalValue = finalValue;
 	paper->isSelled = 1;
 }
+
+void paperMenu(Budget* budget)
+{
+	char option;
+	while(budget)
+	{
+		printf("\n===================== You are on %s budget =====================\nMenu:\nQ)uit  L)ist papers  A)dd paper   U)pdate paper   S)ave paper and quit  D)elete paper\n", budget->name);
+		scanf(" %c", &option);
+		if (option >= 65 && option <=90)
+		{
+			option += 32;
+		}
+		
+		if(option == 'q')
+		{
+			break;
+		}
+		
+		else if(option == 'l')
+		{
+			listPapers(budget->start);
+		}
+		
+		else if(option == 'a')
+		{
+			addPaper(budget, createPaper());
+		}
+		
+		else if(option == 'u')
+		{
+			updatePaper(budget);
+		}
+		
+		else if(option == 's')
+		{
+			break;
+		}
+		
+		else if(option == 'd')
+		{
+			deletePaper(budget);
+		}
+	}
+}

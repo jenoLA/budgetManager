@@ -6,7 +6,7 @@ void readList(char* path);
 void saveList(List* list, char* path)
 {
 	FILE* pf;
-	pf = fopen("arquive/temp.txt", "w+");
+	pf = fopen(path, "w+");
 	if (pf == NULL)
 	{
 		printf("something has gone wrong\n");

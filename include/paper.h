@@ -19,5 +19,7 @@ void listPapers(Paper* current);
 // data required within
 void updatePaper(Paper* paper);
 
+void paperMenu(Budget* budget);
+
 
 #endif

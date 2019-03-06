@@ -16,14 +16,12 @@ Budget* initBudget(char* name)
 {
 	Budget* newBudget = malloc(sizeof(Budget));
 	strcpy(newBudget->name, name);
-	printf("Initialized budget \"%s\".\n", newBudget->name);
 	return newBudget;
 }
 
 
-void addBudget(List* list, char* name)
+void addBudget(List* list, Budget* budget)
 {
-	Budget* newBudget = initBudget(name);
 	if (list->start > 0)
 	{
 		Budget* lastBudget = list->start;
@@ -32,14 +30,12 @@ void addBudget(List* list, char* name)
 			lastBudget = lastBudget->next;
 		}
 
-		lastBudget->next = newBudget;
+		lastBudget->next = budget;
 		list->size++;
 		return;
 	}
-	list->start = newBudget;
+	list->start = budget;
 	list->size++;
-
-	printf("Budget \"%s\" created.\n", name);
 }
 
 

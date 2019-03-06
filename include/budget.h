@@ -6,7 +6,7 @@ List* initList();
 
 Budget* searchBudget(Budget* current, char* name);
 
-void addBudget(List* list, char* name);
+void addBudget(List* list, Budget* budget);
 
 void deleteBudget(List* list, char* name);
 
