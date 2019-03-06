@@ -107,7 +107,7 @@ void listPapers(Paper* current)
 		printf("Paper Code: %s\n", current->code);
 		printf("    Initial value: %0.2f reals\n", current->initialValue);
 		printf("    Quantity: %i\n", current->quantity);
-		if (current->isSelled)
+		if (current->isSelled == 1)
 		{
 			printf("    Final value: %0.2f reals\n", current->finalValue);
 			printf("    You have earned: %0.2f reals\n", current->finalValue - current->initialValue);
@@ -156,7 +156,10 @@ void paperMenu(Budget* budget)
 		
 		else if(option == 'u')
 		{
-			updatePaper(budget);
+			char code[6];
+			printf("name of the paper: \n");
+			scanf(" %s", &code);
+			updatePaper(searchPaper(budget->start, code));
 		}
 		
 		else if(option == 's')
