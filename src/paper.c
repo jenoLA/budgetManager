@@ -159,7 +159,13 @@ void paperMenu(Budget* budget)
 			char code[6];
 			printf("name of the paper: \n");
 			scanf(" %s", &code);
-			updatePaper(searchPaper(budget->start, code));
+			Paper* paper = searchPaper(budget->start, code);
+			if (paper != NULL)
+			{
+				updatePaper(paper);
+			}
+			else
+				printf("\nError, paper not registered\n");
 		}
 		
 		else if(option == 's')

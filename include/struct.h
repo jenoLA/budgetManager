@@ -26,7 +26,7 @@ typedef struct
 	int size;
 } List;
 
-void readList();
+List* readList(char* path);
 
 void saveList(List* list, char* path);
 
