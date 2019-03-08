@@ -9,7 +9,7 @@ List* readList(char* path)
 	pf = fopen(path, "r");
 	if (pf == NULL)
 	{
-		printf("file data not found\n");
+		printf("file data not found or invalid\n");
 		exit(1);
 	}
 	fscanf(pf, "\"list\"\n");
