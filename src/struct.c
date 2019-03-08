@@ -10,6 +10,7 @@ List* readList(char* path)
 	if (pf == NULL)
 	{
 		printf("file data not found\n");
+		exit(1);
 	}
 	fscanf(pf, "\"list\"\n");
 	fscanf(pf, "\"size\": %i\n", &(list->size));

@@ -8,16 +8,31 @@
 
 
 
-int main()
+int main(int argc, char** argv)
 {
-	List* list = initList();
-
+	List* list;
 	char name[20];
 	char option;
-
+	if (argc == 1)
+	{
+		list = initList();
+	}
+	else if (argc == 2)
+	{
+		list = readList(argv[1]);
+	}
+	else
+	{
+		printf("this program just accept one data file only\n");
+		exit(1);
+	}
 	while (true) {
 
 		printf("\n====================== Budget Manager ======================\n\n");
+		if (list->size > 0)
+		{
+			printBudgets(list->start);
+		}
 		printf("Q)uit, L)ist budgets, N)ew budget,  E)nter budget,  D)elete budget,  S)ave and quit\n");
 
 		scanf(" %c", &option);
@@ -44,9 +59,7 @@ int main()
 		else if (option == 'q')
 		{
 			free(list);
-			list = readList("arquive/temp.txt");
-			printf("\nlist readed\n");
-			printBudgets(list->start);			
+			exit(0);
 		}
 
 		else if (option == 's')

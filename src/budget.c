@@ -99,4 +99,5 @@ void printBudgets(Budget* current)
 		printf("budget %d: %s\n", i, current->name);
 		current = current->next;
 	}
+	printf("\n");
 }
