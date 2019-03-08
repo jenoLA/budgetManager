@@ -31,6 +31,8 @@ Budget* initBudget(char* name)
 	newBudget->next = NULL;
 	newBudget->size = 0;
 	newBudget->start = NULL;
+	newBudget->totalValue = 0;
+	newBudget->earned = 0;
 	return newBudget;
 }
 
@@ -103,12 +105,21 @@ void deleteBudget(List* list, char* name)
 	printf("Budget \"%s\" deleted.\n", name);
 }
 
-
 void printBudgets(Budget* current)
 {
 	for (int i = 1 ; current != NULL ; i++)
 	{
-		printf("budget %d: %s\n", i, current->name);
+		printf("budget: %s\n", current->name);
+		printf("   items: %i\n", current->size);
+		if (current->size > 0)
+		{
+			printf("   total value of items: %0.2f R$\n", current->totalValue);
+		}
+		if (current->earned != 0)
+		{
+			printf("   earned with till now: %0.2f R$\n", current->earned);
+		}
+		printf("\n");
 		current = current->next;
 	}
 	printf("\n");

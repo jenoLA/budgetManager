@@ -51,11 +51,14 @@ void addPaper(Budget* budget, Paper* paper)
 			current = current->next;
 		}
 		current->next = paper;
+		budget->totalValue += paper->initialValue * paper->quantity; 
 		budget->size++;
+		printf("budget value: %f\n", budget->totalValue);
 		return;
 	}
 	budget->start = paper;
 	budget->size++;
+	budget->totalValue += paper->initialValue * paper->quantity;
 }
 
 void deletePaper(Budget* budget)
@@ -106,12 +109,12 @@ void listPapers(Paper* current)
 	while(current != NULL)
 	{
 		printf("Paper Code: %s\n", current->code);
-		printf("    Initial value: %0.2f reals\n", current->initialValue);
+		printf("    Initial value: %0.2f R$\n", current->initialValue);
 		printf("    Quantity: %i\n", current->quantity);
 		if (current->isSelled == 1)
 		{
-			printf("    Final value: %0.2f reals\n", current->finalValue);
-			printf("    You have earned: %0.2f reals\n", current->finalValue - current->initialValue);
+			printf("    Final value: %0.2f R$\n", current->finalValue);
+			printf("    You have earned: %0.2f R$\n", current->finalValue - current->initialValue);
 		}
 		printf("\n");
 		current = current->next;
@@ -119,13 +122,14 @@ void listPapers(Paper* current)
 }
 
 // data required within
-void updatePaper(Paper* paper)
+void updatePaper(Budget* budget, Paper* paper)
 {
 	float finalValue;
 	printf("\nfinal value of the paper: \n");
 	scanf("%f", &finalValue);
 	paper->finalValue = finalValue;
 	paper->isSelled = 1;
+	budget->earned += finalValue * paper->quantity;
 }
 
 static void paperMenuMessage(Budget* budget)
@@ -175,7 +179,7 @@ void paperMenu(Budget* budget)
 			Paper* paper = searchPaper(budget->start, code);
 			if (paper != NULL)
 			{
-				updatePaper(paper);
+				updatePaper(budget, paper);
 			}
 			else
 				printf("\nError, paper not registered\n");

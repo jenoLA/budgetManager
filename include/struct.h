@@ -17,6 +17,8 @@ typedef struct budget_t
 	Paper* start;
 	char name[20];
 	int size;
+	float totalValue;
+	float earned;
 	struct budget_t* next;
 } Budget;
 

@@ -17,7 +17,7 @@ void deletePaper(Budget* budget);
 void listPapers(Paper* current);
 
 // data required within
-void updatePaper(Paper* paper);
+void updatePaper(Budget* budget, Paper* paper);
 
 void paperMenu(Budget* budget);
 

@@ -21,6 +21,8 @@ List* readList(char* path)
 		current->next = malloc(sizeof(Budget));
 		fscanf(pf, "  \"budget\": %s\n", &(current->next->name));
 		fscanf(pf, "    \"size\": %i\n", &(current->next->size));
+		fscanf(pf, "    \"totalValue\": %f\n", &(current->next->totalValue));
+		fscanf(pf, "    \"earned\": %f\n", &(current->next->earned));
 
 		Paper* pcurrent = malloc(sizeof(Paper));
 		for (int j = 0; j < current->next->size; ++j)
@@ -71,6 +73,8 @@ void saveList(List* list, char* path)
 	{
 		fprintf(pf, "  \"budget\": %s\n", current->name);
 		fprintf(pf, "    \"size\": %i\n", current->size);
+		fprintf(pf, "    \"totalValue\": %0.2f\n", current->totalValue);
+		fprintf(pf, "    \"earned\": %0.2f\n", current->earned);
 		Paper* pcurrent = current->start;
 		while(pcurrent != NULL)
 		{

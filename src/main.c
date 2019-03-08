@@ -19,14 +19,13 @@ static void welcomeMessage()
 int main(int argc, char** argv)
 {
 	List* list = initList(argc, argv);
-	char name[20];
-	char option;
 	while (true) 
 	{
+		char name[20];
+		char option;
 		welcomeMessage();
-		scanf(" %c", &option);
+		scanf(" %s", &option);
 		option = tolower(option);
-
 		if (option == 'n')
 		{
 			printf("Type the name to the new budget (max 20 characters):\n");
