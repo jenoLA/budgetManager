@@ -2,7 +2,7 @@
 #define BUDGET_H
 #include "struct.h"
 
-List* initList();
+List* initList(int argc, char** argv);
 
 Budget* searchBudget(Budget* current, char* name);
 

@@ -10,22 +10,9 @@
 
 int main(int argc, char** argv)
 {
-	List* list;
+	List* list = initList(argc, argv);
 	char name[20];
 	char option;
-	if (argc == 1)
-	{
-		list = initList();
-	}
-	else if (argc == 2)
-	{
-		list = readList(argv[1]);
-	}
-	else
-	{
-		printf("this program just accept one data file only\n");
-		exit(1);
-	}
 	while (true) {
 
 		printf("\n====================== Budget Manager ======================\n\n");

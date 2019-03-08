@@ -5,10 +5,22 @@
 
 
 
-List* initList()
+List* initList(int argc, char** argv)
 {
-	List* newList = malloc(sizeof(List));
-	return newList;
+
+	if (argc == 1)
+	{
+		return malloc(sizeof(List));
+	}
+	else if (argc == 2)
+	{
+		return readList(argv[1]);
+	}
+	else
+	{
+		printf("this program accepts only a data file\n");
+		exit(1);
+	}
 }
 
 
