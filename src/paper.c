@@ -128,12 +128,24 @@ void updatePaper(Paper* paper)
 	paper->isSelled = 1;
 }
 
+static void paperMenuMessage(Budget* budget)
+{
+	printf("\n====================");
+	printf(" You are on");
+	printf("\033[0;96m");
+	printf(" %s ", budget->name);
+	printf("\033[0;97m"); 
+	printf("budget");
+	printf("======================\n");
+	printf("\nQ)uit  L)ist papers  A)dd paper   U)pdate paper   S)ave paper and quit  D)elete paper\n");
+}
+
 void paperMenu(Budget* budget)
 {
 	char option;
 	while(budget)
 	{
-		printf("\n===================== You are on %s budget =====================\nMenu:\nQ)uit  L)ist papers  A)dd paper   U)pdate paper   S)ave paper and quit  D)elete paper\n", budget->name);
+		paperMenuMessage(budget);
 		scanf(" %c", &option);
 		if (option >= 65 && option <=90)
 		{
@@ -177,6 +189,12 @@ void paperMenu(Budget* budget)
 		else if(option == 'd')
 		{
 			deletePaper(budget);
+		}
+		else
+		{
+			printf("\033[0;91m");
+			printf("invalid command\n");
+			printf("\033[0;97m");
 		}
 	}
 }
