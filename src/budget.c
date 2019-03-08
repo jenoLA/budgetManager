@@ -16,6 +16,9 @@ Budget* initBudget(char* name)
 {
 	Budget* newBudget = malloc(sizeof(Budget));
 	strcpy(newBudget->name, name);
+	newBudget->next = NULL;
+	newBudget->size = 0;
+	newBudget->start = NULL;
 	return newBudget;
 }
 

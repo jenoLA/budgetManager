@@ -2,13 +2,6 @@
 #include <stdlib.h>
 #include "../include/struct.h"
 
-/*
-	sketch:
-	chaamr função initBudget
-	depois addBudget
-	depois fazer integração com os papeis
-	create/add/updatePaper
-*/
 List* readList(char* path)
 {
 	FILE* pf;
@@ -16,54 +9,47 @@ List* readList(char* path)
 	pf = fopen(path, "r");
 	if (pf == NULL)
 	{
-		printf("something has gone wrong\n");
+		printf("file data not found\n");
 	}
 	fscanf(pf, "\"list\"\n");
 	fscanf(pf, "\"size\": %i\n", &(list->size));
-	list->start = malloc(sizeof(Budget)); //declaring to after delete
-	Budget* current = list->start->next;// NULL by now
+	Budget* current = malloc(sizeof(Budget));
 	Paper* pcurrent;
 	for (int i = 0; i < list->size; ++i)
 	{
-		current = malloc(sizeof(Budget));
-		fscanf(pf, "  \"budget\": %s\n", &(current->name));
-		fscanf(pf, "    \"size\": %i\n", &(current->size));
-		if (current->start == NULL)
+		current->next = malloc(sizeof(Budget));
+		fscanf(pf, "  \"budget\": %s\n", &(current->next->name));
+		fscanf(pf, "    \"size\": %i\n", &(current->next->size));
+
+		Paper* pcurrent = malloc(sizeof(Paper));
+		for (int j = 0; j < current->next->size; ++j)
 		{
-			current->start = malloc(sizeof(Paper));
-			Paper* pcurrent = current->start->next;
-		}
-		for (int j = 0; j < current->size; ++j)
-		{
-			pcurrent = malloc(sizeof(Paper));
-			fscanf(pf, "    \"paper\": %s\n", &(pcurrent->code));
-			printf(" pcurrent code: %s\n", pcurrent->code);
-			fscanf(pf, "      \"initialValue\": %f\n", &(pcurrent->initialValue));
-			printf(" pcurrent initialValue: %f\n", pcurrent->initialValue);
-			fscanf(pf, "      \"selled\": %i\n", &(pcurrent->isSelled));
-			printf(" pcurrent selled: %i\n", pcurrent->isSelled);
-			if (pcurrent->isSelled == 1)
+			pcurrent->next = malloc(sizeof(Paper));
+			fscanf(pf, "    \"paper\": %s\n", &(pcurrent->next->code));
+			fscanf(pf, "      \"initialValue\": %f\n", &(pcurrent->next->initialValue));
+			fscanf(pf, "      \"selled\": %i\n", &(pcurrent->next->isSelled));
+			if (pcurrent->next->isSelled == 1)
 			{
-				fscanf(pf, "      \"finalValue\": %f\n", &(pcurrent->finalValue));
-				printf(" pcurrent finalValue: %f\n", pcurrent->finalValue);
+				fscanf(pf, "      \"finalValue\": %f\n", &(pcurrent->next->finalValue));
 			}
-			fscanf(pf, "      \"quantity\": %i\n", &(pcurrent->quantity));
-			printf(" pcurrent quantity: %i\n", pcurrent->quantity);
+			fscanf(pf, "      \"quantity\": %i\n", &(pcurrent->next->quantity));
 			
-			if (j == 0)
+			if (current->next->start == NULL)
 			{// for the first paper in the budget
-				current->start = pcurrent;
-				pcurrent = current->start->next;
+				current->next->start = pcurrent->next;
+				pcurrent = current->next->start;
 			}
 			else
 				pcurrent = pcurrent->next;
 		}
+		fscanf(pf, "\n");
 		if (i == 0)
 		{// for the first budget in the list
-			list->start = current;
+			list->start = current->next;
+			current = list->start;
 		}
-		fscanf(pf, "\n");
-		current = current->next;
+		else
+			current = current->next;
 	}
 	fclose(pf);
 	return list;

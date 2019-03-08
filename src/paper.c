@@ -21,6 +21,7 @@ Paper* createPaper()
 	scanf(" %i", &quantity);
 	temp->quantity = quantity;
 	
+	temp->next = NULL;
 	temp->isSelled = 0;
 	return temp;
 }

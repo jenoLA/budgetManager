@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <ctype.h>
 #include <stdbool.h>
 #include "../include/struct.h"
@@ -42,6 +43,7 @@ int main()
 
 		else if (option == 'q')
 		{
+			free(list);
 			list = readList("arquive/temp.txt");
 			printf("\nlist readed\n");
 			printBudgets(list->start);			
