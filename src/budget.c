@@ -5,7 +5,7 @@
 
 
 
-List* initList(int argc, char** argv)
+List* initList(int argc, char* argv[])
 {
 	if (argc == 1)
 		return malloc(sizeof(List));
@@ -25,11 +25,11 @@ Budget* initBudget(char* name)
 {
 	Budget* newBudget = malloc(sizeof(Budget));
 	strcpy(newBudget->name, name);
-	// newBudget->next = NULL;
-	// newBudget->size = 0;
-	// newBudget->start = NULL;
-	// newBudget->totalValue = 0;
-	// newBudget->earned = 0;
+	newBudget->next = NULL;
+	newBudget->size = 0;
+	newBudget->start = NULL;
+	newBudget->totalValue = 0;
+	newBudget->earned = 0;
 	return newBudget;
 }
 
