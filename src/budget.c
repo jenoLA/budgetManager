@@ -101,7 +101,7 @@ void deleteBudget(List* list, char* name)
 
 void printBudgets(Budget* current)
 {
-	for (int i = 1 ; current != NULL ; i++)
+	while (current != NULL)
 	{
 		printf("Budget: %s\n", current->name);
 		printf("   Items: %i\n", current->size);
