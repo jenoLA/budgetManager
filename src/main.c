@@ -1,39 +1,41 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include "../include/struct.h"
 #include "../include/budget.h"
 #include "../include/paper.h"
 
+
 static void welcomeMessage()
 {
+	printf("\e[0;m");
 	printf("\n=========================");
-	printf("\033[0;96m");
-	printf(" Budget Manager "); 
-	printf("\033[0;97m");
+	printf("\e[36m");
+	printf(" Budget Manager ");
+	printf("\e[m");
 	printf("==========================\n\n");
 	printf("Q)uit, L)ist budgets, N)ew budget,  E)nter budget,  D)elete budget,  S)ave and quit\n");
 }
 
+
 int main(int argc, char** argv)
 {
 	List* list = initList(argc, argv);
+	char name[20];
+	char option;
+
 	while (list)
 	{
-		char name[20];
-		char option;
 		welcomeMessage();
-		scanf(" %s", &option);
-		
-		if (option >= 65 && option <= 95)
-		{// if uppercase is modified to be lowercase
-			option += 32;
-		}
+
+		scanf(" %c", &option);
+		option = tolower(option);
 
 		if (option == 'n')
 		{
 			printf("Type the name to the new budget (max 20 characters):\n");
-			scanf(" %s", &name);
+			scanf(" %s", name);
 			Budget* newBudget = initBudget(name);
 			addBudget(list, newBudget);
 			paperMenu(newBudget);
@@ -41,45 +43,42 @@ int main(int argc, char** argv)
 		else if (option == 'd')
 		{
 			printf("Type the name of the budget to delete:\n");
-			scanf(" %s", &name);
+			scanf(" %s", name);
 			deleteBudget(list, name);
 		}
-		else if (option == 'l')
-			printBudgets(list->start);
-
-		else if (option == 'q')
-		{
-			free(list);
-			exit(0);
-		}
-
+		// thought: print folder arquive
 		else if (option == 's')
-		{// thought: print folder arquive
-			printf("name to the newly data file: \n");
-			char name[20];
-			scanf(" %s", &name);
+		{
+			printf("Name to the newly data file: \n");
+			scanf(" %s", name);
+
 			char* path = "arquive/";
 			strcat(path, name);
 			saveList(list, path);
 			break;
 		}
-
 		else if (option == 'e')
 		{
-			printf("name of the budget to enter: \n");
-			scanf(" %s", &name);
+			printf("Name of the budget to enter: \n");
+			scanf(" %s", name);
+
 			Budget* budget = searchBudget(list->start, name);
 			if (budget == NULL)
-			{
-				printf("not found any budget with this name[%s]\n", name);
-			}
+				printf("Not found any budget with this name[%s]\n", name);
+
 			paperMenu(budget);
 		}
+		else if (option == 'l')
+			printBudgets(list->start);
+
+		else if (option == 'q')
+			exit(0);
+
 		else
 		{
-			printf("\033[0;91m");
-			printf("invalid command\n");
-			printf("\033[0;97m");
+			printf("\e[m");
+			printf("Invalid command\n");
+			printf("\e[37m");
 		}
 	}
 	return 0;

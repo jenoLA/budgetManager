@@ -18,7 +18,7 @@ List* initList(int argc, char** argv)
 	}
 	else
 	{
-		printf("this program accepts only a data file\n");
+		printf("This program accepts only a data file (one argument)\n");
 		exit(1);
 	}
 }
@@ -109,15 +109,15 @@ void printBudgets(Budget* current)
 {
 	for (int i = 1 ; current != NULL ; i++)
 	{
-		printf("budget: %s\n", current->name);
-		printf("   items: %i\n", current->size);
+		printf("Budget: %s\n", current->name);
+		printf("   Items: %i\n", current->size);
 		if (current->size > 0)
 		{
-			printf("   total value of items: %0.2f R$\n", current->totalValue);
+			printf("   Total value of items: %0.2f R$\n", current->totalValue);
 		}
 		if (current->earned != 0)
 		{
-			printf("   earned with till now: %0.2f R$\n", current->earned);
+			printf("   Earned with till now: %0.2f R$\n", current->earned);
 		}
 		printf("\n");
 		current = current->next;
