@@ -15,11 +15,11 @@ static void welcomeMessage()
 	printf(" Budget Manager ");
 	printf("\e[m");
 	printf("==========================\n\n");
-	printf("Q)uit, L)ist budgets, N)ew budget,  E)nter budget,  D)elete budget,  S)ave and quit\n");
+	printf("N)ew budget  E)nter budget  L)ist budgets  D)elete budget  S)ave and quit  Q)uit\n\n");
 }
 
 
-int main(int argc, char** argv)
+int main(int argc, char* argv[])
 {
 	List* list = initList(argc, argv);
 	char name[20];
@@ -31,6 +31,7 @@ int main(int argc, char** argv)
 
 		scanf(" %c", &option);
 		option = tolower(option);
+		printf("\n");
 
 		if (option == 'n')
 		{
@@ -40,6 +41,7 @@ int main(int argc, char** argv)
 			addBudget(list, newBudget);
 			paperMenu(newBudget);
 		}
+		
 		else if (option == 'd')
 		{
 			printf("Type the name of the budget to delete:\n");
@@ -49,25 +51,27 @@ int main(int argc, char** argv)
 		// thought: print folder arquive
 		else if (option == 's')
 		{
-			printf("Name to the newly data file: \n");
+			printf("Name to the new data file: \n");
 			scanf(" %s", name);
-
-			char* path = "arquive/";
-			strcat(path, name);
-			saveList(list, path);
-			break;
+			char filePath[60] = "arquive/";
+			strcat(filePath, name);
+			saveList(list, filePath);
+			exit(0);
 		}
+		
 		else if (option == 'e')
 		{
 			printf("Name of the budget to enter: \n");
 			scanf(" %s", name);
 
 			Budget* budget = searchBudget(list->start, name);
+			
 			if (budget == NULL)
-				printf("Not found any budget with this name[%s]\n", name);
+				printf("Not found any budget with this name\n");
 
 			paperMenu(budget);
 		}
+		
 		else if (option == 'l')
 			printBudgets(list->start);
 
@@ -76,9 +80,9 @@ int main(int argc, char** argv)
 
 		else
 		{
-			printf("\e[m");
-			printf("Invalid command\n");
 			printf("\e[37m");
+			printf("Invalid command\n");
+			printf("\e[m");
 		}
 	}
 	return 0;
