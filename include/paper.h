@@ -19,6 +19,7 @@ void listPapers(Paper* current);
 // data required within
 void updatePaper(Budget* budget, Paper* paper);
 
+// menu to handle papers within the given budget
 void paperMenu(Budget* budget);
 
 

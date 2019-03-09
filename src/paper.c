@@ -8,7 +8,7 @@ Paper* createPaper()
 	Paper* temp = malloc(sizeof(Paper));
 	char code[6];
 	printf("Name of your new stock: \n");
-	scanf(" %s", &code);
+	scanf(" %s", code);
 	strcpy(temp->code, code);
 
 	float initialValue;
@@ -71,35 +71,23 @@ void deletePaper(Budget* budget)
 
 	if (erase == NULL)
 	{
-		printf("Not found any paper with this[%s] code\n", code);
+		printf("Not found any paper with this code\n");
 		return;
 	}
 
-	if (budget->start == erase)
-	{
-		Paper* oldHead = budget->start;
+	else if (budget->start == erase)
 		budget->start = erase->next;
 
-		free(oldHead);
-
-		budget->size--;
-		return;
-	}
-
-	if (erase->next != NULL)
+	else if (erase->next != NULL)
 	{
 		Paper* before = budget->start;
 
 		while (before->next != erase)
 			before = before->next;
 
-		Paper* nextPaper = erase->next;
-		before->next = nextPaper;
-
-		free(erase);
-		budget->size--;
-		return;
+		before->next = before->next->next;
 	}
+	printf("paper %s deleted\n", code);
 	free(erase);
 	budget->size--;
 }
@@ -112,6 +100,7 @@ void listPapers(Paper* current)
 		printf("Paper Code: %s\n", current->code);
 		printf("    Initial value: %0.2f R$\n", current->initialValue);
 		printf("    Quantity: %i\n", current->quantity);
+		
 		if (current->isSelled == 1)
 		{
 			printf("    Final value: %0.2f R$\n", current->finalValue);
@@ -127,7 +116,7 @@ void updatePaper(Budget* budget, Paper* paper)
 {
 	float finalValue;
 	printf("\nFinal value of the paper: \n");
-	scanf("%f", &finalValue);
+	scanf(" %f", &finalValue);
 	paper->finalValue = finalValue;
 	paper->isSelled = 1;
 	budget->earned += finalValue * paper->quantity;
@@ -139,19 +128,20 @@ static void paperMenuMessage(Budget* budget)
 	printf(" You are on");
 	printf("\e[96m");
 	printf(" %s ", budget->name);
-	printf("\e[97m");
+	printf("\e[m");
 	printf("Budget");
 	printf("======================\n");
-	printf("\nQ)uit  L)ist papers  A)dd paper   U)pdate paper   S)ave paper and quit  D)elete paper\n");
+	printf("\nA)dd paper  L)ist papers  U)pdate paper  D)elete paper  S)ave paper and quit  Q)uit\n");
 }
 
 void paperMenu(Budget* budget)
 {
-	char option;
 	while(budget)
 	{
+		char option;
 		paperMenuMessage(budget);
 		scanf(" %c", &option);
+		
 		if (option >= 65 && option <=90)
 		{
 			option += 32;
@@ -176,12 +166,11 @@ void paperMenu(Budget* budget)
 		{
 			char code[6];
 			printf("Name of the paper: \n");
-			scanf(" %s", &code);
+			scanf(" %s", code);
 			Paper* paper = searchPaper(budget->start, code);
 			if (paper != NULL)
-			{
 				updatePaper(budget, paper);
-			}
+			
 			else
 				printf("\nError, paper not registered\n");
 		}
@@ -196,7 +185,7 @@ void paperMenu(Budget* budget)
 		{
 			printf("\e[91m");
 			printf("Invalid command\n");
-			printf("\e[97m");
+			printf("\e[m");
 		}
 	}
 }
