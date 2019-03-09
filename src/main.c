@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <ctype.h>
-#include <stdbool.h>
+#include <string.h>
 #include "../include/struct.h"
 #include "../include/budget.h"
 #include "../include/paper.h"
@@ -19,13 +18,18 @@ static void welcomeMessage()
 int main(int argc, char** argv)
 {
 	List* list = initList(argc, argv);
-	while (true) 
+	while (list)
 	{
 		char name[20];
 		char option;
 		welcomeMessage();
 		scanf(" %s", &option);
-		option = tolower(option);
+		
+		if (option >= 65 && option <= 95)
+		{// if uppercase is modified to be lowercase
+			option += 32;
+		}
+
 		if (option == 'n')
 		{
 			printf("Type the name to the new budget (max 20 characters):\n");
@@ -50,8 +54,13 @@ int main(int argc, char** argv)
 		}
 
 		else if (option == 's')
-		{
-			saveList(list, "arquive/temp.txt");
+		{// thought: print folder arquive
+			printf("name to the newly data file: \n");
+			char name[20];
+			scanf(" %s", &name);
+			char* path = "arquive/";
+			strcat(path, name);
+			saveList(list, path);
 			break;
 		}
 
