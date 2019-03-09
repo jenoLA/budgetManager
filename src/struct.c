@@ -14,45 +14,45 @@ List* readList(char* path)
 	}
 	fscanf(pf, "\"list\"\n");
 	fscanf(pf, "\"size\": %i\n", &(list->size));
-	Budget* current = malloc(sizeof(Budget));
-	Paper* pcurrent;
+	Budget* currentBudget = malloc(sizeof(Budget));
+	Paper* currentPaper;
 	for (int i = 0; i < list->size; ++i)
 	{
-		current->next = malloc(sizeof(Budget));
-		fscanf(pf, "  \"budget\": %s\n", &(current->next->name));
-		fscanf(pf, "    \"size\": %i\n", &(current->next->size));
-		fscanf(pf, "    \"totalValue\": %f\n", &(current->next->totalValue));
-		fscanf(pf, "    \"earned\": %f\n", &(current->next->earned));
+		currentBudget->next = malloc(sizeof(Budget));
+		fscanf(pf, "\t\"budget\": %s\n", &(currentBudget->next->name));
+		fscanf(pf, "\t\t\"size\": %i\n", &(currentBudget->next->size));
+		fscanf(pf, "\t\t\"totalValue\": %f\n", &(currentBudget->next->totalValue));
+		fscanf(pf, "\t\t\"earned\": %f\n", &(currentBudget->next->earned));
 
-		Paper* pcurrent = malloc(sizeof(Paper));
-		for (int j = 0; j < current->next->size; ++j)
+		Paper* currentPaper = malloc(sizeof(Paper));
+		for (int j = 0; j < currentBudget->next->size; ++j)
 		{
-			pcurrent->next = malloc(sizeof(Paper));
-			fscanf(pf, "    \"paper\": %s\n", &(pcurrent->next->code));
-			fscanf(pf, "      \"initialValue\": %f\n", &(pcurrent->next->initialValue));
-			fscanf(pf, "      \"selled\": %i\n", &(pcurrent->next->isSelled));
-			if (pcurrent->next->isSelled == 1)
+			currentPaper->next = malloc(sizeof(Paper));
+			fscanf(pf, "    \"paper\": %s\n", &(currentPaper->next->code));
+			fscanf(pf, "      \"initialValue\": %f\n", &(currentPaper->next->initialValue));
+			fscanf(pf, "      \"selled\": %i\n", &(currentPaper->next->isSelled));
+			if (currentPaper->next->isSelled == 1)
 			{
-				fscanf(pf, "      \"finalValue\": %f\n", &(pcurrent->next->finalValue));
+				fscanf(pf, "      \"finalValue\": %f\n", &(currentPaper->next->finalValue));
 			}
-			fscanf(pf, "      \"quantity\": %i\n", &(pcurrent->next->quantity));
-			
-			if (current->next->start == NULL)
+			fscanf(pf, "      \"quantity\": %i\n", &(currentPaper->next->quantity));
+
+			if (currentBudget->next->start == NULL)
 			{// for the first paper in the budget
-				current->next->start = pcurrent->next;
-				pcurrent = current->next->start;
+				currentBudget->next->start = currentPaper->next;
+				currentPaper = currentBudget->next->start;
 			}
 			else
-				pcurrent = pcurrent->next;
+				currentPaper = currentPaper->next;
 		}
 		fscanf(pf, "\n");
 		if (i == 0)
 		{// for the first budget in the list
-			list->start = current->next;
-			current = list->start;
+			list->start = currentBudget->next;
+			currentBudget = list->start;
 		}
 		else
-			current = current->next;
+			currentBudget = currentBudget->next;
 	}
 	fclose(pf);
 	return list;
@@ -68,28 +68,29 @@ void saveList(List* list, char* path)
 	}
 	fprintf(pf, "\"list\"\n");
 	fprintf(pf, "\"size\": %i\n", list->size);
-	Budget* current = list->start;
-	while(current != NULL)
+	Budget* currentBudget = list->start;
+	while(currentBudget != NULL)
 	{
-		fprintf(pf, "  \"budget\": %s\n", current->name);
-		fprintf(pf, "    \"size\": %i\n", current->size);
-		fprintf(pf, "    \"totalValue\": %0.2f\n", current->totalValue);
-		fprintf(pf, "    \"earned\": %0.2f\n", current->earned);
-		Paper* pcurrent = current->start;
-		while(pcurrent != NULL)
+		fprintf(pf, "\t\"budget\": %s\n", currentBudget->name);
+		fprintf(pf, "\t\t\"size\": %i\n", currentBudget->size);
+		fprintf(pf, "\t\t\"totalValue\": %0.2f\n", currentBudget->totalValue);
+		fprintf(pf, "\t\t\"earned\": %0.2f\n", currentBudget->earned);
+		Paper* currentPaper = currentBudget->start;
+
+		while(currentPaper != NULL)
 		{
-			fprintf(pf, "    \"paper\": %s\n", pcurrent->code);
-			fprintf(pf, "      \"initialValue\": %0.2f\n", pcurrent->initialValue);
-			fprintf(pf, "      \"selled\": %i\n", pcurrent->isSelled);
-			if (pcurrent->isSelled == 1)
+			fprintf(pf, "\t\t\"paper\": %s\n", currentPaper->code);
+			fprintf(pf, "\t\t\t\"initialValue\": %0.2f\n", currentPaper->initialValue);
+			fprintf(pf, "\t\t\t\"selled\": %i\n", currentPaper->isSelled);
+			if (currentPaper->isSelled == 1)
 			{
-				fprintf(pf, "      \"finalValue\": %0.2f\n", pcurrent->finalValue);
+				fprintf(pf, "\t\t\t\"finalValue\": %0.2f\n", currentPaper->finalValue);
 			}
-			fprintf(pf, "      \"quantity\": %i\n", pcurrent->quantity);
-			pcurrent = pcurrent->next;
+			fprintf(pf, "\t\t\t\"quantity\": %i\n", currentPaper->quantity);
+			currentPaper = currentPaper->next;
 		}
 		fprintf(pf, "\n");
-		current = current->next;
+		currentBudget = currentBudget->next;
 	}
 	fclose(pf);
 	printf("\nsaved!!\n\n");
