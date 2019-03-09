@@ -28,8 +28,10 @@ typedef struct
 	int size;
 } List;
 
+//return the one readed from the data file on the path, if exists
 List* readList(char* path);
 
+//save the state of the list in a data file saved on the path
 void saveList(List* list, char* path);
 
 

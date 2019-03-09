@@ -19,16 +19,16 @@ List* readList(char* path)
 	for (int i = 0; i < list->size; ++i)
 	{
 		currentBudget->next = malloc(sizeof(Budget));
-		fscanf(pf, "\t\"budget\": %s\n", &(currentBudget->next->name));
+		fscanf(pf, "\t\"budget\": %s\n", currentBudget->next->name);
 		fscanf(pf, "\t\t\"size\": %i\n", &(currentBudget->next->size));
 		fscanf(pf, "\t\t\"totalValue\": %f\n", &(currentBudget->next->totalValue));
 		fscanf(pf, "\t\t\"earned\": %f\n", &(currentBudget->next->earned));
 
-		Paper* currentPaper = malloc(sizeof(Paper));
+		currentPaper = malloc(sizeof(Paper));
 		for (int j = 0; j < currentBudget->next->size; ++j)
 		{
 			currentPaper->next = malloc(sizeof(Paper));
-			fscanf(pf, "    \"paper\": %s\n", &(currentPaper->next->code));
+			fscanf(pf, "    \"paper\": %s\n", currentPaper->next->code);
 			fscanf(pf, "      \"initialValue\": %f\n", &(currentPaper->next->initialValue));
 			fscanf(pf, "      \"selled\": %i\n", &(currentPaper->next->isSelled));
 			if (currentPaper->next->isSelled == 1)
