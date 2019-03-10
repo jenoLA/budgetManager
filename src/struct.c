@@ -1,5 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include "../include/struct.h"
 
 List* readList(char* path)
@@ -30,11 +28,7 @@ List* readList(char* path)
 			currentPaper->next = malloc(sizeof(Paper));
 			fscanf(pf, "    \"paper\": %s\n", currentPaper->next->code);
 			fscanf(pf, "      \"initialValue\": %f\n", &(currentPaper->next->initialValue));
-			fscanf(pf, "      \"selled\": %i\n", &(currentPaper->next->isSelled));
-			if (currentPaper->next->isSelled == 1)
-			{
-				fscanf(pf, "      \"finalValue\": %f\n", &(currentPaper->next->finalValue));
-			}
+			fscanf(pf, "      \"earned\": %f\n", &(currentPaper->next->earned));
 			fscanf(pf, "      \"quantity\": %i\n", &(currentPaper->next->quantity));
 
 			if (currentBudget->next->start == NULL)
@@ -81,11 +75,7 @@ void saveList(List* list, char* path)
 		{
 			fprintf(pf, "\t\t\"paper\": %s\n", currentPaper->code);
 			fprintf(pf, "\t\t\t\"initialValue\": %0.2f\n", currentPaper->initialValue);
-			fprintf(pf, "\t\t\t\"selled\": %i\n", currentPaper->isSelled);
-			if (currentPaper->isSelled == 1)
-			{
-				fprintf(pf, "\t\t\t\"finalValue\": %0.2f\n", currentPaper->finalValue);
-			}
+			fprintf(pf, "\t\t\t\"earned\": %0.2f\n", currentPaper->earned);	
 			fprintf(pf, "\t\t\t\"quantity\": %i\n", currentPaper->quantity);
 			currentPaper = currentPaper->next;
 		}

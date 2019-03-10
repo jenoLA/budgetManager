@@ -1,14 +1,14 @@
 #ifndef STRUCT_H
 #define STRUCT_H
-
+#include <stdio.h>
+#include <stdlib.h>
 
 typedef struct paper_t
 {
 	char code[6];
 	float initialValue;
-	float finalValue;
 	int quantity;
-	int isSelled;
+	float earned;
 	struct paper_t* next;
 } Paper;
 

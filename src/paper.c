@@ -1,28 +1,32 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
 #include "../include/paper.h"
 
 Paper* createPaper()
 {
 	Paper* temp = malloc(sizeof(Paper));
 	char code[6];
-	printf("Name of your new stock: \n");
+	printf("Name of your new stock: ");
 	scanf(" %s", code);
+	printf("\n");
+	
+	for (int i = 0; i < sizeof(code); ++i)
+		code[i] = toupper(code[i]);
+	
 	strcpy(temp->code, code);
 
 	float initialValue;
-	printf("His value by unit: \n");
+	printf("His value by unit: ");
 	scanf(" %f", &initialValue);
+	printf("\n");
 	temp->initialValue = initialValue;
 
 	int quantity;
-	printf("How much units: \n");
+	printf("How much units: ");
 	scanf(" %i", &quantity);
+	printf("\n");
 	temp->quantity = quantity;
 
 	temp->next = NULL;
-	temp->isSelled = 0;
+	temp->earned = 0;
 	return temp;
 }
 
@@ -36,6 +40,7 @@ Paper* searchPaper(Paper* current, char* string)
 
 		current = current->next;
 	}
+	
 	return NULL;
 }
 
@@ -52,7 +57,7 @@ void addPaper(Budget* budget, Paper* paper)
 		current->next = paper;
 		budget->totalValue += paper->initialValue * paper->quantity;
 		budget->size++;
-		printf("Budget value: %f\n", budget->totalValue);
+
 		return;
 	}
 
@@ -71,7 +76,9 @@ void deletePaper(Budget* budget)
 
 	if (erase == NULL)
 	{
+		printf("\e[91m");	
 		printf("Not found any paper with this code\n");
+		printf("\e[m");
 		return;
 	}
 
@@ -87,6 +94,7 @@ void deletePaper(Budget* budget)
 
 		before->next = before->next->next;
 	}
+
 	printf("paper %s deleted\n", code);
 	free(erase);
 	budget->size--;
@@ -99,13 +107,13 @@ void listPapers(Paper* current)
 	{
 		printf("Paper Code: %s\n", current->code);
 		printf("    Initial value: %0.2f R$\n", current->initialValue);
-		printf("    Quantity: %i\n", current->quantity);
+		printf("    Current quantity: %i\n", current->quantity);
+		if (current->quantity == 0)
+			printf("    final earned (brute) value: %0.2f R$\n", current->earned);
 		
-		if (current->isSelled == 1)
-		{
-			printf("    Final value: %0.2f R$\n", current->finalValue);
-			printf("    You have earned: %0.2f R$\n", current->finalValue - current->initialValue);
-		}
+		else if (current->earned != 0)
+			printf("    You have earned till now: %0.2f R$\n", current->earned);
+
 		printf("\n");
 		current = current->next;
 	}
@@ -114,12 +122,29 @@ void listPapers(Paper* current)
 // data required within
 void updatePaper(Budget* budget, Paper* paper)
 {
-	float finalValue;
-	printf("\nFinal value of the paper: \n");
-	scanf(" %f", &finalValue);
-	paper->finalValue = finalValue;
-	paper->isSelled = 1;
-	budget->earned += finalValue * paper->quantity;
+	float quantityPlus, quantityMinus, value;
+
+	printf("\nQuantity brought: ");
+	scanf(" %f", &quantityPlus);
+
+	printf("\nQuantity selled: ");
+	scanf(" %f", &quantityMinus);
+
+	if (paper->quantity <= quantityMinus)
+	{
+		printf("\e[91m");
+		printf("invalid number, you cannot sell more than you have\n");
+		printf("\e[m");
+		return;
+	}
+
+	printf("\nValue of the paper selled: ");
+	scanf(" %f", &value);
+
+	paper->quantity += quantityPlus - quantityMinus;
+	paper->earned += (value * quantityMinus);
+	budget->earned += (value * quantityMinus);
+	return;
 }
 
 static void paperMenuMessage(Budget* budget)
@@ -136,13 +161,13 @@ static void paperMenuMessage(Budget* budget)
 
 void paperMenu(Budget* budget)
 {
+	char option;
 	while(budget)
 	{
-		char option;
 		paperMenuMessage(budget);
-		scanf(" %c", &option);
+		scanf(" %c", &option); //this to prevent more than one a character
 		
-		if (option >= 65 && option <=90)
+		if (option >= 65 && option <= 90)
 		{
 			option += 32;
 		}
@@ -165,9 +190,14 @@ void paperMenu(Budget* budget)
 		else if(option == 'u')
 		{
 			char code[6];
-			printf("Name of the paper: \n");
+			printf("\nName of the paper: ");
 			scanf(" %s", code);
+			
+			for (int i = 0; i < sizeof(code); ++i)
+				code[i] = toupper(code[i]);
+
 			Paper* paper = searchPaper(budget->start, code);
+			
 			if (paper != NULL)
 				updatePaper(budget, paper);
 			

@@ -1,5 +1,9 @@
 #ifndef PAPER_H
 #define PAPER_H
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
 #include "struct.h"
 
 // user will be asked for the required data 
