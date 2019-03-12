@@ -2,12 +2,13 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <dirent.h>
 #include "../include/struct.h"
 #include "../include/budget.h"
 #include "../include/paper.h"
 
 
-static void welcomeMessage()
+void welcomeMessage()
 {
 	printf("\e[0;m");
 	printf("\n=========================");
@@ -15,11 +16,32 @@ static void welcomeMessage()
 	printf(" Budget Manager ");
 	printf("\e[m");
 	printf("==========================\n\n");
-	printf("N)ew budget  E)nter budget  L)ist budgets  D)elete budget  S)ave and quit  Q)uit\n\n");
+	printf("N)ew budget  E)nter budget  L)ist budgets  D)elete budget  S)ave and quit  Q)uit\n");
 }
 
+void printFilesInFolder(char* path)
+{
+	DIR* dir;
+	struct dirent* entry;
+	printf("--------------------------[dir: %s ]-------------------------\n\n", path);
+	
+	if ((dir = opendir(path)))
+	{	
+		while ((entry = readdir(dir)))
+		{
+ 			if (entry->d_name[0] != '.')
+  				printf(">> %s\n", entry->d_name);
+		}
 
-int main(int argc, char* argv[])
+		closedir(dir);
+		printf("\n");
+		return;
+	}
+
+	printf("invalid directory\n");
+}
+
+int main(int argc, char const *argv[])
 {
 	List* list = initList(argc, argv);
 	char name[20];
@@ -31,7 +53,6 @@ int main(int argc, char* argv[])
 
 		scanf(" %c", &option);
 		option = tolower(option);
-		printf("\n");
 
 		if (option == 'n')
 		{
@@ -48,12 +69,13 @@ int main(int argc, char* argv[])
 			scanf(" %s", name);
 			deleteBudget(list, name);
 		}
-		// thought: print folder arquive
+
 		else if (option == 's')
 		{
+			char filePath[60] = "arquive/";
+			printFilesInFolder(filePath);
 			printf("Name to the new data file: \n");
 			scanf(" %s", name);
-			char filePath[60] = "arquive/";
 			strcat(filePath, name);
 			saveList(list, filePath);
 			exit(0);
@@ -80,8 +102,8 @@ int main(int argc, char* argv[])
 
 		else
 		{
-			printf("\e[37m");
-			printf("Invalid command\n");
+			printf("\e[91m");
+			printf("\nInvalid command\n");
 			printf("\e[m");
 		}
 	}
