@@ -1,5 +1,5 @@
 # Ignore compiled program
 budget-manager
 
-# Ignore bd
-arquive/temp.txt
+# Ignore bd test
+#arquive/*

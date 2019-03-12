@@ -1,36 +1,7 @@
-My simple manager of investiments
+put a time system;
 
-structs:
-	List
-		Node start
-		int size
+warning of maximum selled value in a month(20.000 R$);
 
-	Budget
-		char* name
-		Paper* start
-		int size
-		Paper* start
+make a cli usage;
 
-	Node
-		struct node* next
-		Budget* budget
 
-	Paper
-		char* code
-		float initialValue
-		float finalValue
-		time_t brought
-		time_t selled
-		struct paper* next
-
-functions:
-	create List/Budget/Paper
-	search Budget/Paper
-	save Paper(on budget)/List(on a file)
-	delete Paper/budget
-	update Paper
-	append Paper
-	read List # on future
-
-	main budget loop
-	main paper loop

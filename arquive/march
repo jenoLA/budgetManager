@@ -1,0 +1,27 @@
+"list"
+"size": 1
+	"budget": fev
+		"size": 4
+		"totalValue": 2917.16
+		"earned": 1137.24
+		"paper": CMIG4
+			"bValue": 13.40
+			"earned": 0.00
+			"quantity": 25
+			"actualQuantity": 25
+		"paper": MRFG3
+			"bValue": 5.48
+			"earned": 0.00
+			"quantity": 200
+			"actualQuantity": 200
+		"paper": GGBR4
+			"bValue": 15.16
+			"earned": 0.00
+			"quantity": 26
+			"actualQuantity": 26
+		"paper": MRVE3
+			"bValue": 14.00
+			"earned": 1137.24
+			"quantity": 78
+			"actualQuantity": 0
+
