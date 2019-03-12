@@ -6,9 +6,10 @@
 typedef struct paper_t
 {
 	char code[6];
-	float initialValue;
+	float bValue;
 	int quantity;
 	float earned;
+	int actualQuantity;
 	struct paper_t* next;
 } Paper;
 
@@ -29,7 +30,7 @@ typedef struct
 } List;
 
 //return the one readed from the data file on the path, if exists
-List* readList(char* path);
+List* readList(char const *path);
 
 //save the state of the list in a data file saved on the path
 void saveList(List* list, char* path);

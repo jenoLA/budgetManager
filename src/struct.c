@@ -1,6 +1,6 @@
 #include "../include/struct.h"
 
-List* readList(char* path)
+List* readList(char const *path)
 {
 	FILE* pf;
 	List* list = malloc(sizeof(List));
@@ -26,10 +26,11 @@ List* readList(char* path)
 		for (int j = 0; j < currentBudget->next->size; ++j)
 		{
 			currentPaper->next = malloc(sizeof(Paper));
-			fscanf(pf, "    \"paper\": %s\n", currentPaper->next->code);
-			fscanf(pf, "      \"initialValue\": %f\n", &(currentPaper->next->initialValue));
-			fscanf(pf, "      \"earned\": %f\n", &(currentPaper->next->earned));
-			fscanf(pf, "      \"quantity\": %i\n", &(currentPaper->next->quantity));
+			fscanf(pf, "\t\t\"paper\": %s\n", currentPaper->next->code);
+			fscanf(pf, "\t\t\t\"bValue\": %f\n", &(currentPaper->next->bValue));
+			fscanf(pf, "\t\t\t\"earned\": %f\n", &(currentPaper->next->earned));
+			fscanf(pf, "\t\t\t\"quantity\": %i\n", &(currentPaper->next->quantity));
+			fscanf(pf, "\t\t\t\"actualQuantity\": %i\n", &(currentPaper->next->actualQuantity));
 
 			if (currentBudget->next->start == NULL)
 			{// for the first paper in the budget
@@ -74,9 +75,10 @@ void saveList(List* list, char* path)
 		while(currentPaper != NULL)
 		{
 			fprintf(pf, "\t\t\"paper\": %s\n", currentPaper->code);
-			fprintf(pf, "\t\t\t\"initialValue\": %0.2f\n", currentPaper->initialValue);
+			fprintf(pf, "\t\t\t\"bValue\": %0.2f\n", currentPaper->bValue);
 			fprintf(pf, "\t\t\t\"earned\": %0.2f\n", currentPaper->earned);	
 			fprintf(pf, "\t\t\t\"quantity\": %i\n", currentPaper->quantity);
+			fprintf(pf, "\t\t\t\"actualQuantity\": %i\n", currentPaper->actualQuantity);
 			currentPaper = currentPaper->next;
 		}
 		fprintf(pf, "\n");
