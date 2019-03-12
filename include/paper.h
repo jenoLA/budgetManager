@@ -1,9 +1,5 @@
 #ifndef PAPER_H
 #define PAPER_H
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <ctype.h>
 #include "struct.h"
 
 // user will be asked for the required data 
@@ -22,6 +18,12 @@ void listPapers(Paper* current);
 
 // data required within
 void updatePaper(Budget* budget, Paper* paper);
+
+// simulate a sell
+void simulateSell(Paper* paper);
+
+// welcome message
+void paperMenuMessage(Budget* budget);
 
 // menu to handle papers within the given budget
 void paperMenu(Budget* budget);

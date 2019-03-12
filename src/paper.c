@@ -1,3 +1,7 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
 #include "../include/paper.h"
 
 Paper* createPaper()
@@ -7,7 +11,7 @@ Paper* createPaper()
 	printf("Name of your new stock: ");
 	scanf(" %s", code);
 	printf("\n");
-	
+	// change in the future to if the quantity isn't multiply of 100 add F in the end
 	for (int i = 0; i < sizeof(code); ++i)
 		code[i] = toupper(code[i]);
 	
@@ -17,13 +21,14 @@ Paper* createPaper()
 	printf("His value by unit: ");
 	scanf(" %f", &initialValue);
 	printf("\n");
-	temp->initialValue = initialValue;
+	temp->bValue = initialValue;
 
 	int quantity;
 	printf("How much units: ");
 	scanf(" %i", &quantity);
 	printf("\n");
 	temp->quantity = quantity;
+	temp->actualQuantity = quantity;
 
 	temp->next = NULL;
 	temp->earned = 0;
@@ -47,23 +52,22 @@ Paper* searchPaper(Paper* current, char* string)
 // puts on the last position
 void addPaper(Budget* budget, Paper* paper)
 {
-	if (budget->size > 0)
+	if (budget->size == 0)
 	{
-		Paper* current = budget->start;
-
-		while(current->next != NULL)
-			current = current->next;
-
-		current->next = paper;
-		budget->totalValue += paper->initialValue * paper->quantity;
+		budget->start = paper;
 		budget->size++;
-
+		budget->totalValue += paper->bValue * paper->quantity;
 		return;
 	}
+	
+	Paper* current = budget->start;
+	while(current->next != NULL)
+		current = current->next;
 
-	budget->start = paper;
+	current->next = paper;
+	budget->totalValue += paper->bValue * paper->quantity;
 	budget->size++;
-	budget->totalValue += paper->initialValue * paper->quantity;
+
 }
 
 void deletePaper(Budget* budget)
@@ -105,14 +109,14 @@ void listPapers(Paper* current)
 {
 	while(current != NULL)
 	{
-		printf("Paper Code: %s\n", current->code);
-		printf("    Initial value: %0.2f R$\n", current->initialValue);
-		printf("    Current quantity: %i\n", current->quantity);
-		if (current->quantity == 0)
-			printf("    final earned (brute) value: %0.2f R$\n", current->earned);
+		printf("\nPaper Code: %s\n", current->code);
+		printf("    Pondered value: %0.2f R$\n", current->bValue);
+		printf("    Current quantity: %i\n", current->actualQuantity);
+		if (current->actualQuantity == 0)
+			printf("    final pondered value: %0.2f R$\n", current->bValue * current->quantity);
 		
-		else if (current->earned != 0)
-			printf("    You have earned till now: %0.2f R$\n", current->earned);
+		if (current->earned != 0)
+			printf("    Selled: %0.2f R$\n", current->earned);
 
 		printf("\n");
 		current = current->next;
@@ -122,32 +126,81 @@ void listPapers(Paper* current)
 // data required within
 void updatePaper(Budget* budget, Paper* paper)
 {
-	float quantityPlus, quantityMinus, value;
-
-	printf("\nQuantity brought: ");
-	scanf(" %f", &quantityPlus);
-
+	float quantityMinus;
 	printf("\nQuantity selled: ");
 	scanf(" %f", &quantityMinus);
 
-	if (paper->quantity <= quantityMinus)
+	if (quantityMinus > paper->actualQuantity)
 	{
 		printf("\e[91m");
-		printf("invalid number, you cannot sell more than you have\n");
+		printf("\ninvalid number, you cannot sell more than you have\n");
 		printf("\e[m");
-		return;
+		return; //because of the invalid entry
+	}
+	
+	float price; //for both situations
+	// sell part
+	if (quantityMinus > 0)
+	{
+		printf("\nValue of the paper selled: ");
+		scanf(" %f", &price); //sell price
+
+		paper->actualQuantity -= quantityMinus;
+		paper->earned += (price * quantityMinus);
+		budget->earned += (price * quantityMinus);
+		return; //not going to buy part
 	}
 
-	printf("\nValue of the paper selled: ");
-	scanf(" %f", &value);
-
-	paper->quantity += quantityPlus - quantityMinus;
-	paper->earned += (value * quantityMinus);
-	budget->earned += (value * quantityMinus);
-	return;
+	// buy part
+	float quantityPlus;
+	printf("\nQuantity brought: ");
+	scanf(" %f", &quantityPlus);
+	
+	if (quantityPlus > 0)
+	{
+		printf("\nvalue by unit: \n");
+		scanf(" %f", &price);
+		paper->bValue = (paper->bValue + price) / 2;
+		budget->totalValue += price * quantityPlus;
+		paper->quantity += quantityPlus;
+		paper->actualQuantity += quantityPlus;
+		return; //to end here
+	}
+	//nothing happens because there isn't any thing to change
 }
 
-static void paperMenuMessage(Budget* budget)
+void simulateSell(Paper* paper)
+{
+	float quantityPlus, quantityMinus, value;
+	printf("\nQuantity selled: ");
+	scanf(" %f", &quantityMinus);
+
+	if (quantityMinus > paper->actualQuantity)
+	{
+		printf("\e[91m");
+		printf("\ninvalid number, you cannot sell more than you have\n");
+		printf("\e[m");
+		return; //if invalid enter
+	}
+
+	if (quantityMinus > 0)
+	{
+		printf("\nValue of the paper selled: ");
+		scanf(" %f", &value);
+		printf("\nearned by unit: %0.2f\n", value - paper->bValue);
+		return;
+	}
+	//goes here if isn't going to sell any paper
+	printf("\nQuantity brought: ");
+	scanf(" %f", &quantityPlus);
+	float bprice; //buy price
+	printf("\nvalue by unit: \n");
+	scanf(" %f", &bprice);
+	printf("\npondered value: %0.2f\n", (paper->bValue + bprice) / 2);
+
+}
+
+void paperMenuMessage(Budget* budget)
 {
 	printf("\n====================");
 	printf(" You are on");
@@ -156,7 +209,7 @@ static void paperMenuMessage(Budget* budget)
 	printf("\e[m");
 	printf("Budget");
 	printf("======================\n");
-	printf("\nA)dd paper  L)ist papers  U)pdate paper  D)elete paper  S)ave paper and quit  Q)uit\n");
+	printf("\nA)dd paper  L)ist papers  U)pdate paper  S)imulate  D)elete paper  B)ack to the main menu\n");
 }
 
 void paperMenu(Budget* budget)
@@ -165,19 +218,11 @@ void paperMenu(Budget* budget)
 	while(budget)
 	{
 		paperMenuMessage(budget);
-		scanf(" %c", &option); //this to prevent more than one a character
+		scanf(" %c", &option);
 		
-		if (option >= 65 && option <= 90)
-		{
-			option += 32;
-		}
+		option = tolower(option);
 
-		if(option == 'q')
-		{
-			break;
-		}
-
-		else if(option == 'l')
+		if(option == 'l')
 		{
 			listPapers(budget->start);
 		}
@@ -205,16 +250,29 @@ void paperMenu(Budget* budget)
 				printf("\nError, paper not registered\n");
 		}
 
+		else if (option == 's')
+		{
+			char code[6];
+			printf("\nName of the paper: ");
+			scanf(" %s", code);
+			
+			for (int i = 0; i < sizeof(code); ++i)
+				code[i] = toupper(code[i]);
+
+			Paper* paper = searchPaper(budget->start, code);
+			simulateSell(paper);
+		}
+
 		else if(option == 'd')
 			deletePaper(budget);
 
-		else if(option == 's')
+		else if(option == 'b')
 			break;
 
 		else
 		{
 			printf("\e[91m");
-			printf("Invalid command\n");
+			printf("\nInvalid command\n");
 			printf("\e[m");
 		}
 	}
