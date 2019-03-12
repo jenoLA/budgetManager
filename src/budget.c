@@ -5,7 +5,7 @@
 
 
 
-List* initList(int argc, char* argv[])
+List* initList(int argc, char const *argv[])
 {
 	if (argc == 1)
 		return malloc(sizeof(List));
@@ -36,18 +36,19 @@ Budget* initBudget(char* name)
 
 void addBudget(List* list, Budget* budget)
 {
-	if (list->start > 0)
+	if (list->size == 0)
 	{
-		Budget* lastBudget = list->start;
-
-		while (lastBudget->next != NULL)
-			lastBudget = lastBudget->next;
-
-		lastBudget->next = budget;
+		list->start = budget;
 		list->size++;
 		return;
 	}
-	list->start = budget;
+	
+	Budget* lastBudget = list->start;
+
+	while (lastBudget->next != NULL)
+		lastBudget = lastBudget->next;
+
+	lastBudget->next = budget;
 	list->size++;
 }
 
@@ -103,14 +104,14 @@ void printBudgets(Budget* current)
 {
 	while (current != NULL)
 	{
-		printf("Budget: %s\n", current->name);
+		printf("\nBudget: %s\n", current->name);
 		printf("   Items: %i\n", current->size);
 
 		if (current->size > 0)
 			printf("   Total value of items: %0.2f R$\n", current->totalValue);
 
 		if (current->earned != 0)
-			printf("   Earned with till now: %0.2f R$\n", current->earned);
+			printf("   Selled with till now: %0.2f R$\n", current->earned);
 
 		printf("\n");
 		current = current->next;

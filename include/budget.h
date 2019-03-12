@@ -3,7 +3,7 @@
 #include "struct.h"
 
 //if argv[1] is a valid data file return the readed one from there
-List* initList(int argc, char* argv[]); 
+List* initList(int argc, char const *argv[]); 
 
 //search a budget by its name
 Budget* searchBudget(Budget* current, char* name);
