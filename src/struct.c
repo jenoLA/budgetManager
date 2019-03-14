@@ -17,32 +17,34 @@ List* readList(char const *path)
 	for (int i = 0; i < list->size; ++i)
 	{
 		currentBudget->next = malloc(sizeof(Budget));
-		fscanf(pf, "\t\"budget\": %s\n", currentBudget->next->name);
-		fscanf(pf, "\t\t\"size\": %i\n", &(currentBudget->next->size));
-		fscanf(pf, "\t\t\"totalValue\": %f\n", &(currentBudget->next->totalValue));
-		fscanf(pf, "\t\t\"earned\": %f\n", &(currentBudget->next->earned));
+		fscanf(pf, "\n\t\"budget\": %s\n", currentBudget->next->name);
+		fscanf(pf, "\t\t\"size\": %i\n", &currentBudget->next->size);
+		fscanf(pf, "\t\t\"totalValue\": %f\n", &currentBudget->next->totalValue);
+		fscanf(pf, "\t\t\"earned\": %f\n", &currentBudget->next->earned);
 
 		currentPaper = malloc(sizeof(Paper));
 		for (int j = 0; j < currentBudget->next->size; ++j)
 		{
 			currentPaper->next = malloc(sizeof(Paper));
 			fscanf(pf, "\t\t\"paper\": %s\n", currentPaper->next->code);
-			fscanf(pf, "\t\t\t\"bValue\": %f\n", &(currentPaper->next->bValue));
-			fscanf(pf, "\t\t\t\"earned\": %f\n", &(currentPaper->next->earned));
-			fscanf(pf, "\t\t\t\"quantity\": %i\n", &(currentPaper->next->quantity));
-			fscanf(pf, "\t\t\t\"actualQuantity\": %i\n", &(currentPaper->next->actualQuantity));
+			fscanf(pf, "\t\t\t\"bValue\": %f\n", &currentPaper->next->bValue);
+			fscanf(pf, "\t\t\t\"earned\": %f\n", &currentPaper->next->earned);
+			fscanf(pf, "\t\t\t\"quantity\": %i\n", &currentPaper->next->quantity);
+			fscanf(pf, "\t\t\t\"actualQuantity\": %i\n", &currentPaper->next->actualQuantity);
 
-			if (currentBudget->next->start == NULL)
-			{// for the first paper in the budget
+			// for the first paper in the budget
+			if (j == 0)
+			{
 				currentBudget->next->start = currentPaper->next;
 				currentPaper = currentBudget->next->start;
 			}
 			else
 				currentPaper = currentPaper->next;
 		}
-		fscanf(pf, "\n");
+
+		// for the first budget in the list
 		if (i == 0)
-		{// for the first budget in the list
+		{
 			list->start = currentBudget->next;
 			currentBudget = list->start;
 		}
@@ -66,7 +68,7 @@ void saveList(List* list, char* path)
 	Budget* currentBudget = list->start;
 	while(currentBudget != NULL)
 	{
-		fprintf(pf, "\t\"budget\": %s\n", currentBudget->name);
+		fprintf(pf, "\n\t\"budget\": %s\n", currentBudget->name);
 		fprintf(pf, "\t\t\"size\": %i\n", currentBudget->size);
 		fprintf(pf, "\t\t\"totalValue\": %0.2f\n", currentBudget->totalValue);
 		fprintf(pf, "\t\t\"earned\": %0.2f\n", currentBudget->earned);
@@ -81,7 +83,7 @@ void saveList(List* list, char* path)
 			fprintf(pf, "\t\t\t\"actualQuantity\": %i\n", currentPaper->actualQuantity);
 			currentPaper = currentPaper->next;
 		}
-		fprintf(pf, "\n");
+
 		currentBudget = currentBudget->next;
 	}
 	fclose(pf);
