@@ -94,10 +94,22 @@ void deleteBudget(List* list, char* name)
 		before->next = before->next->next;
 		// before->next = eraseBudget->next;
 	}
+	else
+	{
+		Budget* before = list->start;
+
+		// Iterate to get the before budget
+		while (before->next != eraseBudget)
+			before = before->next;
+
+		//removing eraseBudget os the list
+		before->next = NULL;
+	}
+
 
 	free(eraseBudget);
 	list->size--;
-	printf("Budget \"%s\" deleted.\n", name);
+	printf("\nBudget \"%s\" deleted.\n", name);
 }
 
 void printBudgets(Budget* current)

@@ -14,7 +14,7 @@ Paper* createPaper()
 	// change in the future to if the quantity isn't multiply of 100 add F in the end
 	for (int i = 0; i < sizeof(code); ++i)
 		code[i] = toupper(code[i]);
-	
+
 	strcpy(temp->code, code);
 
 	float initialValue;
@@ -38,6 +38,9 @@ Paper* createPaper()
 // requesting char code[6] for better integration with the system
 Paper* searchPaper(Paper* current, char* string)
 {
+	for (int i = 0; i < strlen(string); ++i)
+		string[i] = toupper(string[i]); // putting here to simplify
+
 	while (current != NULL)
 	{
 		if (strcmp(current->code, string) == 0)
@@ -76,9 +79,9 @@ void deletePaper(Budget* budget)
 	printf("Name of the paper to delete: \n");
 	scanf(" %s", code);
 
-	Paper* erase = searchPaper(budget->start, code);
+	Paper* erasePaper = searchPaper(budget->start, code);
 
-	if (erase == NULL)
+	if (erasePaper == NULL)
 	{
 		printf("\e[91m");	
 		printf("Not found any paper with this code\n");
@@ -86,21 +89,32 @@ void deletePaper(Budget* budget)
 		return;
 	}
 
-	else if (budget->start == erase)
-		budget->start = erase->next;
+	else if (budget->start == erasePaper)
+		budget->start = erasePaper->next;
 
-	else if (erase->next != NULL)
+	else if (erasePaper->next != NULL)
 	{
 		Paper* before = budget->start;
 
-		while (before->next != erase)
+		while (before->next != erasePaper)
 			before = before->next;
 
 		before->next = before->next->next;
 	}
+	else
+	{
+		Paper* before = budget->start;
+
+		// Iterate to get the before budget
+		while (before->next != erasePaper)
+			before = before->next;
+
+		//removing erasePaper of the budget
+		before->next = NULL;
+	}
 
 	printf("paper %s deleted\n", code);
-	free(erase);
+	free(erasePaper);
 	budget->size--;
 }
 
@@ -187,7 +201,9 @@ void simulateSell(Paper* paper)
 	{
 		printf("\nValue of the paper selled: ");
 		scanf(" %f", &value);
-		printf("\nearned by unit: %0.2f\n", value - paper->bValue);
+		float byUnit = value - paper->bValue;
+		printf("\nearned by unit: %0.2f\n", byUnit);
+		printf("\ntotal: %0.2f\n", byUnit * quantityMinus);
 		return;
 	}
 	//goes here if isn't going to sell any paper
@@ -196,7 +212,9 @@ void simulateSell(Paper* paper)
 	float bprice; //buy price
 	printf("\nvalue by unit: \n");
 	scanf(" %f", &bprice);
-	printf("\npondered value: %0.2f\n", (paper->bValue + bprice) / 2);
+	float ponderedValue = (paper->bValue + bprice) / 2;
+	printf("\npondered value: %0.2f\n", ponderedValue);
+	printf("\ntotal: %0.2f\n", ponderedValue * quantityPlus);
 
 }
 
@@ -238,9 +256,6 @@ void paperMenu(Budget* budget)
 			printf("\nName of the paper: ");
 			scanf(" %s", code);
 			
-			for (int i = 0; i < sizeof(code); ++i)
-				code[i] = toupper(code[i]);
-
 			Paper* paper = searchPaper(budget->start, code);
 			
 			if (paper != NULL)
@@ -255,10 +270,6 @@ void paperMenu(Budget* budget)
 			char code[6];
 			printf("\nName of the paper: ");
 			scanf(" %s", code);
-			
-			for (int i = 0; i < sizeof(code); ++i)
-				code[i] = toupper(code[i]);
-
 			Paper* paper = searchPaper(budget->start, code);
 			simulateSell(paper);
 		}
