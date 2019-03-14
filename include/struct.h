@@ -1,7 +1,5 @@
 #ifndef STRUCT_H
 #define STRUCT_H
-#include <stdio.h>
-#include <stdlib.h>
 
 typedef struct paper_t
 {
@@ -10,6 +8,7 @@ typedef struct paper_t
 	int quantity;
 	float earned;
 	int actualQuantity;
+	char dayOf[sizeof("dd:mm:yy sun")];
 	struct paper_t* next;
 } Paper;
 
@@ -20,6 +19,7 @@ typedef struct budget_t
 	int size;
 	float totalValue;
 	float earned;
+	char lastModified[sizeof("dd:mm:yy sun")];
 	struct budget_t* next;
 } Budget;
 
@@ -29,6 +29,8 @@ typedef struct
 	int size;
 } List;
 
+//return a string in the format dd:mm:yyyy
+void setWeek(char* date);
 //return the one readed from the data file on the path, if exists
 List* readList(char const *path);
 

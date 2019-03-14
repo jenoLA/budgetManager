@@ -1,4 +1,16 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 #include "../include/struct.h"
+
+void setWeek(char* date)
+{
+	time_t now = time(NULL);;
+	struct tm* ts;
+	ts = localtime(&now);
+
+	strftime(date, 15, "%d:%m:%y %a", ts);
+}
 
 List* readList(char const *path)
 {

@@ -4,6 +4,8 @@
 #include <ctype.h>
 #include "../include/paper.h"
 
+
+
 Paper* createPaper()
 {
 	Paper* temp = malloc(sizeof(Paper));
@@ -29,6 +31,8 @@ Paper* createPaper()
 	printf("\n");
 	temp->quantity = quantity;
 	temp->actualQuantity = quantity;
+
+	setWeek(temp->dayOf);
 
 	temp->next = NULL;
 	temp->earned = 0;
@@ -60,6 +64,7 @@ void addPaper(Budget* budget, Paper* paper)
 		budget->start = paper;
 		budget->size++;
 		budget->totalValue += paper->bValue * paper->quantity;
+		strcpy(budget->lastModified, paper->dayOf);
 		return;
 	}
 	
@@ -70,6 +75,7 @@ void addPaper(Budget* budget, Paper* paper)
 	current->next = paper;
 	budget->totalValue += paper->bValue * paper->quantity;
 	budget->size++;
+	strcpy(budget->lastModified, paper->dayOf);
 
 }
 
@@ -116,6 +122,7 @@ void deletePaper(Budget* budget)
 	printf("paper %s deleted\n", code);
 	free(erasePaper);
 	budget->size--;
+	setWeek(budget->lastModified);
 }
 
 // print all the info about the papers
@@ -123,7 +130,7 @@ void listPapers(Paper* current)
 {
 	while(current != NULL)
 	{
-		printf("\nPaper Code: %s\n", current->code);
+		printf("\nPaper Code: %s\t\t\t\t%s\n", current->code, current->dayOf);
 		printf("    Pondered value: %0.2f R$\n", current->bValue);
 		printf("    Current quantity: %i\n", current->actualQuantity);
 		if (current->actualQuantity == 0)
@@ -131,6 +138,8 @@ void listPapers(Paper* current)
 		
 		if (current->earned != 0)
 			printf("    Selled: %0.2f R$\n", current->earned);
+
+		printf("last modified: %s\n", current->lastModified);
 
 		printf("\n");
 		current = current->next;
@@ -153,6 +162,9 @@ void updatePaper(Budget* budget, Paper* paper)
 	}
 	
 	float price; //for both situations
+	setWeek(paper->dayOf);
+	setWeek(budget->lastModified);
+	
 	// sell part
 	if (quantityMinus > 0)
 	{
