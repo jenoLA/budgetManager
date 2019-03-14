@@ -24,15 +24,17 @@ List* readList(char const *path)
 	}
 	fscanf(pf, "\"list\"\n");
 	fscanf(pf, "\"size\": %i\n", &(list->size));
+	fscanf(pf, "\n");
 	Budget* currentBudget = malloc(sizeof(Budget));
 	Paper* currentPaper;
 	for (int i = 0; i < list->size; ++i)
 	{
 		currentBudget->next = malloc(sizeof(Budget));
-		fscanf(pf, "\n\t\"budget\": %s\n", currentBudget->next->name);
+		fscanf(pf, "\t\"budget\": %s\n", currentBudget->next->name);
 		fscanf(pf, "\t\t\"size\": %i\n", &currentBudget->next->size);
 		fscanf(pf, "\t\t\"totalValue\": %f\n", &currentBudget->next->totalValue);
 		fscanf(pf, "\t\t\"earned\": %f\n", &currentBudget->next->earned);
+		fscanf(pf, "\t\t\"lastModified\": %[^\n]\n", currentBudget->next->lastModified);
 
 		currentPaper = malloc(sizeof(Paper));
 		for (int j = 0; j < currentBudget->next->size; ++j)
@@ -43,6 +45,10 @@ List* readList(char const *path)
 			fscanf(pf, "\t\t\t\"earned\": %f\n", &currentPaper->next->earned);
 			fscanf(pf, "\t\t\t\"quantity\": %i\n", &currentPaper->next->quantity);
 			fscanf(pf, "\t\t\t\"actualQuantity\": %i\n", &currentPaper->next->actualQuantity);
+			fscanf(pf, "\t\t\t\"dayOf\": %[^\n]\n", currentPaper->next->dayOf);
+			
+			if (currentPaper->next->quantity != currentPaper->next->actualQuantity)
+				fscanf(pf, "\t\t\t\"selled\": %[^\n]\n", currentPaper->next->selled);
 
 			// for the first paper in the budget
 			if (j == 0)
@@ -54,6 +60,7 @@ List* readList(char const *path)
 				currentPaper = currentPaper->next;
 		}
 
+		fscanf(pf, "\n");
 		// for the first budget in the list
 		if (i == 0)
 		{
@@ -80,12 +87,13 @@ void saveList(List* list, char* path)
 	Budget* currentBudget = list->start;
 	while(currentBudget != NULL)
 	{
-		fprintf(pf, "\n\t\"budget\": %s\n", currentBudget->name);
+		fprintf(pf, "\t\"budget\": %s\n", currentBudget->name);
 		fprintf(pf, "\t\t\"size\": %i\n", currentBudget->size);
 		fprintf(pf, "\t\t\"totalValue\": %0.2f\n", currentBudget->totalValue);
 		fprintf(pf, "\t\t\"earned\": %0.2f\n", currentBudget->earned);
-		Paper* currentPaper = currentBudget->start;
+		fprintf(pf, "\t\t\"lastModified\": %s\n", currentBudget->lastModified);
 
+		Paper* currentPaper = currentBudget->start;
 		while(currentPaper != NULL)
 		{
 			fprintf(pf, "\t\t\"paper\": %s\n", currentPaper->code);
@@ -93,9 +101,14 @@ void saveList(List* list, char* path)
 			fprintf(pf, "\t\t\t\"earned\": %0.2f\n", currentPaper->earned);	
 			fprintf(pf, "\t\t\t\"quantity\": %i\n", currentPaper->quantity);
 			fprintf(pf, "\t\t\t\"actualQuantity\": %i\n", currentPaper->actualQuantity);
+			fprintf(pf, "\t\t\t\"dayOf\": %s\n", currentPaper->dayOf);
+			if (currentPaper->next->quantity != currentPaper->next->actualQuantity)
+				fprintf(pf, "\t\t\t\"selled\": %s\n", currentPaper->selled);
+
 			currentPaper = currentPaper->next;
 		}
 
+		fprintf(pf, "\n");
 		currentBudget = currentBudget->next;
 	}
 	fclose(pf);

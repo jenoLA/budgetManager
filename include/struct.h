@@ -9,6 +9,7 @@ typedef struct paper_t
 	float earned;
 	int actualQuantity;
 	char dayOf[sizeof("dd:mm:yy sun")];
+	char selled[sizeof("dd:mm:yy sun")];
 	struct paper_t* next;
 } Paper;
 
