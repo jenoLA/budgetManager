@@ -10,7 +10,7 @@ Paper* createPaper()
 {
 	Paper* temp = malloc(sizeof(Paper));
 	char code[6];
-	printf("Name of your new stock: ");
+	printf("\nName of your new stock: ");
 	scanf(" %s", code);
 	printf("\n");
 	// change in the future to if the quantity isn't multiply of 100 add F in the end
@@ -20,15 +20,14 @@ Paper* createPaper()
 	strcpy(temp->code, code);
 
 	float initialValue;
-	printf("His value by unit: ");
+	printf("\nHis value by unit: ");
 	scanf(" %f", &initialValue);
 	printf("\n");
 	temp->bValue = initialValue;
 
 	int quantity;
-	printf("How much units: ");
+	printf("\nHow much units: ");
 	scanf(" %i", &quantity);
-	printf("\n");
 	temp->quantity = quantity;
 	temp->actualQuantity = quantity;
 
@@ -82,7 +81,7 @@ void addPaper(Budget* budget, Paper* paper)
 void deletePaper(Budget* budget)
 {
 	char code[6];
-	printf("Name of the paper to delete: \n");
+	printf("\nName of the paper to delete: ");
 	scanf(" %s", code);
 
 	Paper* erasePaper = searchPaper(budget->start, code);
@@ -119,7 +118,7 @@ void deletePaper(Budget* budget)
 		before->next = NULL;
 	}
 
-	printf("paper %s deleted\n", code);
+	printf("\npaper %s deleted\n", code);
 	free(erasePaper);
 	budget->size--;
 	setWeek(budget->lastModified);
@@ -137,9 +136,7 @@ void listPapers(Paper* current)
 			printf("    final pondered value: %0.2f R$\n", current->bValue * current->quantity);
 		
 		if (current->earned != 0)
-			printf("    Selled: %0.2f R$\n", current->earned);
-
-		printf("last modified: %s\n", current->lastModified);
+			printf("    Selled: %0.2f R$\t\t\t\t%s\n", current->earned, current->selled);
 
 		printf("\n");
 		current = current->next;
@@ -162,12 +159,12 @@ void updatePaper(Budget* budget, Paper* paper)
 	}
 	
 	float price; //for both situations
-	setWeek(paper->dayOf);
 	setWeek(budget->lastModified);
-	
+
 	// sell part
 	if (quantityMinus > 0)
 	{
+		setWeek(paper->selled);
 		printf("\nValue of the paper selled: ");
 		scanf(" %f", &price); //sell price
 
@@ -184,6 +181,7 @@ void updatePaper(Budget* budget, Paper* paper)
 	
 	if (quantityPlus > 0)
 	{
+		setWeek(paper->dayOf);
 		printf("\nvalue by unit: \n");
 		scanf(" %f", &price);
 		paper->bValue = (paper->bValue + price) / 2;
@@ -198,6 +196,12 @@ void updatePaper(Budget* budget, Paper* paper)
 void simulateSell(Paper* paper)
 {
 	float quantityPlus, quantityMinus, value;
+	if ((strcmp(paper->dayOf, paper->selled)) == 0)
+	{
+		printf("\e[36m");
+		printf("\nif you sell this paper today, be ware of the tax\n");
+		printf("\e[m");
+	}
 	printf("\nQuantity selled: ");
 	scanf(" %f", &quantityMinus);
 

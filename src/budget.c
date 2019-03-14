@@ -116,7 +116,7 @@ void printBudgets(Budget* current)
 {
 	while (current != NULL)
 	{
-		printf("\nBudget: %s\n", current->name);
+		printf("\nBudget: %s\t\t\t\t%s\n", current->name, current->lastModified);
 		printf("   Items: %i\n", current->size);
 
 		if (current->size > 0)
