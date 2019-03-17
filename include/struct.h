@@ -36,7 +36,7 @@ void setWeek(char* date);
 List* readList(char const *path);
 
 //save the state of the list in a data file saved on the path
-void saveList(List* list, char* path);
+void saveList(List* list, char const* path);
 
 
 #endif

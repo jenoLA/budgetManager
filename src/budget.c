@@ -4,27 +4,26 @@
 #include "../include/budget.h"
 
 
-
-List* initList(int argc, char const *argv[])
+List* initList(char* path, char const* file)
 {
-	if (argc == 1)
-		return malloc(sizeof(List));
-
-	else if (argc == 2)
-		return readList(argv[1]);
+	if (file)
+	{
+		int len = strlen(path) + strlen(file) + 1;
+		char filePath[len];
+		strncpy(filePath, path, strlen(path) + 1);
+		return readList(strncat(filePath, file, len));
+	}
 
 	else
-	{
-		printf("This program accepts only a data file (one argument)\n");
-		exit(1);
-	}
+		return malloc(sizeof(List));
+
 }
 
 
-Budget* initBudget(char* name)
+Budget* initBudget(char const* name)
 {
 	Budget* newBudget = malloc(sizeof(Budget));
-	strcpy(newBudget->name, name);
+	strncpy(newBudget->name, name, strlen(name));
 	newBudget->next = NULL;
 	newBudget->size = 0;
 	newBudget->start = NULL;
@@ -34,13 +33,13 @@ Budget* initBudget(char* name)
 }
 
 
-void addBudget(List* list, Budget* budget)
+int addBudget(List* list, Budget* budget)
 {
 	if (list->size == 0)
 	{
 		list->start = budget;
 		list->size++;
-		return;
+		return 1;
 	}
 	
 	Budget* lastBudget = list->start;
@@ -50,10 +49,11 @@ void addBudget(List* list, Budget* budget)
 
 	lastBudget->next = budget;
 	list->size++;
+	return 1;
 }
 
 
-Budget* searchBudget(Budget* current, char* name)
+Budget* searchBudget(Budget* current, char const* name)
 {
 	while (current != NULL)
 	{
@@ -66,16 +66,13 @@ Budget* searchBudget(Budget* current, char* name)
 }
 
 
-void deleteBudget(List* list, char* name)
+int deleteBudget(List* list, char const* name)
 {
 	Budget* eraseBudget = searchBudget(list->start, name);
 
 	// If it was not found
 	if (eraseBudget == NULL)
-	{
-		printf("Budget \"%s\" not found.\n", name);
-		return; // Don't erase, quit
-	}
+		return 0; // Don't erase, quit
 
 	// If it is the first budget
 	else if (eraseBudget == list->start)
@@ -110,6 +107,7 @@ void deleteBudget(List* list, char* name)
 	free(eraseBudget);
 	list->size--;
 	printf("\nBudget \"%s\" deleted.\n", name);
+	return 1;
 }
 
 void printBudgets(Budget* current)

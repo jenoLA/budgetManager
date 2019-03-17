@@ -2,31 +2,29 @@
 #define PAPER_H
 #include "struct.h"
 
-// user will be asked for the required data 
-Paper* createPaper();
+// user will be asked for the required data outside the function
+Paper* createPaper(char* code, float value, int quantity);
 
 // requesting char code[6] for better integration with the system
 Paper* searchPaper(Paper* current, char* string);
 
 // puts on the last position
-void addPaper(Budget* budget, Paper* paper);
+int addPaper(Budget* budget, Paper* paper);
 
-void deletePaper(Budget* budget);
+//delete a paper
+int deletePaper(Budget* budget, char* code);
 
 // print all the info about the papers
-void listPapers(Paper* current);
+int listPapers(Paper* current);
 
-// data required within
-void updatePaper(Budget* budget, Paper* paper);
+//update paper selling him
+int updatePaperSell(Budget* budget, Paper* paper, float value, int quantity);
 
-// simulate a sell
-void simulateSell(Paper* paper);
+//update paper buying him
+int updatePaperBuy(Budget* budget, Paper* paper, float value, int quantity);
 
-// welcome message
-void paperMenuMessage(Budget* budget);
-
-// menu to handle papers within the given budget
-void paperMenu(Budget* budget);
-
+// simulate a trade
+void simulateSell(Paper* paper, float value, int quantity);
+// maybe in the future make a more detailed view of a single paper
 
 #endif

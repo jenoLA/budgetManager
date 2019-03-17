@@ -12,17 +12,28 @@ void setWeek(char* date)
 	strftime(date, 15, "%d:%m:%y %a", ts);
 }
 
-List* readList(char const *path)
+// make a verification
+List* readList(char const* path)
 {
 	FILE* pf;
 	List* list = malloc(sizeof(List));
 	pf = fopen(path, "r");
+	
 	if (pf == NULL)
 	{
-		printf("file data not found or invalid\n");
+		printf("\e[91m");
+		printf("\nfile data not found\n");
 		exit(1);
 	}
-	fscanf(pf, "\"list\"\n");
+	int isList;
+
+	if (!fscanf(pf, "\"list\": %i\n", &isList))
+	{
+		printf("\e[91m");
+		printf("\nfile data invalid\n");
+		exit(1);
+	}
+
 	fscanf(pf, "\"size\": %i\n", &(list->size));
 	fscanf(pf, "\n");
 	Budget* currentBudget = malloc(sizeof(Budget));
@@ -59,6 +70,7 @@ List* readList(char const *path)
 			else
 				currentPaper = currentPaper->next;
 		}
+		currentPaper->next = NULL;
 
 		fscanf(pf, "\n");
 		// for the first budget in the list
@@ -70,20 +82,27 @@ List* readList(char const *path)
 		else
 			currentBudget = currentBudget->next;
 	}
+	currentBudget->next = NULL;
 	fclose(pf);
 	return list;
 }
 
-void saveList(List* list, char* path)
+void saveList(List* list, char const* path)
 {
 	FILE* pf;
 	pf = fopen(path, "w+");
+	
 	if (pf == NULL)
 	{
-		printf("something has gone wrong\n");
+		printf("\e[91m");
+		printf("\ninvalid directory\n");
+		exit(1);
 	}
-	fprintf(pf, "\"list\"\n");
+
+	fprintf(pf, "\"list\": 1\n");
 	fprintf(pf, "\"size\": %i\n", list->size);
+	fprintf(pf, "\n");
+
 	Budget* currentBudget = list->start;
 	while(currentBudget != NULL)
 	{
@@ -102,7 +121,8 @@ void saveList(List* list, char* path)
 			fprintf(pf, "\t\t\t\"quantity\": %i\n", currentPaper->quantity);
 			fprintf(pf, "\t\t\t\"actualQuantity\": %i\n", currentPaper->actualQuantity);
 			fprintf(pf, "\t\t\t\"dayOf\": %s\n", currentPaper->dayOf);
-			if (currentPaper->next->quantity != currentPaper->next->actualQuantity)
+
+			if (currentPaper->quantity != currentPaper->actualQuantity)
 				fprintf(pf, "\t\t\t\"selled\": %s\n", currentPaper->selled);
 
 			currentPaper = currentPaper->next;
