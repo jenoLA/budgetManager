@@ -2,7 +2,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
-#include "../include/paper.h"
+
+#include "paper.h"
 
 
 Paper* createPaper(char* code, float value, int quantity)
@@ -19,7 +20,7 @@ Paper* createPaper(char* code, float value, int quantity)
 	return temp;
 }
 
-// requesting char code[6] for better integration with the system
+// requesting char string for better integration with the system
 Paper* searchPaper(Paper* current, char* string)
 {
 	while (current != NULL)

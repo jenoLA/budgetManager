@@ -3,9 +3,10 @@
 #include <string.h>
 #include <ctype.h>
 #include <dirent.h>
-#include "../include/budget.h"
-#include "../include/paper.h"
-#include "../include/commands.h"
+
+#include "budget.h"
+#include "paper.h"
+#include "commands.h"
 
 void welcomeMessage()
 {

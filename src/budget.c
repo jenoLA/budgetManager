@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "../include/budget.h"
+#include "budget.h"
 
 
 List* initList(char* path, char const* file)
@@ -23,7 +23,7 @@ List* initList(char* path, char const* file)
 Budget* initBudget(char const* name)
 {
 	Budget* newBudget = malloc(sizeof(Budget));
-	strncpy(newBudget->name, name, strlen(name));
+	strncpy(newBudget->name, name, strlen(name) + 1);
 	newBudget->next = NULL;
 	newBudget->size = 0;
 	newBudget->start = NULL;

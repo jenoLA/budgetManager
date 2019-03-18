@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include "../include/struct.h"
+#include "struct.h"
 
 void setWeek(char* date)
 {

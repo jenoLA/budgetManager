@@ -3,10 +3,11 @@
 #include <string.h>
 #include <unistd.h>
 #include <ctype.h>
-#include "../include/commands.h"
-#include "../include/struct.h"
-#include "../include/budget.h"
-#include "../include/paper.h"
+
+#include "commands.h"
+#include "struct.h"
+#include "budget.h"
+#include "paper.h"
 
 #define HOME getenv("HOME")
 
