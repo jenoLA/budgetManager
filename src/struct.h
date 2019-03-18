@@ -3,7 +3,7 @@
 
 typedef struct paper_t
 {
-	char code[6];
+	char code[7];
 	float bValue;
 	int quantity;
 	float earned;
@@ -32,6 +32,7 @@ typedef struct
 
 //return a string in the format dd:mm:yyyy
 void setWeek(char* date);
+
 //return the one readed from the data file on the path, if exists
 List* readList(char const *path);
 

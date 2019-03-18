@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 #include "budget.h"
 
 
@@ -126,5 +127,4 @@ void printBudgets(Budget* current)
 		printf("\n");
 		current = current->next;
 	}
-	printf("\n");
 }

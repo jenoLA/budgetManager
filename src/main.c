@@ -40,7 +40,7 @@ int main(int argc, char const *argv[])
 			List* list = initList(path, file);
 
 			if (argv[opt1_][character] == 'f')
-			{	
+			{
 				if (argc == 3)
 					mainMenu(path, file);
 

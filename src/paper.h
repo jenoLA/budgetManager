@@ -5,7 +5,7 @@
 // user will be asked for the required data outside the function
 Paper* createPaper(char* code, float value, int quantity);
 
-// requesting char code[6] for better integration with the system
+// requesting the code for better integration with the system
 Paper* searchPaper(Paper* current, char* string);
 
 // puts on the last position

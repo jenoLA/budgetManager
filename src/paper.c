@@ -11,7 +11,7 @@ Paper* createPaper(char* code, float value, int quantity)
 	Paper* temp = malloc(sizeof(Paper));
 	setWeek(temp->dayOf);
 
-	strncpy(temp->code, code, 6);
+	strncpy(temp->code, code, 7); //maximun size
 	temp->bValue = value;
 	temp->quantity = quantity;
 	temp->actualQuantity = quantity;
@@ -37,23 +37,24 @@ Paper* searchPaper(Paper* current, char* string)
 // puts on the last position
 int addPaper(Budget* budget, Paper* paper)
 {
-	if (budget->size == 0)
+    strncpy(budget->lastModified, paper->dayOf, 15);
+    
+    if (budget->size == 0)
 	{
 		budget->start = paper;
 		budget->size++;
 		budget->totalValue += paper->bValue * paper->quantity;
-		strncpy(budget->lastModified, paper->dayOf, strlen(paper->dayOf));
 		return 1;
 	}
 	
 	Paper* current = budget->start;
-	while(current->next != NULL)
+	
+    while(current->next != NULL)
 		current = current->next;
 
 	current->next = paper;
 	budget->totalValue += paper->bValue * paper->quantity;
 	budget->size++;
-	strncpy(budget->lastModified, paper->dayOf, strlen(paper->dayOf));
 	return 1;
 }
 
@@ -148,9 +149,7 @@ int updatePaperBuy(Budget* budget, Paper* paper, float value, int quantityPlus)
 }
 
 void simulateSell(Paper* paper, float value, int quantityMinus)
-{
-	char today[15];
-	
+{	
 	if (quantityMinus > paper->actualQuantity)
 	{
 		printf("\e[91m");
@@ -159,6 +158,7 @@ void simulateSell(Paper* paper, float value, int quantityMinus)
 		return; //if invalid enter
 	}
 	
+	char today[15];
 	setWeek(today);
 
 	if ((strcmp(paper->dayOf, today)) == 0)

@@ -2,7 +2,7 @@
 #define BUDGET_H
 #include "struct.h"
 
-//if argv[1] is a valid data file return the readed one from there
+//if is a valid path/file return the readed one from there, else a new
 List* initList(char* path, char const* file); 
 
 //search a budget by its name
