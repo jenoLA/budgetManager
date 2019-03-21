@@ -44,6 +44,7 @@ int addPaper(Budget* budget, Paper* paper)
 		budget->start = paper;
 		budget->size++;
 		budget->totalValue += paper->bValue * paper->quantity;
+        setWeek(budget->lastModified);
 		return 1;
 	}
 	
@@ -95,7 +96,6 @@ int deletePaper(Budget* budget, char* code)
 	printf("\npaper %s deleted\n", code);
 	free(erasePaper);
 	budget->size--;
-	setWeek(budget->lastModified);
 	return 1;
 }
 
@@ -104,14 +104,15 @@ int listPapers(Paper* current)
 {
 	while(current != NULL)
 	{
-		printf("\nPaper Code: %s\t\t\t\t%s\n", current->code, current->dayOf);
-		printf("    Pondered value: %0.2f R$\n", current->bValue);
-		printf("    Current quantity: %i\n", current->actualQuantity);
-		if (current->actualQuantity == 0)
-			printf("    final pondered value: %0.2f R$\n", current->bValue * current->quantity);
-		
+		printf("\n  Paper code: %s\t\t\t\t%s\n", current->code, current->dayOf);
+		printf("\tPondered value: %0.2f R$\n", current->bValue);
+		printf("\tCurrent quantity: %i\n", current->actualQuantity);
+
+        if (current->actualQuantity == 0)
+			printf("\tfinal pondered value: %0.2f R$\n", current->bValue * current->quantity);
+
 		if (current->earned != 0)
-			printf("    Selled: %0.2f R$\t\t\t%s\n", current->earned, current->selled);
+			printf("\tSelled: %0.2f R$\t\t\t%s\n", current->earned, current->selled);
 
 		printf("\n");
 		current = current->next;
@@ -124,13 +125,8 @@ int updatePaperSell(Budget* budget, Paper* paper, float value, int quantityMinus
 {
 	if (quantityMinus > paper->actualQuantity)
 		return 0; //because of the invalid entry
-		
-		// printf("\e[91m");
-		// printf("\ninvalid number, you cannot sell more than you have\n");
-		// printf("\e[m");
-	
+
 	setWeek(paper->selled);
-	setWeek(budget->lastModified);
 	paper->actualQuantity -= quantityMinus;
 	paper->earned += (value * quantityMinus);
 	budget->earned += (value * quantityMinus);

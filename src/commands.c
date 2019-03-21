@@ -211,22 +211,22 @@ int paperMenu(Budget* budget)
 					printf("\nValue of the paper selled: ");
 					scanf(" %f", &price); //sell price
 					success = updatePaperSell(budget, paper, price, quantityMinus);
-				}
-			}
-			
-			//buy part
-			else if (quantityMinus == 0)
-			{
-				float quantityPlus;
-				printf("\nQuantity brought: ");
-				scanf(" %f", &quantityPlus);
-			
-				if (quantityPlus > 0)
-				{
-					printf("\nvalue by unit: \n");
-					scanf(" %f", &price);
-					success = updatePaperBuy(budget, paper, price, quantityPlus);
-				}
+                }
+
+                //buy part
+                else
+                {
+                    float quantityPlus;
+                    printf("\nQuantity brought: ");
+                    scanf(" %f", &quantityPlus);
+
+                    if (quantityPlus > 0)
+                    {
+                        printf("\nvalue by unit: ");
+                        scanf(" %f", &price);
+                        success = updatePaperBuy(budget, paper, price, quantityPlus);
+                    }
+                }
 			}
 
 			else
@@ -254,6 +254,7 @@ int paperMenu(Budget* budget)
 				scanf(" %f", &value);
 				
 				simulateSell(paper, value, quantityMinus);
+                success++;
 			}
 		}
 
@@ -262,7 +263,11 @@ int paperMenu(Budget* budget)
 			char code[6];
 			printf("\nName of the paper to delete: ");
 			scanf(" %s", code);
-			success = deletePaper(budget, code);
+            
+            for (int i = 0; i < strlen(code); ++i)
+                code[i] = toupper(code[i]);
+
+            success = deletePaper(budget, code);
 		}
 
 		else if(option == 'b')
@@ -277,7 +282,7 @@ int paperMenu(Budget* budget)
 			printf("\nInvalid action\n");
 			printf("\e[m");
 		}
-		
+
 		if (!success)
 		{
 			printf("\e[91m");	

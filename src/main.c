@@ -78,17 +78,17 @@ int main(int argc, char const *argv[])
 						{
 
 							int codeSize = strlen(argv [code_]);
-					
+
 							if (codeSize > 6)
 							{
 								printf("\e[33m");
 								printf("\ncode too big to by a stock\n");
 								exit(1);
 							}
-						
+
 							char code[6];
 							strncpy(code, argv [code_], codeSize);
-	
+
 							for (int i = 0; i < codeSize; ++i)
 								code[i] = toupper(code[i]);
 							
@@ -193,33 +193,33 @@ int main(int argc, char const *argv[])
 
 	// mini help message
 	printf("-h or --help:\n");
-	
+
 	printf("\n-f <data-file>          ~ enter or get data of a data file ~");
 	printf("\n-b <data-file>          ~ backup of the data file ~");
 	printf("\n-r <data-file>          ~ restore a data file from backup ~");
 	printf("\n-l                      ~ list elements ~");
-	
+
 	printf("\n-B                      ~ enter in the budget, also used combinated ~");
 	printf("\n-d                      ~ delete a budget or paper ~");
-	
+    
 	printf("\n-n                      ~ declares a new budget ~");
 	printf("\n-b                      ~ buy/create a paper, if exists modifies ~");
-	
+    
 	printf("\n-s                      ~ sell the given paper ~");
 	printf("\n--simul                 ~ simulate a sell ~\n");
 
 	//  usage
 	printf("\n======================== use cases ========================\n");
 	printf("\n~ no arguments lead to the main menu ~\n");
-	
+
 	printf("\nbudgetManager -b <data-file>\n");
 	printf("\nbudgetManager -r <data-file>\n");
 	printf("\nbudgetManager -f <data-file> -l\n");
-	
+
 	printf("\nbudgetManager -f <data-file> -n <budget>\n");
-	
+
 	printf("\nbudgetManager -f <data-file> -B <budget> -l\n");
-	
+
 	printf("\nbudgetManager -f <data-file> -B <budget> -b <code> <value by unit> <quantity>\n");
 
 	printf("\nbudgetManager -f <data-file> -B <budget> -- <code> <value by unit> <quantity>\n");
