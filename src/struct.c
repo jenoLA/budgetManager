@@ -132,5 +132,4 @@ void saveList(List* list, char const* path)
 		currentBudget = currentBudget->next;
 	}
 	fclose(pf);
-	printf("\nsaved!!\n\n");
 }

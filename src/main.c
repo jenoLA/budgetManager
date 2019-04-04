@@ -223,6 +223,4 @@ int main(int argc, char const *argv[])
 	printf("\nbudgetManager -f <data-file> -B <budget> -b <code> <value by unit> <quantity>\n");
 
 	printf("\nbudgetManager -f <data-file> -B <budget> -- <code> <value by unit> <quantity>\n");
-
-	return 0;
 }

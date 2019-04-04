@@ -23,11 +23,12 @@ void printFilesInFolder(char* path)
 {
 	DIR* dir;
 	struct dirent* entry;
-	printf("--------------------------[dir: %s ]-------------------------\n\n", path);
-	
+
 	if ((dir = opendir(path)))
 	{	
-		while ((entry = readdir(dir)))
+        printf("--------------------------[dir: %s ]-------------------------\n\n", path);
+
+        while ((entry = readdir(dir)))
 		{
  			if (entry->d_name[0] != '.')
   				printf(">> %s\n", entry->d_name);
@@ -38,7 +39,7 @@ void printFilesInFolder(char* path)
 		return;
 	}
 
-	printf("invalid directory\n");
+	printf("data directory not found\n");
 }
 
 void mainMenu(char* path, char const* file)
