@@ -137,9 +137,9 @@ int updatePaperBuy(Budget* budget, Paper* paper, float value, int quantityPlus)
 {
 	setWeek(paper->dayOf);
 	setWeek(budget->lastModified);
-	paper->bValue = (paper->bValue + value) / 2;
 	budget->totalValue += value * quantityPlus;
 	paper->quantity += quantityPlus;
+	paper->bValue = (paper->bValue * paper->actualQuantity + value * quantityPlus) / paper->quantity; //pondered new paper->bvalue
 	paper->actualQuantity += quantityPlus;
 	return 1;
 }
