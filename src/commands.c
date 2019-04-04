@@ -3,6 +3,8 @@
 #include <string.h>
 #include <ctype.h>
 #include <dirent.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 
 #include "budget.h"
 #include "paper.h"
@@ -24,9 +26,9 @@ void printFilesInFolder(char* path)
 	DIR* dir;
 	struct dirent* entry;
 
-	if ((dir = opendir(path)))
-	{	
-        printf("--------------------------[dir: %s ]-------------------------\n\n", path);
+    if ((dir = opendir(path)))
+	{
+        printf("--------------------------[ data files ]-------------------------\n\n");
 
         while ((entry = readdir(dir)))
 		{
@@ -36,10 +38,12 @@ void printFilesInFolder(char* path)
 
 		closedir(dir);
 		printf("\n");
-		return;
 	}
 
-	printf("data directory not found\n");
+    else if(!mkdir(path, 0777)) printFilesInFolder(path);
+
+    else
+        printf("invalid folder");
 }
 
 void mainMenu(char* path, char const* file)
