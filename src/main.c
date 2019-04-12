@@ -86,7 +86,7 @@ int main(int argc, char const *argv[])
 								exit(1);
 							}
 
-							char code[6];
+							char code[7];
 							strncpy(code, argv [code_], codeSize);
 
 							for (int i = 0; i < codeSize; ++i)
