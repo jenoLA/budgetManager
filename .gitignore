@@ -1,5 +1,5 @@
 # Ignore compiled program
-budgetManager
-
+bgtManager
+*.o
 # Ignore bd test
 arquive/*

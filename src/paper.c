@@ -147,10 +147,8 @@ int updatePaperBuy(Budget* budget, Paper* paper, float value, int quantityPlus)
 void simulateSell(Paper* paper, float value, int quantityMinus)
 {	
 	if (quantityMinus > paper->actualQuantity)
-	{
-		printf("\e[91m");
-		printf("\ninvalid number, you cannot sell more than you have\n");
-		printf("\e[m");
+    {
+        printf("\ninvalid number, you cannot sell more than you have\n");
 		return; //if invalid enter
 	}
 	
@@ -158,11 +156,7 @@ void simulateSell(Paper* paper, float value, int quantityMinus)
 	setWeek(today);
 
 	if ((strcmp(paper->dayOf, today)) == 0)
-	{
-		printf("\e[33m");
 		printf("\nif you sell this paper today, be ware of the tax\n");
-		printf("\e[m");
-	}
 
 	float byUnit = value - paper->bValue;
 	printf("\nearned by unit: %0.2f\n", byUnit);

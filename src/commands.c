@@ -108,11 +108,7 @@ void mainMenu(char* path, char const* file)
 			exit(0);
 
 		else
-		{
-			printf("\e[91m");
 			printf("\nInvalid command\n");
-			printf("\e[m");
-		}
 
 		if (save)
 		{
@@ -126,11 +122,8 @@ void mainMenu(char* path, char const* file)
 		}
 
 		else if (!success)
-		{
-			printf("\e[33m");
 			printf("\nInvalid entry\n");
-			printf("\e[m");
-		}
+
 	}	
 }
 
@@ -202,11 +195,7 @@ int paperMenu(Budget* budget)
 				setWeek(today);
 				
 				if ((strcmp(paper->dayOf, today)) == 0)
-				{
-					printf("\e[33m");
 					printf("\nif you sell this paper today, be ware of the tax\n");
-					printf("\e[m");
-				}
 
 				printf("\nQuantity selled: ");
 				scanf(" %f", &quantityMinus);
@@ -282,18 +271,11 @@ int paperMenu(Budget* budget)
 			return 1;
 
 		else
-		{
-			printf("\e[91m");
 			printf("\nInvalid action\n");
-			printf("\e[m");
-		}
 
 		if (!success)
-		{
-			printf("\e[91m");	
 			printf("Not found any paper with this code\n");
-			printf("\e[m");
-		}
+
 	}
 	return 0;
 }

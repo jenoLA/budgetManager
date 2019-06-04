@@ -20,8 +20,7 @@ List* readList(char const* path)
 	pf = fopen(path, "r");
 	
 	if (pf == NULL)
-	{
-		printf("\e[91m");
+    {    
 		printf("\nfile data not found\n");
 		exit(1);
 	}
@@ -29,7 +28,6 @@ List* readList(char const* path)
 
 	if (!fscanf(pf, "\"list\": %i\n", &isList))
 	{
-		printf("\e[91m");
 		printf("\nfile data invalid\n");
 		exit(1);
 	}
@@ -82,6 +80,7 @@ List* readList(char const* path)
 		else
 			currentBudget = currentBudget->next;
 	}
+
 	currentBudget->next = NULL;
 	fclose(pf);
 	return list;
@@ -94,7 +93,6 @@ void saveList(List* list, char const* path)
 	
 	if (pf == NULL)
 	{
-		printf("\e[91m");
 		printf("\ninvalid directory\n");
 		exit(1);
 	}
@@ -131,5 +129,6 @@ void saveList(List* list, char const* path)
 		fprintf(pf, "\n");
 		currentBudget = currentBudget->next;
 	}
+
 	fclose(pf);
 }
