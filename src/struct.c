@@ -6,11 +6,11 @@
 
 void setWeek(char* date)
 {
-	time_t now = time(NULL);;
 	struct tm* ts;
+	time_t now = time(NULL);
 	ts = localtime(&now);
 
-	strftime(date, 15, "%d/%m/%y %a", ts);
+	strftime(date, 13, "%d/%m/%y %a", ts);
 }
 
 List* readList(char const* path)
@@ -45,10 +45,10 @@ List* readList(char const* path)
 		fscanf(pf, "\t\"earned\": %f\n", (*currentPaper)->earned);
 		fscanf(pf, "\t\"quantity\": %i\n", &(*currentPaper)->quantity);
 		fscanf(pf, "\t\"actualQuantity\": %i\n", &(*currentPaper)->actualQuantity);
-		fscanf(pf, "\t\"dayOf\": %[^\n]\n", &(*currentPaper)->dayOf);
+		fscanf(pf, "\t\"dayOfBuy\": \"%s\"\n", &(*currentPaper)->dayOfBuy);
 
 		if ((*currentPaper)->quantity != (*currentPaper)->actualQuantity)
-			fscanf(pf, "\t\t\t\"selled\": %[^\n]\n", &(*currentPaper)->selled);
+			fscanf(pf, "\t\t\t\"dayOfSell\": %[^\n]\n", &(*currentPaper)->dayOfSell);
 
 		currentPaper = &(*currentPaper)->next;
 	}
@@ -82,10 +82,10 @@ void saveList(List* list, char const* path)
 		fprintf(pf, "\t\"earned\": %0.2f\n", (*currentPaper)->earned);	
 		fprintf(pf, "\t\"quantity\": %i\n", (*currentPaper)->quantity);
 		fprintf(pf, "\t\"actualQuantity\": %i\n", (*currentPaper)->actualQuantity);
-		fprintf(pf, "\t\"dayOf\": %s\n", (*currentPaper)->dayOf);
+		fprintf(pf, "\t\"dayOfBuy\": \"%s\"\n", (*currentPaper)->dayOfBuy);
 
 		if ((*currentPaper)->quantity != (*currentPaper)->actualQuantity)
-			fprintf(pf, "\t\"selled\": %s\n", (*currentPaper)->selled);
+			fprintf(pf, "\t\"dayOfSell\": %s\n", (*currentPaper)->dayOfSell);
 
 		fprintf(pf, "\n");
 

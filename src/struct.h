@@ -1,33 +1,29 @@
-#ifndef STRUCT_H
-#define STRUCT_H
+#pragma once
 
 typedef struct paper_t
 {
 	char code[7];
 	float buyValue;
-	int quantity;
 	float earned;
-	int actualQuantity;
-	char dayOf[sizeof("dd:mm:yy sun")];
-	char selled[sizeof("dd:mm:yy sun")];
+	unsigned int quantity;
+	unsigned int actualQuantity;
+	char dayOfBuy[13];
+	char dayOfSell[13];
 	struct paper_t* next;
 } Paper;
 
 typedef struct list_t
 {
 	Paper* start;
-	int size;
+	unsigned int size;
 	float totalValue;
 	float earned;
-	char lastModified[sizeof("dd:mm:yy sun")];
+	char lastModified[13];
 } List;
 
-//return a string in the format dd:mm:yyyy
+//return a string in the format dd/mm/yy DoW
 void setWeek(char* date);
 
 List* readList(char const *path);
 
 void saveList(List* list, char const* path);
-
-
-#endif
