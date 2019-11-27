@@ -1,5 +1,5 @@
 # Ignore compiled program
-bgtManager
+bgtmanager
 *.o
 # Ignore bd test
 arquive/*

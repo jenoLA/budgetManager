@@ -6,12 +6,11 @@
 
 #include "commands.h"
 #include "struct.h"
-#include "budget.h"
 #include "paper.h"
 
 #define HOME getenv("HOME")
 
-enum cli{opt1_ = 1, file_, opt2_, budgetName_, opt3_, code_, value_, quantity_};
+enum cli{opt1_ = 1, file_, opt2_, opt3_, code_, value_, quantity_};
 
 enum arr{hipen, character};
 // handle the options
@@ -24,6 +23,7 @@ int main(int argc, char const *argv[])
 	if (argc == 1)
 		mainMenu(path, NULL);
 
+	/*
 	else if (argv[opt1_][hipen] == '-')
 	{
 		if (argv[opt1_][character] == 'l')
@@ -56,21 +56,21 @@ int main(int argc, char const *argv[])
 
 					else if (argv[opt2_][character] == 'B')
 					{
-						Budget* budget = searchBudget (list->start, argv [budgetName_]);
+						Budget* list = searchBudget (list->start, argv [listName_]);
 
-						if (!budget)
+						if (!list)
 						{
 							printf("\e[31m");
-							printf("\nInvalid budget\n");
+							printf("\nInvalid list\n");
 							exit(1);
 						}
 
 						else if (argc == 5)
-							success = paperMenu(budget);
+							success = paperMenu(list);
 
 						else if (argv [opt3_][character] == 'l')
 						{
-							listPapers(budget->start);
+							listPapers(list->start);
 							exit(0);
 						}
 
@@ -93,7 +93,7 @@ int main(int argc, char const *argv[])
 								code[i] = toupper(code[i]);
 							
 							if (argv [opt3_][character] == 'd')
-								success = deletePaper(budget, code);
+								success = deletePaper(list, code);
 
 							else if (argc == 9)
 							{
@@ -106,28 +106,28 @@ int main(int argc, char const *argv[])
 
 								if (argv [opt3_][character] == 'b')
 								{
-									paper = searchPaper(budget->start, code);
+									paper = searchPaper(list->start, code);
 									
 									if (paper)
-										success = updatePaperBuy(budget, paper, value, quantity);
+										success = updatePaperBuy(list, paper, value, quantity);
 
 									else
-										success = addPaper(budget, createPaper(code,  value, quantity));
+										success = addPaper(list, createPaper(code,  value, quantity));
 
 								}
 								
 								else if (argv [opt3_][character] == 's')
 								{
-									paper = searchPaper(budget->start, code);
+									paper = searchPaper(list->start, code);
 									
 									if (paper)
-										success = updatePaperSell(budget, paper, value, quantity);
+										success = updatePaperSell(list, paper, value, quantity);
 
 								}
 								// put option print too
 								else if (argv [opt3_][character] == '-')
 								{
-									paper = searchPaper(budget->start, code);
+									paper = searchPaper(list->start, code);
 									
 									if (paper)
 										simulateSell(paper, value, quantity);
@@ -139,10 +139,10 @@ int main(int argc, char const *argv[])
 					}
 
 					else if (argv[opt2_][character] == 'd')
-						success = deleteBudget (list, argv [budgetName_]);
+						success = deleteBudget (list, argv [listName_]);
 
 					else if (argv [opt2_][character] == 'n')
-						success = addBudget(list, initBudget (argv [budgetName_]));
+						success = addBudget(list, initBudget (argv [listName_]));
 
 					else
 						printf("\nInvalid entry, verify your command\n");
@@ -190,19 +190,18 @@ int main(int argc, char const *argv[])
 			}
 		}
 	}
-
+	*/
 	// mini help message
 	printf("-h or --help:\n");
 
 	printf("\n-f <data-file>          ~ enter or get data of a data file ~");
-	printf("\n-b <data-file>          ~ backup of the data file ~");
+	printf("\n-B <data-file>          ~ backup of the data file ~");
 	printf("\n-r <data-file>          ~ restore a data file from backup ~");
 	printf("\n-l                      ~ list elements ~");
 
-	printf("\n-B                      ~ enter in the budget, also used combinated ~");
-	printf("\n-d                      ~ delete a budget or paper ~");
+	printf("\n-d                      ~ delete a list or paper ~");
     
-	printf("\n-n                      ~ declares a new budget ~");
+	printf("\n-n                      ~ declares a new list ~");
 	printf("\n-b                      ~ buy/create a paper, if exists modifies ~");
     
 	printf("\n-s                      ~ sell the given paper ~");

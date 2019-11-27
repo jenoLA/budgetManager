@@ -1,30 +1,34 @@
-#ifndef PAPER_H
-#define PAPER_H
+#pragma once
 #include "struct.h"
+
+// create a list of papers
+List* initList(char* path, char const* file); 
 
 // user will be asked for the required data outside the function
 Paper* createPaper(char* code, float value, int quantity);
 
 // requesting the code for better integration with the system
-Paper* searchPaper(Paper* current, char* string);
+Paper* searchPaper(Paper* paper, char* code);
 
 // puts on the last position
-int addPaper(Budget* budget, Paper* paper);
+int addPaper(List* list, Paper* paper);
 
 //delete a paper
-int deletePaper(Budget* budget, char* code);
+int deletePaper(List* list, char* code);
 
 // print all the info about the papers
 int listPapers(Paper* current);
 
 //update paper selling him
-int updatePaperSell(Budget* budget, Paper* paper, float value, int quantity);
+int updatePaperSell(List* list, Paper* paper, float value, int quantity);
 
 //update paper buying him
-int updatePaperBuy(Budget* budget, Paper* paper, float value, int quantity);
+int updatePaperBuy(List* list, Paper* paper, float value, int quantity);
 
 // simulate a trade
 void simulateSell(Paper* paper, float value, int quantity);
-// maybe in the future make a more detailed view of a single paper
 
-#endif
+// simulate a buy trade
+void simulateBuy(Paper* paper, float value, int quantity);
+
+// maybe in the future make a more detailed view of a single paper

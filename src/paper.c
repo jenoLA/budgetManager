@@ -5,6 +5,18 @@
 
 #include "paper.h"
 
+List* initList(char* path, char const* file)
+{
+	if (file)
+	{
+		int len = strlen(path) + strlen(file) + 1;
+		char filePath[len];
+		strncpy(filePath, path, strlen(path) + 1);
+		return readList(strncat(filePath, file, len));
+	}
+
+	return malloc(sizeof(List));
+}
 
 Paper* createPaper(char* code, float value, int quantity)
 {
@@ -12,7 +24,7 @@ Paper* createPaper(char* code, float value, int quantity)
 	setWeek(temp->dayOf);
 
 	strncpy(temp->code, code, 7); //maximun size
-	temp->bValue = value;
+	temp->buyValue = value;
 	temp->quantity = quantity;
 	temp->actualQuantity = quantity;
 	temp->next = NULL;
@@ -21,82 +33,83 @@ Paper* createPaper(char* code, float value, int quantity)
 }
 
 // requesting char string for better integration with the system
-Paper* searchPaper(Paper* current, char* string)
+Paper* searchPaper(Paper* paper, char* code)
 {
-	while (current != NULL)
-	{
-		if (strcmp(current->code, string) == 0)
-			return current;
+	for (int i = 0; i < strlen(code); ++i)
+		code[i] = toupper(code[i]);
 
-		current = current->next;
+	while (paper)
+	{
+		if (!strcmp(paper->code, code))
+			return paper;
+
+		paper = paper->next;
 	}
 	
 	return NULL;
 }
 
 // puts on the last position
-int addPaper(Budget* budget, Paper* paper)
+int addPaper(List* list, Paper* paper)
 {
-    strncpy(budget->lastModified, paper->dayOf, 15);
+    strncpy(list->lastModified, paper->dayOf, 15);
     
-    if (budget->size == 0)
+    if (!list->size)
 	{
-		budget->start = paper;
-		budget->size++;
-		budget->totalValue += paper->bValue * paper->quantity;
-        setWeek(budget->lastModified);
-		return 1;
+		list->start = paper;
+		list->size++;
+		list->totalValue += paper->buyValue * paper->quantity;
+        setWeek(list->lastModified);
+		return 0;
 	}
 	
-	Paper* current = budget->start;
+	Paper* current = list->start;
 	
-    while(current->next != NULL)
+    while(current->next)
 		current = current->next;
 
 	current->next = paper;
-	budget->totalValue += paper->bValue * paper->quantity;
-	budget->size++;
-	return 1;
+	list->totalValue += paper->buyValue * paper->quantity;
+	list->size++;
+	return 0;
 }
 
-int deletePaper(Budget* budget, char* code)
+int deletePaper(List* list, char* code)
 {
-	Paper* erasePaper = searchPaper(budget->start, code);
+	Paper* paperToDelete = searchPaper(list->start, code);
 
-	if (erasePaper == NULL)
+	if (!paperToDelete)
+		return 1;
+
+	else if (list->start == paperToDelete)
+		list->start = paperToDelete->next;
+
+	else if (paperToDelete->next)
 	{
-		return 0;
-	}
+		Paper* before = list->start;
 
-	else if (budget->start == erasePaper)
-		budget->start = erasePaper->next;
-
-	else if (erasePaper->next != NULL)
-	{
-		Paper* before = budget->start;
-
-		while (before->next != erasePaper)
+		while (before->next != paperToDelete)
 			before = before->next;
 
 		before->next = before->next->next;
 	}
-
+/*
 	else
 	{
-		Paper* before = budget->start;
+		Paper* before = list->start;
 
-		// Iterate to get the before budget
-		while (before->next != erasePaper)
+		// Iterate to get the before list
+		while (before->next != paperToDelete)
 			before = before->next;
 
-		//removing erasePaper of the budget
+		//removing paperToDelete of the list
 		before->next = NULL;
 	}
-
+*/
 	printf("\npaper %s deleted\n", code);
-	free(erasePaper);
-	budget->size--;
-	return 1;
+	free(paperToDelete);
+	list->size--;
+	return 0;
 }
 
 // print all the info about the papers
@@ -105,11 +118,11 @@ int listPapers(Paper* current)
 	while(current != NULL)
 	{
 		printf("\n  Paper code: %s\t\t\t\t%s\n", current->code, current->dayOf);
-		printf("\tPondered value: %0.2f R$\n", current->bValue);
+		printf("\tPondered value: %0.2f R$\n", current->buyValue);
 		printf("\tCurrent quantity: %i\n", current->actualQuantity);
 
         if (current->actualQuantity == 0)
-			printf("\tfinal pondered value: %0.2f R$\n", current->bValue * current->quantity);
+			printf("\tfinal pondered value: %0.2f R$\n", current->buyValue * current->quantity);
 
 		if (current->earned != 0)
 			printf("\tSelled: %0.2f R$\t\t\t%s\n", current->earned, current->selled);
@@ -117,31 +130,31 @@ int listPapers(Paper* current)
 		printf("\n");
 		current = current->next;
 	}
-	return 1;
+	return 0;
 }
 
 // data required within
-int updatePaperSell(Budget* budget, Paper* paper, float value, int quantityMinus)
+int updatePaperSell(List* list, Paper* paper, float value, int quantityMinus)
 {
 	if (quantityMinus > paper->actualQuantity)
-		return 0; //because of the invalid entry
+		return 1; //because of the invalid entry
 
 	setWeek(paper->selled);
 	paper->actualQuantity -= quantityMinus;
 	paper->earned += (value * quantityMinus);
-	budget->earned += (value * quantityMinus);
-	return 1;
+	list->earned += (value * quantityMinus);
+	return 0;
 }
 
-int updatePaperBuy(Budget* budget, Paper* paper, float value, int quantityPlus)
+int updatePaperBuy(List* list, Paper* paper, float value, int quantityPlus)
 {
 	setWeek(paper->dayOf);
-	setWeek(budget->lastModified);
-	budget->totalValue += value * quantityPlus;
+	setWeek(list->lastModified);
+	list->totalValue += value * quantityPlus;
 	paper->quantity += quantityPlus;
-	paper->bValue = (paper->bValue * paper->actualQuantity + value * quantityPlus) / paper->quantity; //pondered new paper->bvalue
+	paper->buyValue = (paper->buyValue * paper->actualQuantity + value * quantityPlus) / paper->quantity; //pondered new paper->bvalue
 	paper->actualQuantity += quantityPlus;
-	return 1;
+	return 0;
 }
 
 void simulateSell(Paper* paper, float value, int quantityMinus)
@@ -158,7 +171,7 @@ void simulateSell(Paper* paper, float value, int quantityMinus)
 	if ((strcmp(paper->dayOf, today)) == 0)
 		printf("\nif you sell this paper today, be ware of the tax\n");
 
-	float byUnit = value - paper->bValue;
+	float byUnit = value - paper->buyValue;
 	printf("\nearned by unit: %0.2f\n", byUnit);
 	printf("\ntotal: %0.2f\n", byUnit * quantityMinus);
 }

@@ -6,7 +6,6 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-#include "budget.h"
 #include "paper.h"
 #include "commands.h"
 
@@ -18,7 +17,6 @@ void welcomeMessage()
 	printf(" Budget Manager ");
 	printf("\e[m");
 	printf("==========================\n\n");
-	printf("N)ew budget  E)nter budget  L)ist budgets  D)elete budget  S)ave and quit  Q)uit\n");
 }
 
 void printFilesInFolder(char* path)
@@ -31,10 +29,8 @@ void printFilesInFolder(char* path)
         printf("--------------------------[ data files ]-------------------------\n\n");
 
         while ((entry = readdir(dir)))
-		{
  			if (entry->d_name[0] != '.')
   				printf(">> %s\n", entry->d_name);
-		}
 
 		closedir(dir);
 		printf("\n");
@@ -50,151 +46,59 @@ void mainMenu(char* path, char const* file)
 {
 	List* list = initList(path, file);
 
-	char name[20];
+	char code[7];
+	char name[21];
 	char option;
 	int save;
-	int success;
+	int failed; // by default failed gonna be always defined to 0 in each interation
+	welcomeMessage();
 
-	while (list)
+	while(list)
 	{
-		welcomeMessage();
+		failed = 0;
+		printf("\nN)ew paper  L)ist papers  U)pdate paper  P)retend action  D)elete paper  Q)uit  S)ave\n\n");
 
-		printf("\n");
 		scanf(" %c", &option);
 		option = tolower(option);
 
 		if (option == 'n')
 		{
-			printf("Type the name to the new budget (max 20 characters): ");
-			scanf(" %s", name);
-			printf("\n");
-			Budget* newBudget = initBudget(name);
-			success = addBudget(list, newBudget);
-			save = paperMenu(newBudget);
-		}
-		
-		else if (option == 'd')
-		{
-			printf("Type the name of the budget to delete: ");
-			scanf(" %s", name);
-			printf("\n");
-			success = deleteBudget(list, name);
-		}
-
-		else if (option == 's')
-			save = 1;
-		
-		else if (option == 'e')
-		{
-			printf("Name of the budget to enter: ");
-			scanf(" %s", name);
-			printf("\n");
-
-			Budget* budget = searchBudget(list->start, name);
-			
-			if (budget == NULL)
-				printf("Not found any budget with this name\n");
-
-			save = paperMenu(budget);
-		}
-		
-		else if (option == 'l')
-		{
-			printBudgets(list->start);
-			success = 1;
-		}
-
-		else if (option == 'q')
-			exit(0);
-
-		else
-			printf("\nInvalid command\n");
-
-		if (save)
-		{
-			printFilesInFolder(path);
-			printf("Name to the new data file: ");
-			scanf(" %s", name);
-			printf("\n");
-			
-			saveList(list, strcat(path, name)); //sending directly
-			exit(0);
-		}
-
-		else if (!success)
-			printf("\nInvalid entry\n");
-
-	}	
-}
-
-void paperMenuMessage(Budget* budget)
-{
-	printf("\n====================");
-	printf(" You are on");
-	printf("\e[96m");
-	printf(" %s ", budget->name);
-	printf("\e[m");
-	printf("Budget");
-	printf("======================\n");
-	printf("\nA)dd paper  L)ist papers  U)pdate paper  S)imulate  D)elete paper  B)ack  Q)uit and save\n\n");
-}
-
-int paperMenu(Budget* budget)
-{
-	char option;
-	int success;
-	while(budget)
-	{
-		paperMenuMessage(budget);
-
-		scanf(" %c", &option);
-		
-		option = tolower(option);
-
-		if(option == 'l')
-			success = listPapers(budget->start);
-
-		else if(option == 'a')
-		{
 			char code[6];
-			printf("\nName of your new stock: ");
+			printf("\nCode: ");
 			scanf(" %s", code);
-			printf("\n");
 
 			for (int i = 0; i < sizeof(code); ++i)
 				code[i] = toupper(code[i]);
 
 			float value;
-			printf("\nHis value by unit: ");
+			printf("Unitary value: ");
 			scanf(" %f", &value);
-			printf("\n");
 
 			int quantity;
-			printf("\nHow much units: ");
+			printf("Quantity: ");
 			scanf(" %i", &quantity);
-			success = addPaper(budget, createPaper(code, value, quantity));
+			printf("\n");
+			failed = addPaper(list, createPaper(code, value, quantity));
 		}
 
 		else if(option == 'u')
 		{
 			char code[6];
-			printf("\nName of the paper: ");
+			printf("\nCode: ");
 			scanf(" %s", code);
-			
-			for (int i = 0; i < strlen(code); ++i)
-				code[i] = toupper(code[i]);
 
-			Paper* paper = searchPaper(budget->start, code);
+			Paper* paper = searchPaper(list->start, code);
 			
-			float price; //for both situations
-			
-			float quantityMinus;
-			if (paper)
+			if (!paper) failed = 1;
+
+			else
 			{
+				float price; //for both situations
+				float quantityMinus;
 				char today[13];
 				setWeek(today);
 				
-				if ((strcmp(paper->dayOf, today)) == 0)
+				if (!strcmp(paper->dayOf, today))
 					printf("\nif you sell this paper today, be ware of the tax\n");
 
 				printf("\nQuantity selled: ");
@@ -204,7 +108,7 @@ int paperMenu(Budget* budget)
 				{
 					printf("\nValue of the paper selled: ");
 					scanf(" %f", &price); //sell price
-					success = updatePaperSell(budget, paper, price, quantityMinus);
+					failed = updatePaperSell(list, paper, price, quantityMinus);
                 }
 
                 //buy part
@@ -218,64 +122,66 @@ int paperMenu(Budget* budget)
                     {
                         printf("\nvalue by unit: ");
                         scanf(" %f", &price);
-                        success = updatePaperBuy(budget, paper, price, quantityPlus);
+                        failed = updatePaperBuy(list, paper, price, quantityPlus);
                     }
                 }
 			}
+		}	
 
-			else
-				printf("\nInvalid entry\n");
-
+		else if (option == 'd')
+		{
+			printf("\nCode: ");
+			scanf(" %s", code);
+			printf("\n");
+			failed = deletePaper(list, code);
 		}
 
 		else if (option == 's')
 		{
-			char code[6];
-			printf("\nName of the paper: ");
+			printFilesInFolder(path);
+			printf("Name to the new data file (20 caracters): ");
+			scanf(" %s", name);
+			printf("\n");
+			
+			saveList(list, strcat(path, name)); //sending directly
+			exit(0);
+		}
+		
+		else if (option == 'l')
+			listPapers(list->start);
+
+		else if (option == 'q') exit(0);
+
+		else if (option == 'p')
+		{
+			printf("\ncode: ");
 			scanf(" %s", code);
 			
 			for (int i = 0; i < strlen(code); ++i)
 				code[i] = toupper(code[i]);
 			
-			Paper* paper = searchPaper(budget->start, code);
-			if (paper)
+			Paper* paper = searchPaper(list->start, code);
+
+			if (!paper) failed = 1; 
+			
+			else
 			{
 				float quantityMinus, value;
 				printf("\nQuantity selled: ");
 				scanf(" %f", &quantityMinus);
 				
-				printf("\nValue of the paper selled: ");
+				printf("Value of the paper selled: ");
 				scanf(" %f", &value);
 				
 				simulateSell(paper, value, quantityMinus);
-                success++;
 			}
 		}
 
-		else if(option == 'd')
-		{
-			char code[6];
-			printf("\nName of the paper to delete: ");
-			scanf(" %s", code);
-            
-            for (int i = 0; i < strlen(code); ++i)
-                code[i] = toupper(code[i]);
-
-            success = deletePaper(budget, code);
-		}
-
-		else if(option == 'b')
-			return 0;
-
-		else if (option == 'q')
-			return 1;
-
 		else
-			printf("\nInvalid action\n");
+			failed = 1;
 
-		if (!success)
-			printf("Not found any paper with this code\n");
+		if (failed)
+			printf("\nInvalid entry\n");
 
-	}
-	return 0;
+	}	
 }

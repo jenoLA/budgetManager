@@ -2,7 +2,7 @@ CC = gcc
 Cflags = -Wall -Wextra \
 		 -pedantic -pedantic
 
-OBJECTS = main.o commands.o paper.o budget.o struct.o
+OBJECTS = main.o commands.o paper.o struct.o
 
 %.o: src/%.c
 	@$(CC) -c $^ -o $@
