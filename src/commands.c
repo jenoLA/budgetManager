@@ -50,25 +50,23 @@ void mainMenu(char* path, char const* file)
 	char name[21];
 	char option;
 	int save;
-	int failed; // by default failed gonna be always defined to 0 in each interation
+	int failed;
 	welcomeMessage();
 
 	while(list)
 	{
-		failed = 0;
+		failed = 1;// gonna be defined to 1 in each iteration to know if a entry was valid or not
+
 		printf("\nN)ew paper  L)ist papers  U)pdate paper  P)retend action  D)elete paper  Q)uit  S)ave\n\n");
 
 		scanf(" %c", &option);
-		option = tolower(option);
+		if (option > 64 && option < 91) option += 32;
 
 		if (option == 'n')
 		{
-			char code[6];
+			char code[7];
 			printf("\nCode: ");
 			scanf(" %s", code);
-
-			for (int i = 0; i < sizeof(code); ++i)
-				code[i] = toupper(code[i]);
 
 			float value;
 			printf("Unitary value: ");
@@ -89,9 +87,7 @@ void mainMenu(char* path, char const* file)
 
 			Paper* paper = searchPaper(list->start, code);
 			
-			if (!paper) failed = 1;
-
-			else
+			if (paper)
 			{
 				float price; //for both situations
 				float quantityMinus;
@@ -148,7 +144,10 @@ void mainMenu(char* path, char const* file)
 		}
 		
 		else if (option == 'l')
+		{
 			listPapers(list->start);
+			failed = 0;
+		}
 
 		else if (option == 'q') exit(0);
 
@@ -157,14 +156,9 @@ void mainMenu(char* path, char const* file)
 			printf("\ncode: ");
 			scanf(" %s", code);
 			
-			for (int i = 0; i < strlen(code); ++i)
-				code[i] = toupper(code[i]);
-			
 			Paper* paper = searchPaper(list->start, code);
 
-			if (!paper) failed = 1; 
-			
-			else
+			if(paper)
 			{
 				float quantityMinus, value;
 				printf("\nQuantity selled: ");
@@ -174,11 +168,9 @@ void mainMenu(char* path, char const* file)
 				scanf(" %f", &value);
 				
 				simulateSell(paper, value, quantityMinus);
+				failed = 0;
 			}
 		}
-
-		else
-			failed = 1;
 
 		if (failed)
 			printf("\nInvalid entry\n");

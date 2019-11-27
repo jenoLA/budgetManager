@@ -23,6 +23,9 @@ Paper* createPaper(char* code, float value, int quantity)
 	Paper* temp = malloc(sizeof(Paper));
 	setWeek(temp->dayOf);
 
+	for (int i = 0; i < sizeof(code); ++i)
+		code[i] = toupper(code[i]);
+
 	strncpy(temp->code, code, 7); //maximun size
 	temp->buyValue = value;
 	temp->quantity = quantity;
@@ -32,7 +35,6 @@ Paper* createPaper(char* code, float value, int quantity)
 	return temp;
 }
 
-// requesting char string for better integration with the system
 Paper* searchPaper(Paper* paper, char* code)
 {
 	for (int i = 0; i < strlen(code); ++i)
