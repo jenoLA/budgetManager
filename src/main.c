@@ -82,10 +82,13 @@ int main(const int argc, char const *argv[])
 		}
 
 		else if(argc == 4)
+		{
 			if(!strcmp(argv[opt2_], "-d") || !strcmp(argv[opt2_], "--delete"))
 				failed = deletePaper(list, (char*) argv[code_]);
 
-		if(argc == 6)
+		}
+
+		else if(argc == 6)
 		{
 			char code[7];
 			strncpy(code, argv[code_], 7);

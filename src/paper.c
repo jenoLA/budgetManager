@@ -78,7 +78,6 @@ int addPaper(List* list, Paper* paper)
 int deletePaper(List* list, char *code)
 {
 	Paper* paperToDelete = searchPaper(list->start, code);
-	printf("first\n");
 
 	if (!paperToDelete)
 		return 1;
@@ -108,7 +107,6 @@ int deletePaper(List* list, char *code)
 		before->next = NULL;
 	}
 */
-	printf("second\n");
 	printf("\npaper %s deleted\n", code);
 	free(paperToDelete);
 	list->size--;
