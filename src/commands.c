@@ -39,7 +39,7 @@ void printFilesInFolder(char* path)
     else if(!mkdir(path, 0777)) printFilesInFolder(path);
 
     else
-        printf("invalid folder");
+        printf("invalid folder\n");
 }
 
 void mainMenu(char* path, char const* file)
@@ -94,7 +94,7 @@ void mainMenu(char* path, char const* file)
 				char today[13];
 				setWeek(today);
 				
-				if (!strcmp(paper->dayOf, today))
+				if (!strcmp(paper->dayOfBuy, today))
 					printf("\nif you sell this paper today, be ware of the tax\n");
 
 				printf("\nQuantity selled: ");

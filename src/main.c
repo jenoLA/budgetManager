@@ -10,28 +10,75 @@
 
 #define HOME getenv("HOME")
 
-enum cli{opt1_ = 1, file_, opt2_, opt3_, code_, value_, quantity_};
-
-enum arr{hipen, character};
-// handle the options
-int main(int argc, char const *argv[])
+void backup(char *path, char *file)
 {
-	char path[40];
-	strncpy(path, HOME, 20);
+	char bak[60];
+	strncpy(bak, ".", 2);
+	strncat(bak, file, 60);
+	List* list = initList(path, file);
+	if(list->start)
+	{
+		saveList(list, strncat(path, bak, 60));
+		exit(0);
+	}
+	printf("\ninvalid entry\n");
+	exit(1);
+}
+
+// improve and verify if it is valid
+void restore(char *path, char *file)
+{
+	char bak[60];
+	strncpy(bak, ".", 2);
+	strncat(bak, file, 60);
+	List* list = initList(path, bak);
+	saveList(list, strncat(path, file, 60));
+
+	printf("%s restored!\n", file);
+	exit(0);
+}
+
+void deleteFile(char *path, char *file)
+{
+	if (remove(strncat(path, file, 60)))
+		printf("\n%s deleted\n", file);
+
+	else
+		printf("\n%s not found\n", file);
+
+	exit(0);
+}
+
+enum cli{opt1_ = 1, opt2_, code_, value_, quantity_};
+
+int main(const int argc, char const *argv[])
+{
+	char path[60];
+	char file[21];
+	strncpy(path, HOME, sizeof(HOME) / sizeof(char) + 3);
 	strncat(path, "/.bgtManager/", 14);
 
 	if (argc == 1)
 		mainMenu(path, NULL);
 
-	/*
-	else if (argv[opt1_][hipen] == '-')
-	{
-		if (argv[opt1_][character] == 'l')
-		{
-			printFilesInFolder(path);
-			exit(0);
-		}
+	if(!strcmp(argv[opt1_], "-l") || !strcmp(argv[opt1_], "--list"))
+		printFilesInFolder(path);
 
+	if(!strcmp(argv[opt1_], "-r") || !strcmp(argv[opt1_], "--restore"))
+		restore(path, file);
+
+	if(!strcmp(argv[opt1_], "-b") || !strcmp(argv[opt1_], "--backup"))
+		backup(path, file);
+
+	if(!strcmp(argv[opt1_], "-d") || !strcmp(argv[opt1_], "--delete"))
+		deleteFile(path, file);
+
+	if(argv[opt1_][0] != '-')
+	{
+		mainMenu(path, argv[opt1_]);
+	}
+}
+/*
 		else if (argc > 2)
 		{
 			int sizeStr = strlen(argv [file_]);
@@ -157,40 +204,20 @@ int main(int argc, char const *argv[])
 
 			else if (argv[opt1_][character] == 'd')
 			{
-				int status = remove(strncat(path, file, 60));
-				if (status)
-					printf("\n%s deleted\n", file);
-
-				else
-					printf("\n%s not found\n", file);
-
-				exit(0);
+				
 			}
 
 			else if (argv [opt1_][character] == 'b')
 			{
-				char bak[sizeStr];
-				strncpy(bak, ".", 2);
-				strncat(bak, file, sizeStr);
-				saveList(list, strncat(path, bak, 60));
-
-				exit(0);
-			}
+							}
 
 			else if (argv [opt1_][character] == 'r')
 			{
-				char bak[sizeStr];
-				strncpy(bak, ".", 2);
-				strncat(bak, file, sizeStr);
-				list = initList(path, bak);
-				saveList(list, strncat(path, file, 60));
-
-				printf("%s restored!\n", file);
-				exit(0);
+				
 			}
 		}
 	}
-	*/
+	*//*
 	// mini help message
 	printf("-h or --help:\n");
 
@@ -223,3 +250,4 @@ int main(int argc, char const *argv[])
 
 	printf("\nbudgetManager -f <data-file> -B <budget> -- <code> <value by unit> <quantity>\n");
 }
+*/
