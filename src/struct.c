@@ -21,13 +21,13 @@ List* readList(char const* path)
 	
 	if (!pf)
     {    
-		printf("file data not found\n");
+		printf("File data not found\n");
 		exit(1);
 	}
 
 	if (!fscanf(pf, "size: %i\n", &(list->size)))
 	{
-		printf("file data invalid\n");
+		printf("File data invalid\n");
 		exit(1);
 	}
 

@@ -21,7 +21,8 @@ void backup(char *path, char *file)
 		saveList(list, strncat(path, bak, 60));
 		exit(0);
 	}
-	printf("\ninvalid entry\n");
+
+	printf("invalid entry\n");
 	exit(1);
 }
 
@@ -40,13 +41,14 @@ void restore(char *path, char *file)
 
 void deleteFile(char *path, char *file)
 {
-	if (remove(strncat(path, file, 60)))
-		printf("\n%s deleted\n", file);
+	if (!remove(strncat(path, file, 60)))
+		printf("\"%s\" deleted\n", file);
 
 	else
-		printf("\n%s not found\n", file);
-
-	exit(0);
+	{
+		printf("File data not found\n");
+		exit(1);
+	}
 }
 
 enum cli{opt1_ = 1, opt2_, code_, value_, quantity_};
@@ -61,193 +63,80 @@ int main(const int argc, char const *argv[])
 	if (argc == 1)
 		mainMenu(path, NULL);
 
-	if(!strcmp(argv[opt1_], "-l") || !strcmp(argv[opt1_], "--list"))
+	else if(!strcmp(argv[opt1_], "-l") || !strcmp(argv[opt1_], "--list"))
 		printFilesInFolder(path);
 
-	if(!strcmp(argv[opt1_], "-r") || !strcmp(argv[opt1_], "--restore"))
-		restore(path, file);
-
-	if(!strcmp(argv[opt1_], "-b") || !strcmp(argv[opt1_], "--backup"))
-		backup(path, file);
-
-	if(!strcmp(argv[opt1_], "-d") || !strcmp(argv[opt1_], "--delete"))
-		deleteFile(path, file);
-
-	if(argv[opt1_][0] != '-')
+	else if(argv[opt1_][0] != '-')
 	{
-		mainMenu(path, argv[opt1_]);
-	}
-}
-/*
-		else if (argc > 2)
+		strncpy(file, argv[opt1_], 21);
+		List* list = initList(path, file);
+		int failed = 1;
+
+		if(argc == 2)
+			mainMenu(path, file);
+
+		else if(!strcmp(argv[opt2_], "-l") || !strcmp(argv[opt2_], "--list"))
 		{
-			int sizeStr = strlen(argv [file_]);
-			char file[sizeStr];
-			strncpy(file, argv [file_], sizeStr);
-			List* list = initList(path, file);
+			listPapers(list->start);
+			exit(0);
+		}
 
-			if (argv[opt1_][character] == 'f')
+		else if(argc == 4)
+			if(!strcmp(argv[opt2_], "-d") || !strcmp(argv[opt2_], "--delete"))
+				failed = deletePaper(list, (char*) argv[code_]);
+
+		if(argc == 6)
+		{
+			char code[7];
+			strncpy(code, argv[code_], 7);
+
+			int quantity = atoi(argv[quantity_]);
+			float value = atof(argv[value_]);
+			Paper* paper = searchPaper(list->start, code);
+
+			if(paper)
 			{
-				if (argc == 3)
-					mainMenu(path, file);
+				if(!strcmp(argv[opt2_], "-b") || !strcmp(argv[opt2_], "--buy"))
+					failed = updatePaperBuy(list, paper, value, quantity);
 
-				else if (argc > 3)
-				{
-					int success;
+				else if(!strcmp(argv[opt2_], "-s") || !strcmp(argv[opt2_], "--sell"))
+					failed = updatePaperSell(list, paper, value, quantity);
 
-					if (argv[opt2_][character] == 'l')
-					{
-						printBudgets(list->start);
-						exit(0);
-					}
+				else if(!strcmp(argv[opt2_], "-B") || !strcmp(argv[opt2_], "--simulate-buy"))
+					simulateBuy(paper, value, quantity);
 
-					else if (argv[opt2_][character] == 'B')
-					{
-						Budget* list = searchBudget (list->start, argv [listName_]);
+				else if(!strcmp(argv[opt2_], "-S") || !strcmp(argv[opt2_], "--simulate-sell"))
+					simulateSell(paper, value, quantity);
 
-						if (!list)
-						{
-							printf("\e[31m");
-							printf("\nInvalid list\n");
-							exit(1);
-						}
-
-						else if (argc == 5)
-							success = paperMenu(list);
-
-						else if (argv [opt3_][character] == 'l')
-						{
-							listPapers(list->start);
-							exit(0);
-						}
-
-						else if (argc > 6 && argc < 10)
-						{
-
-							int codeSize = strlen(argv [code_]);
-
-							if (codeSize > 6)
-							{
-								printf("\e[33m");
-								printf("\ncode too big to by a stock\n");
-								exit(1);
-							}
-
-							char code[7];
-							strncpy(code, argv [code_], codeSize);
-
-							for (int i = 0; i < codeSize; ++i)
-								code[i] = toupper(code[i]);
-							
-							if (argv [opt3_][character] == 'd')
-								success = deletePaper(list, code);
-
-							else if (argc == 9)
-							{
-								Paper* paper;
-								float value;
-								sscanf(argv [value_], "%f", &value);
-								
-								int quantity;
-								sscanf(argv [quantity_], "%i", &quantity);
-
-								if (argv [opt3_][character] == 'b')
-								{
-									paper = searchPaper(list->start, code);
-									
-									if (paper)
-										success = updatePaperBuy(list, paper, value, quantity);
-
-									else
-										success = addPaper(list, createPaper(code,  value, quantity));
-
-								}
-								
-								else if (argv [opt3_][character] == 's')
-								{
-									paper = searchPaper(list->start, code);
-									
-									if (paper)
-										success = updatePaperSell(list, paper, value, quantity);
-
-								}
-								// put option print too
-								else if (argv [opt3_][character] == '-')
-								{
-									paper = searchPaper(list->start, code);
-									
-									if (paper)
-										simulateSell(paper, value, quantity);
-							
-									exit(0);
-								}
-							}
-						}
-					}
-
-					else if (argv[opt2_][character] == 'd')
-						success = deleteBudget (list, argv [listName_]);
-
-					else if (argv [opt2_][character] == 'n')
-						success = addBudget(list, initBudget (argv [listName_]));
-
-					else
-						printf("\nInvalid entry, verify your command\n");
-					
-					if (success)
-						saveList (list, strncat(path, file, 60));
-					
-					// exit after do the job meant to be done
-					exit(0);
-				}
 			}
 
-			else if (argv[opt1_][character] == 'd')
-			{
-				
-			}
+			if(!strcmp(argv[opt2_], "-b") || !strcmp(argv[opt2_], "--buy"))
+				failed = addPaper(list, createPaper(code, value, quantity));
 
-			else if (argv [opt1_][character] == 'b')
-			{
-							}
+		}
 
-			else if (argv [opt1_][character] == 'r')
-			{
-				
-			}
+		if(!failed)
+			saveList(list, strncat(path, file, 21));
+
+		else
+		{
+			printf("invalid entry\n");
+			exit(1);
 		}
 	}
-	*//*
-	// mini help message
-	printf("-h or --help:\n");
 
-	printf("\n-f <data-file>          ~ enter or get data of a data file ~");
-	printf("\n-B <data-file>          ~ backup of the data file ~");
-	printf("\n-r <data-file>          ~ restore a data file from backup ~");
-	printf("\n-l                      ~ list elements ~");
+	else if (argc == 3)
+	{
+		strncpy(file, argv[opt2_], 21);
 
-	printf("\n-d                      ~ delete a list or paper ~");
-    
-	printf("\n-n                      ~ declares a new list ~");
-	printf("\n-b                      ~ buy/create a paper, if exists modifies ~");
-    
-	printf("\n-s                      ~ sell the given paper ~");
-	printf("\n--simul                 ~ simulate a sell ~\n");
+		if(!strcmp(argv[opt1_], "-r") || !strcmp(argv[opt1_], "--restore"))
+			restore(path, file);
 
-	//  usage
-	printf("\n======================== use cases ========================\n");
-	printf("\n~ no arguments lead to the main menu ~\n");
+		else if(!strcmp(argv[opt1_], "-b") || !strcmp(argv[opt1_], "--backup"))
+			backup(path, file);
 
-	printf("\nbudgetManager -b <data-file>\n");
-	printf("\nbudgetManager -r <data-file>\n");
-	printf("\nbudgetManager -f <data-file> -l\n");
-
-	printf("\nbudgetManager -f <data-file> -n <budget>\n");
-
-	printf("\nbudgetManager -f <data-file> -B <budget> -l\n");
-
-	printf("\nbudgetManager -f <data-file> -B <budget> -b <code> <value by unit> <quantity>\n");
-
-	printf("\nbudgetManager -f <data-file> -B <budget> -- <code> <value by unit> <quantity>\n");
+		else if(!strcmp(argv[opt1_], "-d") || !strcmp(argv[opt1_], "--delete"))
+			deleteFile(path, file);
+	
+	}
 }
-*/

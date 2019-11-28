@@ -35,7 +35,7 @@ Paper* createPaper(char* code, float value, int quantity)
 	return temp;
 }
 
-Paper* searchPaper(Paper* paper, char* code)
+Paper* searchPaper(Paper* paper, char *code)
 {
 	for (int i = 0; i < strlen(code); ++i)
 		code[i] = toupper(code[i]);
@@ -75,9 +75,10 @@ int addPaper(List* list, Paper* paper)
 	return 0;
 }
 
-int deletePaper(List* list, char* code)
+int deletePaper(List* list, char *code)
 {
 	Paper* paperToDelete = searchPaper(list->start, code);
+	printf("first\n");
 
 	if (!paperToDelete)
 		return 1;
@@ -107,13 +108,14 @@ int deletePaper(List* list, char* code)
 		before->next = NULL;
 	}
 */
+	printf("second\n");
 	printf("\npaper %s deleted\n", code);
 	free(paperToDelete);
 	list->size--;
 	return 0;
 }
 
-int listPapers(Paper* current)
+void listPapers(Paper* current)
 {
 	while(current)
 	{
@@ -125,12 +127,11 @@ int listPapers(Paper* current)
 			printf("\tfinal pondered value: %0.2f R$\n", current->buyValue * current->quantity);
 
 		if (current->earned)
-			printf("\tlast day selled: %0.2f R$\t\t%s\n", current->earned, current->dayOfSell);
+			printf("\tearned: %0.2f R$\t\t%s\n", current->earned, current->dayOfSell);
 
 		printf("\n");
 		current = current->next;
 	}
-	return 0;
 }
 
 int updatePaperSell(List* list, Paper* paper, float value, int quantityMinus)
@@ -157,6 +158,25 @@ int updatePaperBuy(List* list, Paper* paper, float value, int quantityPlus)
 }
 
 void simulateSell(Paper* paper, float value, int quantityMinus)
+{	
+	if (quantityMinus > paper->actualQuantity)
+    {
+        printf("\ninvalid number, you cannot sell more than you have\n");
+		return; //if invalid enter
+	}
+	
+	char today[15];
+	setWeek(today);
+
+	if (!strcmp(paper->dayOfBuy, today))
+		printf("\nif you sell this paper today, be ware of the tax\n");
+
+	float byUnit = value - paper->buyValue;
+	printf("\nearned by unit: %0.2f\n", byUnit);
+	printf("\ntotal: %0.2f\n", byUnit * quantityMinus);
+}
+
+void simulateBuy(Paper* paper, float value, int quantityMinus)
 {	
 	if (quantityMinus > paper->actualQuantity)
     {

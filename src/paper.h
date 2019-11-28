@@ -14,10 +14,10 @@ Paper* searchPaper(Paper* paper, char* code);
 int addPaper(List* list, Paper* paper);
 
 //delete a paper
-int deletePaper(List* list, char* code);
+int deletePaper(List* list, char *code);
 
 // print all the info about the papers
-int listPapers(Paper* current);
+void listPapers(Paper* current);
 
 //update paper selling him
 int updatePaperSell(List* list, Paper* paper, float value, int quantity);
