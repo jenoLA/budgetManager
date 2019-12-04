@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 #include <time.h>
 
@@ -34,9 +35,8 @@ List* readList(char const* path)
 	fscanf(pf, "totalValue: %f\n", &(list->totalValue));
 
 	fscanf(pf, "earned: %f\n", &(list->earned));
-
 	fscanf(pf, "\n");
-	list->start = malloc(sizeof(Paper));
+
 	Paper** paper = &list->start;
 	for (int i = 0; i < list->size; i++)
 	{
@@ -46,18 +46,15 @@ List* readList(char const* path)
 		fscanf(pf, " earned: %f\n", &(*paper)->earned);
 		fscanf(pf, " quantity: %u\n", &(*paper)->quantity);
 		fscanf(pf, " actualQuantity: %u\n", &(*paper)->actualQuantity);
-		fscanf(pf, " dayOfBuy: \"%[^\"]\n", &(*paper)->dayOfBuy);
+		fscanf(pf, " dayOfBuy: \"%[^\"]\"\n", (*paper)->dayOfBuy);
 
 		if ((*paper)->quantity != (*paper)->actualQuantity)
-			fscanf(pf, " dayOfSell: \"%[^\"]\n", &(*paper)->dayOfSell);
-
-		fscanf(pf, "\n");
-
+		{
+			fscanf(pf, " dayOfSell: \"%[^\"]\"\n", (*paper)->dayOfSell);
+		}
 		paper = &(*paper)->next;
-
 	}
 
-	paper = NULL;
 	fclose(pf);
 	return list;
 }
@@ -89,10 +86,9 @@ void saveList(List* list, char const* path)
 		fprintf(pf, " dayOfBuy: \"%s\"\n", (*paper)->dayOfBuy);
 
 		if ((*paper)->quantity != (*paper)->actualQuantity)
+		{
 			fprintf(pf, " dayOfSell: \"%s\"\n", (*paper)->dayOfSell);
-
-		fprintf(pf, "\n");
-
+		}
 		paper = &(*paper)->next;
 	}
 
