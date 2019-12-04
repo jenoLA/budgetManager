@@ -69,13 +69,14 @@ int main(const int argc, char const *argv[])
 	else if(argv[opt1_][0] != '-')
 	{
 		strncpy(file, argv[opt1_], 21);
-		List* list = initList(path, file);
 		int failed = 1;
 
 		if(argc == 2)
 			mainMenu(path, file);
 
-		else if(!strcmp(argv[opt2_], "-l") || !strcmp(argv[opt2_], "--list"))
+		List* list = initList(path, file);
+
+		if(!strcmp(argv[opt2_], "-l") || !strcmp(argv[opt2_], "--list"))
 		{
 			listPapers(list->start);
 			exit(0);
