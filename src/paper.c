@@ -42,8 +42,7 @@ Paper* searchPaper(Paper* paper, char *code)
 
 	while (paper)
 	{
-		if (!strcmp(paper->code, code))
-			return paper;
+		if (!strcmp(paper->code, code)) return paper;
 
 		paper = paper->next;
 	}
@@ -56,7 +55,7 @@ int addPaper(List* list, Paper* paper)
 {
     strncpy(list->lastModified, paper->dayOfBuy, 13);
     
-    if (!list->size)
+    if (list->size == 0)
 	{
 		list->start = paper;
 		list->size++;
@@ -66,7 +65,7 @@ int addPaper(List* list, Paper* paper)
 	
 	Paper* current = list->start;
 	
-    while(current->next)
+	for(int i = 1; i < list->size; i++)
 		current = current->next;
 
 	current->next = paper;
@@ -82,32 +81,20 @@ int deletePaper(List* list, char *code)
 	if (!paperToDelete)
 		return 1;
 
-	else if (list->start == paperToDelete)
+	if (list->start == paperToDelete)
 		list->start = paperToDelete->next;
 
-	else if (paperToDelete->next)
-	{
-		Paper* before = list->start;
-
-		while (before->next != paperToDelete)
-			before = before->next;
-
-		before->next = before->next->next;
-	}
-/*
 	else
 	{
-		Paper* before = list->start;
-
-		// Iterate to get the before list
-		while (before->next != paperToDelete)
+		Paper *before = list->start;
+		while(before->next != paperToDelete)
+		{
 			before = before->next;
-
-		//removing paperToDelete of the list
-		before->next = NULL;
+		}
+		before->next = paperToDelete->next;
 	}
-*/
-	printf("\npaper %s deleted\n", code);
+	
+	printf("\npaper %s deleted\n", paperToDelete);
 	free(paperToDelete);
 	list->size--;
 	return 0;
