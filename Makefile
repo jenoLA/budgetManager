@@ -11,7 +11,10 @@ bgtmanager: $(OBJECTS)
 	@$(CC) $(Cflags) $(OBJECTS) -o bgtmanager
 
 clean:
-	@rm bgtmanager
+	@rm -f *.o bgtmanager
 
 install:
 	@sudo mv bgtmanager /usr/bin/
+
+release:
+	@$(CC) $(Cflags) -O2 src/*.c -o bgtmanager
