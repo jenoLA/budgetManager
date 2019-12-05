@@ -26,20 +26,25 @@ void printFilesInFolder(char* path)
 
     if ((dir = opendir(path)))
 	{
-        printf("--------------------------[ data files ]-------------------------\n\n");
-
+		printf("\n");
         while ((entry = readdir(dir)))
  			if (entry->d_name[0] != '.')
   				printf(">> %s\n", entry->d_name);
 
 		closedir(dir);
-		printf("\n");
 	}
 
     else if(!mkdir(path, 0777)) printFilesInFolder(path);
 
-    else
-        printf("invalid folder\n");
+    else printf("invalid folder\n");
+}
+
+void clean_stdin()
+{
+	int c;
+	do {
+		c = getchar();
+	} while (c != '\n' && c != EOF);
 }
 
 void mainMenu(char* path, char const* file)
@@ -57,15 +62,17 @@ void mainMenu(char* path, char const* file)
 	{
 		failed = 1;// gonna be defined to 1 in each iteration to know if a entry was valid or not
 
-		printf("\nN)ew paper  L)ist papers  U)pdate paper  P)retend action  D)elete paper  Q)uit  S)ave\n\n");
+		printf("N)ew paper  L)ist papers  U)pdate paper  P)retend action  D)elete paper  Q)uit  S)ave\n");
 
 		scanf(" %c", &option);
+
+		clean_stdin();
 		if (option > 64 && option < 91) option += 32;
 
 		if (option == 'n')
 		{
 			char code[7];
-			printf("\nCode: ");
+			printf("Code: ");
 			scanf(" %s", code);
 
 			float value;
@@ -82,7 +89,7 @@ void mainMenu(char* path, char const* file)
 		else if(option == 'u')
 		{
 			char code[6];
-			printf("\nCode: ");
+			printf("Code: ");
 			scanf(" %s", code);
 
 			Paper* paper = searchPaper(list->start, code);
@@ -91,34 +98,29 @@ void mainMenu(char* path, char const* file)
 			{
 				float price; //for both situations
 				float quantityMinus;
-				char today[13];
-				setWeek(today);
 				
-				if (!strcmp(paper->dayOfBuy, today))
-					printf("\nif you sell this paper today, be ware of the tax\n");
-
-				printf("\nQuantity selled: ");
+				printf("Quantity selled: ");
 				scanf(" %f", &quantityMinus);
 				
 				if (quantityMinus > 0)
 				{
-					printf("\nValue of the paper selled: ");
+					printf("Value of the paper selled: ");
 					scanf(" %f", &price); //sell price
-					failed = updatePaperSell(list, paper, price, quantityMinus);
+					failed = sellPaper(list, paper, price, quantityMinus);
                 }
 
                 //buy part
                 else
                 {
                     float quantityPlus;
-                    printf("\nQuantity brought: ");
+                    printf("Quantity brought: ");
                     scanf(" %f", &quantityPlus);
 
                     if (quantityPlus > 0)
                     {
                         printf("\nvalue by unit: ");
                         scanf(" %f", &price);
-                        failed = updatePaperBuy(list, paper, price, quantityPlus);
+                        failed = buyPaper(list, paper, price, quantityPlus);
                     }
                 }
 			}
@@ -126,7 +128,7 @@ void mainMenu(char* path, char const* file)
 
 		else if (option == 'd')
 		{
-			printf("\nCode: ");
+			printf("Code: ");
 			scanf(" %s", code);
 			printf("\n");
 			failed = deletePaper(list, code);
@@ -149,11 +151,9 @@ void mainMenu(char* path, char const* file)
 			failed = 0;
 		}
 
-		else if (option == 'q') exit(0);
-
 		else if (option == 'p')
 		{
-			printf("\ncode: ");
+			printf("code: ");
 			scanf(" %s", code);
 			
 			Paper* paper = searchPaper(list->start, code);
@@ -161,7 +161,7 @@ void mainMenu(char* path, char const* file)
 			if(paper)
 			{
 				float quantityMinus, value;
-				printf("\nQuantity selled: ");
+				printf("Quantity selled: ");
 				scanf(" %f", &quantityMinus);
 				
 				printf("Value of the paper selled: ");
@@ -172,8 +172,8 @@ void mainMenu(char* path, char const* file)
 			}
 		}
 
-		if (failed)
-			printf("\nInvalid entry\n");
+		else if (option == 'q') exit(0);
 
+		if (failed) printf("\nInvalid entry\n");
 	}	
 }

@@ -3,7 +3,7 @@
 typedef struct paper_t
 {
 	char code[7];
-	float buyValue;
+	float averageValue;
 	float earned;
 	unsigned int quantity;
 	unsigned int actualQuantity;

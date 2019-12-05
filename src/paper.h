@@ -20,15 +20,15 @@ int deletePaper(List* list, char *code);
 void listPapers(Paper* current);
 
 //update paper selling him
-int updatePaperSell(List* list, Paper* paper, float value, int quantity);
+int sellPaper(List* list, Paper* paper, float value, int quantity);
 
 //update paper buying him
-int updatePaperBuy(List* list, Paper* paper, float value, int quantity);
+int buyPaper(List* list, Paper* paper, float value, int quantity);
 
 // simulate a trade
-void simulateSell(Paper* paper, float value, int quantity);
+void simulateSell(Paper* paper, float value, int quantityMinus);
 
 // simulate a buy trade
-void simulateBuy(Paper* paper, float value, int quantity);
+void simulateBuy(Paper* paper, float value, int quantityPlus);
 
 // maybe in the future make a more detailed view of a single paper

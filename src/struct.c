@@ -26,7 +26,7 @@ List* readList(char const* path)
 		exit(1);
 	}
 
-	if (!fscanf(pf, "size: %i\n", &(list->size)))
+	if (!fscanf(pf, "size: %u\n", &(list->size)))
 	{
 		printf("File data invalid\n");
 		exit(1);
@@ -38,11 +38,11 @@ List* readList(char const* path)
 	fscanf(pf, "\n");
 
 	Paper** paper = &list->start;
-	for (int i = 0; i < list->size; i++)
+	for (unsigned int i = 0; i < list->size; i++)
 	{
 		*paper = malloc(sizeof(Paper));
 		fscanf(pf, "paper: %s\n", (*paper)->code);
-		fscanf(pf, " buyValue: %f\n", &(*paper)->buyValue);
+		fscanf(pf, " averageValue: %f\n", &(*paper)->averageValue);
 		fscanf(pf, " earned: %f\n", &(*paper)->earned);
 		fscanf(pf, " quantity: %u\n", &(*paper)->quantity);
 		fscanf(pf, " actualQuantity: %u\n", &(*paper)->actualQuantity);
@@ -70,16 +70,16 @@ void saveList(List* list, char const* path)
 		exit(1);
 	}
 
-	fprintf(pf, "size: %i\n", list->size);
+	fprintf(pf, "size: %u\n", list->size);
 	fprintf(pf, "totalValue: %f\n", list->totalValue);
 	fprintf(pf, "earned: %f\n", list->earned);
 	fprintf(pf, "\n");
 
 	Paper** paper = &list->start;
-	for (int i = 0; i < list->size; ++i)
+	for (unsigned int i = 0; i < list->size; ++i)
 	{
 		fprintf(pf, "paper: %s\n", (*paper)->code);
-		fprintf(pf, " buyValue: %f\n", (*paper)->buyValue);
+		fprintf(pf, " averageValue: %f\n", (*paper)->averageValue);
 		fprintf(pf, " earned: %f\n", (*paper)->earned);	
 		fprintf(pf, " quantity: %u\n", (*paper)->quantity);
 		fprintf(pf, " actualQuantity: %u\n", (*paper)->actualQuantity);

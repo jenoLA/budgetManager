@@ -85,8 +85,9 @@ int main(const int argc, char const *argv[])
 		else if(argc == 4)
 		{
 			if(!strcmp(argv[opt2_], "-d") || !strcmp(argv[opt2_], "--delete"))
+			{
 				failed = deletePaper(list, (char*) argv[code_]);
-
+			}
 		}
 
 		else if(argc == 6)
@@ -101,10 +102,10 @@ int main(const int argc, char const *argv[])
 			if(paper)
 			{
 				if(!strcmp(argv[opt2_], "-b") || !strcmp(argv[opt2_], "--buy"))
-					failed = updatePaperBuy(list, paper, value, quantity);
+					failed = buyPaper(list, paper, value, quantity);
 
 				else if(!strcmp(argv[opt2_], "-s") || !strcmp(argv[opt2_], "--sell"))
-					failed = updatePaperSell(list, paper, value, quantity);
+					failed = sellPaper(list, paper, value, quantity);
 
 				else if(!strcmp(argv[opt2_], "-B") || !strcmp(argv[opt2_], "--simulate-buy"))
 					simulateBuy(paper, value, quantity);

@@ -11,7 +11,7 @@ List* initList(char* path, char const* file)
 	{
 		int len = strlen(path) + strlen(file) + 1;
 		char filePath[len];
-		strncpy(filePath, path, strlen(path) + 1);
+		strncpy(filePath, path, strlen(path));
 		return readList(strncat(filePath, file, len));
 	}
 
@@ -23,11 +23,11 @@ Paper* createPaper(char* code, float value, int quantity)
 	Paper* temp = malloc(sizeof(Paper));
 	setWeek(temp->dayOfBuy);
 
-	for (int i = 0; i < sizeof(code); ++i)
+	for (int i = 0; i < sizeof(code); i++)
 		code[i] = toupper(code[i]);
 
-	strncpy(temp->code, code, 7); //maximun size
-	temp->buyValue = value;
+	strncpy(temp->code, code, 7);
+	temp->averageValue = value;
 	temp->quantity = quantity;
 	temp->actualQuantity = quantity;
 	temp->next = NULL;
@@ -37,7 +37,7 @@ Paper* createPaper(char* code, float value, int quantity)
 
 Paper* searchPaper(Paper* paper, char *code)
 {
-	for (int i = 0; i < strlen(code); ++i)
+	for (int i = 0; i < sizeof(code); i++)
 		code[i] = toupper(code[i]);
 
 	while (paper)
@@ -53,13 +53,14 @@ Paper* searchPaper(Paper* paper, char *code)
 // puts on the last position
 int addPaper(List* list, Paper* paper)
 {
-    strncpy(list->lastModified, paper->dayOfBuy, 13);
+    strncpy(list->lastModified, paper->dayOfBuy, 12);
+	list->lastModified[12] = '\0';
     
     if (list->size == 0)
 	{
 		list->start = paper;
 		list->size++;
-		list->totalValue += paper->buyValue * paper->quantity;
+		list->totalValue += paper->averageValue * paper->quantity;
 		return 0;
 	}
 	
@@ -69,7 +70,7 @@ int addPaper(List* list, Paper* paper)
 		current = current->next;
 
 	current->next = paper;
-	list->totalValue += paper->buyValue * paper->quantity;
+	list->totalValue += paper->averageValue * paper->quantity;
 	list->size++;
 	return 0;
 }
@@ -94,7 +95,7 @@ int deletePaper(List* list, char *code)
 		before->next = paperToDelete->next;
 	}
 	
-	printf("\npaper %s deleted\n", paperToDelete);
+	printf("paper %s deleted\n", paperToDelete->code);
 	free(paperToDelete);
 	list->size--;
 	return 0;
@@ -104,22 +105,22 @@ void listPapers(Paper* current)
 {
 	while(current)
 	{
-		printf("\n  Paper code: %s\t\t\t\t%s\n", current->code, current->dayOfBuy);
-		printf("\tPondered value: %0.2f R$\n", current->buyValue);
-		printf("\tCurrent quantity: %i\n", current->actualQuantity);
+		printf("\nPaper code: %s\t\t\t%s\n", current->code, current->dayOfBuy);
+		printf(" average value: %0.2f R$\n", current->averageValue);
+		printf(" Current quantity: %i\n", current->actualQuantity);
 
         if (current->actualQuantity == 0)
-			printf("\tfinal pondered value: %0.2f R$\n", current->buyValue * current->quantity);
+			printf(" final pondered value: %0.2f R$\n", current->averageValue * current->quantity);
 
 		if (current->earned)
-			printf("\tearned: %0.2f R$\t\t%s\n", current->earned, current->dayOfSell);
+			printf(" earned: %0.2f R$\t\t\t%s\n", current->earned, current->dayOfSell);
 
-		printf("\n");
 		current = current->next;
 	}
+	printf("\n");
 }
 
-int updatePaperSell(List* list, Paper* paper, float value, int quantityMinus)
+int sellPaper(List* list, Paper* paper, float value, int quantityMinus)
 {
 	if (quantityMinus > paper->actualQuantity)
 		return 1; //invalid entry
@@ -131,13 +132,13 @@ int updatePaperSell(List* list, Paper* paper, float value, int quantityMinus)
 	return 0;
 }
 
-int updatePaperBuy(List* list, Paper* paper, float value, int quantityPlus)
+int buyPaper(List* list, Paper* paper, float value, int quantityPlus)
 {
 	setWeek(paper->dayOfBuy);
 	setWeek(list->lastModified);
 	list->totalValue += value * quantityPlus;
 	paper->quantity += quantityPlus;
-	paper->buyValue = (paper->buyValue * paper->actualQuantity + value * quantityPlus) / paper->quantity; //pondered new paper->bvalue
+	paper->averageValue = (paper->averageValue * paper->actualQuantity + value * quantityPlus) / paper->quantity;
 	paper->actualQuantity += quantityPlus;
 	return 0;
 }
@@ -147,35 +148,23 @@ void simulateSell(Paper* paper, float value, int quantityMinus)
 	if (quantityMinus > paper->actualQuantity)
     {
         printf("\ninvalid number, you cannot sell more than you have\n");
-		return; //if invalid enter
+		return;
 	}
 	
-	char today[15];
-	setWeek(today);
-
-	if (!strcmp(paper->dayOfBuy, today))
-		printf("\nif you sell this paper today, be ware of the tax\n");
-
-	float byUnit = value - paper->buyValue;
+	float byUnit = value - paper->averageValue;
 	printf("\nearned by unit: %0.2f\n", byUnit);
 	printf("\ntotal: %0.2f\n", byUnit * quantityMinus);
 }
 
-void simulateBuy(Paper* paper, float value, int quantityMinus)
+void simulateBuy(Paper* paper, float value, int quantityPlus)
 {	
-	if (quantityMinus > paper->actualQuantity)
+	if (quantityPlus > 0)
     {
-        printf("\ninvalid number, you cannot sell more than you have\n");
-		return; //if invalid enter
+        printf("\ninvalid number, you can't buy zero or a non-positive number\n");
+		return;
 	}
 	
-	char today[15];
-	setWeek(today);
-
-	if (!strcmp(paper->dayOfBuy, today))
-		printf("\nif you sell this paper today, be ware of the tax\n");
-
-	float byUnit = value - paper->buyValue;
-	printf("\nearned by unit: %0.2f\n", byUnit);
-	printf("\ntotal: %0.2f\n", byUnit * quantityMinus);
+	float byUnit = (value * quantityPlus + paper->averageValue * paper->quantity) / paper->quantity + quantityPlus;
+	printf("\naverage value by unit: %0.2f\n", byUnit);
+	printf("\ntotal: %0.2f\n", byUnit * quantityPlus);
 }
