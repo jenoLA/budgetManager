@@ -11,7 +11,7 @@ void setWeek(char* date)
 	time_t now = time(NULL);
 	ts = localtime(&now);
 
-	strftime(date, 13, "%d/%m/%y %a", ts);
+	strftime(date, DATE_SIZE, "%d/%m/%y %a", ts);
 }
 
 List* readList(char const* path)

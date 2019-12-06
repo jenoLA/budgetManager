@@ -5,6 +5,7 @@
 #include <dirent.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <time.h>
 
 #include "paper.h"
 #include "commands.h"
@@ -26,17 +27,93 @@ void printFilesInFolder(char* path)
 
     if ((dir = opendir(path)))
 	{
-		printf("\n");
         while ((entry = readdir(dir)))
- 			if (entry->d_name[0] != '.')
-  				printf(">> %s\n", entry->d_name);
-
+		{
+ 			if (entry->d_name[0] != '.') printf("%s\n", entry->d_name);
+		}
 		closedir(dir);
 	}
 
-    else if(!mkdir(path, 0777)) printFilesInFolder(path);
+    else if(!mkdir(path, 0700)) printFilesInFolder(path);
+}
 
-    else printf("invalid folder\n");
+void backup(char *path, char *file)
+{
+	char source_filename[PATH_SIZE];
+	memccpy(memccpy(source_filename, path, '\0', PATH_SIZE) - 1, file, '\0', PATH_SIZE);
+
+	FILE *src = fopen(source_filename, "r");
+	if (!src)
+	{
+		printf("\"%s\" not found\n", file);
+		exit(1);	
+	}
+
+	char date[16];
+	struct tm* ts;
+	time_t now = time(NULL);
+	ts = localtime(&now);
+	strftime(date, 16, "\040%d-%m-%y\040%H:%M", ts);
+
+	char bak[PATH_SIZE], bakfile[PATH_SIZE];
+	memccpy(memccpy(bak, path, '\0', PATH_SIZE) - 1, ".bck/", '\0', PATH_SIZE);
+	memccpy(
+			memccpy(
+				memccpy(bakfile, bak, '\0', PATH_SIZE) - 1
+				, file, '\0', PATH_SIZE) - 1
+			, date, '\0', PATH_SIZE
+	);
+
+	printf("bakfile: %s\n", bakfile);
+	FILE *bkp = fopen(bakfile, "w+");
+	if(!bkp)
+	{
+		if(!mkdir(bak, 0700)) backup(path, file);
+
+		else
+		{
+			printf("some error happened, please report\n");
+			exit(1);
+		}
+	}
+
+	char ch;
+	while((ch = fgetc(src)) != EOF )
+	{
+		fputc(ch, bkp);
+	}
+
+	fclose(bkp);
+	fclose(src);
+}
+
+// improve and verify if it is valid
+void restore(char *path, char *file)
+{
+	// same as backup, also show possibility of show the contents, papers
+//	char bak[PATH_SIZE];
+//	strncpy(bak, ".", 2);
+//	strncat(bak, file, PATH_SIZE);
+//	List* list = initList(path, bak);
+//	saveList(list, strncat(path, file, PATH_SIZE));
+//
+//	printf("%s restored!\n", file);
+//	exit(0);
+}
+
+void deleteFile(char *path, char *file)
+{
+	char toDelete[PATH_SIZE];
+	memccpy(memccpy(toDelete, path, '\0', PATH_SIZE) - 1, file, '\0', PATH_SIZE);
+	if (!remove(toDelete))
+	{
+		printf("\"%s\" deleted\n", file);
+	}
+	else
+	{
+		printf("File data not found\n");
+		exit(1);
+	}
 }
 
 void clean_stdin()
@@ -51,10 +128,9 @@ void mainMenu(char* path, char const* file)
 {
 	List* list = initList(path, file);
 
-	char code[7];
-	char name[21];
+	char code[CODE_SIZE];
+	char filename[FILE_SIZE];
 	char option;
-	int save;
 	int failed;
 	welcomeMessage();
 
@@ -137,11 +213,11 @@ void mainMenu(char* path, char const* file)
 		else if (option == 's')
 		{
 			printFilesInFolder(path);
-			printf("Name to the new data file (20 caracters): ");
-			scanf(" %s", name);
-			printf("\n");
+			printf("save to: ");
+			scanf(" %s", filename);
+			memccpy(path + strlen(path), filename, '\0', PATH_SIZE);
 			
-			saveList(list, strcat(path, name)); //sending directly
+			saveList(list, path); //sending directly
 			exit(0);
 		}
 		

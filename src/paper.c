@@ -9,10 +9,9 @@ List* initList(char* path, char const* file)
 {
 	if (file)
 	{
-		int len = strlen(path) + strlen(file) + 1;
-		char filePath[len];
-		strncpy(filePath, path, strlen(path));
-		return readList(strncat(filePath, file, len));
+		char filePath[PATH_SIZE];
+		memccpy(memccpy(filePath, path, '\0', PATH_SIZE) -1, file, '\0', PATH_SIZE);
+		return readList(filePath);
 	}
 
 	return malloc(sizeof(List));
@@ -23,10 +22,11 @@ Paper* createPaper(char* code, float value, int quantity)
 	Paper* temp = malloc(sizeof(Paper));
 	setWeek(temp->dayOfBuy);
 
-	for (int i = 0; i < sizeof(code); i++)
+	register int codeSize = strlen(code);
+	for (register int i = 0; i < codeSize; i++)
 		code[i] = toupper(code[i]);
 
-	strncpy(temp->code, code, 7);
+	memccpy(temp->code, code, '\0', CODE_SIZE);
 	temp->averageValue = value;
 	temp->quantity = quantity;
 	temp->actualQuantity = quantity;
@@ -37,7 +37,8 @@ Paper* createPaper(char* code, float value, int quantity)
 
 Paper* searchPaper(Paper* paper, char *code)
 {
-	for (int i = 0; i < sizeof(code); i++)
+	register int codeSize = strlen(code);
+	for (register int i = 0; i < codeSize; i++)
 		code[i] = toupper(code[i]);
 
 	while (paper)
@@ -53,8 +54,8 @@ Paper* searchPaper(Paper* paper, char *code)
 // puts on the last position
 int addPaper(List* list, Paper* paper)
 {
-    strncpy(list->lastModified, paper->dayOfBuy, 12);
-	list->lastModified[12] = '\0';
+    memccpy(list->lastModified, paper->dayOfBuy, '\0', DATE_SIZE);
+	list->lastModified[DATE_SIZE - 1] = '\0';
     
     if (list->size == 0)
 	{
@@ -66,7 +67,7 @@ int addPaper(List* list, Paper* paper)
 	
 	Paper* current = list->start;
 	
-	for(int i = 1; i < list->size; i++)
+	for(register int i = 1; i < list->size; i++)
 		current = current->next;
 
 	current->next = paper;
@@ -106,14 +107,14 @@ void listPapers(Paper* current)
 	while(current)
 	{
 		printf("\nPaper code: %s\t\t\t%s\n", current->code, current->dayOfBuy);
-		printf(" average value: %0.2f R$\n", current->averageValue);
+		printf(" Average value by unit: %0.2f R$\n", current->averageValue);
 		printf(" Current quantity: %i\n", current->actualQuantity);
 
         if (current->actualQuantity == 0)
-			printf(" final pondered value: %0.2f R$\n", current->averageValue * current->quantity);
+			printf(" Total value: %0.2f R$\n", current->averageValue * current->quantity);
 
 		if (current->earned)
-			printf(" earned: %0.2f R$\t\t\t%s\n", current->earned, current->dayOfSell);
+			printf(" Earned: %0.2f R$\t\t\t%s\n", current->earned, current->dayOfSell);
 
 		current = current->next;
 	}

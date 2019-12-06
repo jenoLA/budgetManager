@@ -10,69 +10,27 @@
 
 #define HOME getenv("HOME")
 
-void backup(char *path, char *file)
-{
-	char bak[60];
-	strncpy(bak, ".", 2);
-	strncat(bak, file, 60);
-	List* list = initList(path, file);
-	if(list->start)
-	{
-		saveList(list, strncat(path, bak, 60));
-		exit(0);
-	}
-
-	printf("invalid entry\n");
-	exit(1);
-}
-
-// improve and verify if it is valid
-void restore(char *path, char *file)
-{
-	char bak[60];
-	strncpy(bak, ".", 2);
-	strncat(bak, file, 60);
-	List* list = initList(path, bak);
-	saveList(list, strncat(path, file, 60));
-
-	printf("%s restored!\n", file);
-	exit(0);
-}
-
-void deleteFile(char *path, char *file)
-{
-	if (!remove(strncat(path, file, 60)))
-		printf("\"%s\" deleted\n", file);
-
-	else
-	{
-		printf("File data not found\n");
-		exit(1);
-	}
-}
-
 enum cli{opt1_ = 1, opt2_, code_, value_, quantity_};
 
 int main(const int argc, char const *argv[])
 {
-	char path[60];
-	char file[21];
-	strncpy(path, HOME, sizeof(HOME) / sizeof(char) + 3);
-	strncat(path, "/.bgtManager/", 14);
+	char path[PATH_SIZE];
+	char file[FILE_SIZE];
+	memccpy(memccpy(path, HOME, '\0', PATH_SIZE) - 1, "/.bgtManager/", '\0', PATH_SIZE);
 
-	if (argc == 1)
-		mainMenu(path, NULL);
+	if (argc == 1) mainMenu(path, NULL);
 
 	else if(!strcmp(argv[opt1_], "-l") || !strcmp(argv[opt1_], "--list"))
+	{
 		printFilesInFolder(path);
+	}
 
 	else if(argv[opt1_][0] != '-')
 	{
-		strncpy(file, argv[opt1_], 21);
+		memccpy(file, argv[opt1_], '\0', FILE_SIZE);
 		int failed = 1;
 
-		if(argc == 2)
-			mainMenu(path, file);
+		if(argc == 2) mainMenu(path, file);
 
 		List* list = initList(path, file);
 
@@ -92,8 +50,8 @@ int main(const int argc, char const *argv[])
 
 		else if(argc == 6)
 		{
-			char code[7];
-			strncpy(code, argv[code_], 7);
+			char code[CODE_SIZE];
+			memccpy(code, argv[code_], '\0', CODE_SIZE);
 
 			int quantity = atoi(argv[quantity_]);
 			float value = atof(argv[value_]);
@@ -121,7 +79,11 @@ int main(const int argc, char const *argv[])
 		}
 
 		if(!failed)
-			saveList(list, strncat(path, file, 21));
+		{
+			memccpy(path + strlen(path), file, '\0', FILE_SIZE);
+				printf("path: %s\n", path);
+			saveList(list, path);
+		}
 
 		else
 		{
@@ -132,7 +94,7 @@ int main(const int argc, char const *argv[])
 
 	else if (argc == 3)
 	{
-		strncpy(file, argv[opt2_], 21);
+		memccpy(file, argv[opt2_], '\0', FILE_SIZE);
 
 		if(!strcmp(argv[opt1_], "-r") || !strcmp(argv[opt1_], "--restore"))
 			restore(path, file);

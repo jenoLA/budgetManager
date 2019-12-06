@@ -1,4 +1,8 @@
 #pragma once
+#define PATH_SIZE 81
+#define FILE_SIZE 21
+#define CODE_SIZE 7
+#define DATE_SIZE 13
 
 typedef struct paper_t
 {
@@ -7,8 +11,8 @@ typedef struct paper_t
 	float earned;
 	unsigned int quantity;
 	unsigned int actualQuantity;
-	char dayOfBuy[13];
-	char dayOfSell[13];
+	char dayOfBuy[DATE_SIZE];
+	char dayOfSell[DATE_SIZE];
 	struct paper_t* next;
 } Paper;
 
@@ -18,7 +22,7 @@ typedef struct list_t
 	unsigned int size;
 	float totalValue;
 	float earned;
-	char lastModified[13];
+	char lastModified[DATE_SIZE];
 } List;
 
 //return a string in the format dd/mm/yy DoW
