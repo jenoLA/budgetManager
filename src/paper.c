@@ -37,8 +37,7 @@ Paper* createPaper(char* code, float value, int quantity)
 
 Paper* searchPaper(Paper* paper, char *code)
 {
-	register int codeSize = strlen(code);
-	for (register int i = 0; i < codeSize; i++)
+	for (register unsigned int i = 0; i < strlen(code); i++)
 		code[i] = toupper(code[i]);
 
 	while (paper)
@@ -67,7 +66,7 @@ int addPaper(List* list, Paper* paper)
 	
 	Paper* current = list->start;
 	
-	for(register int i = 1; i < list->size; i++, current = current->next);
+	for(register unsigned int i = 1; i < list->size; i++, current = current->next);
 
 	current->next = paper;
 	list->totalValue += paper->averageValue * paper->quantity;
