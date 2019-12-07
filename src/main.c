@@ -62,6 +62,9 @@ int main(const int argc, char const *argv[])
 				if(!strcmp(argv[opt2_], "-t") || !strcmp(argv[opt2_], "--trade"))
 					failed = trade(list, paper, value, quantity);
 
+				if(!strcmp(argv[opt2_], "-T") || !strcmp(argv[opt2_], "--simulate-trade"))
+					simulateTrade(paper, value, quantity);
+
 				else if(!strcmp(argv[opt2_], "-B") || !strcmp(argv[opt2_], "--simulate-buy"))
 					simulateBuy(paper, value, quantity);
 
