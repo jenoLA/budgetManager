@@ -12,11 +12,11 @@
 
 void welcomeMessage()
 {
-	printf("\e[0;m");
+	printf("\033[m");
 	printf("\n=========================");
-	printf("\e[36m");
+	printf("\033[36m");
 	printf(" Budget Manager ");
-	printf("\e[m");
+	printf("\033[m");
 	printf("==========================\n\n");
 }
 
@@ -131,6 +131,8 @@ void mainMenu(char* path, char const* file)
 	char code[CODE_SIZE];
 	char filename[FILE_SIZE];
 	char option;
+	float value;
+	int quantity;
 	int failed;
 	welcomeMessage();
 
@@ -138,24 +140,21 @@ void mainMenu(char* path, char const* file)
 	{
 		failed = 1;// gonna be defined to 1 in each iteration to know if a entry was valid or not
 
-		printf("N)ew paper  L)ist papers  T)rade  P)retend action  D)elete paper  Q)uit  S)ave\n");
+		printf("N)ew paper  L)ist papers  T)rade  P)retend trade  D)elete paper  Q)uit  S)ave\n");
 
 		scanf(" %c", &option);
-
 		clean_stdin();
+
 		if (option > 64 && option < 91) option += 32;
 
 		if (option == 'n')
 		{
-			char code[7];
 			printf("Code: ");
 			scanf(" %s", code);
 
-			float value;
 			printf("Unitary value: ");
 			scanf(" %f", &value);
 
-			int quantity;
 			printf("Quantity: ");
 			scanf(" %i", &quantity);
 			printf("\n");
@@ -164,7 +163,6 @@ void mainMenu(char* path, char const* file)
 
 		else if(option == 't')
 		{
-			char code[6];
 			printf("Code: ");
 			scanf(" %s", code);
 
@@ -172,13 +170,10 @@ void mainMenu(char* path, char const* file)
 			
 			if (paper)
 			{
-				float value; //for both situations
-				int quantity;
-
 				printf("use a positive value for buy or negative to sell\n");
 				printf("Quantity: ");
 				scanf(" %d", &quantity);
-				
+
 				printf("value by unit: ");
 				scanf(" %f", &value);
 
@@ -200,11 +195,11 @@ void mainMenu(char* path, char const* file)
 			printf("save to: ");
 			scanf(" %s", filename);
 			memccpy(path + strlen(path), filename, '\0', PATH_SIZE);
-			
-			saveList(list, path); //sending directly
+
+			saveList(list, path);
 			exit(0);
 		}
-		
+
 		else if (option == 'l')
 		{
 			listPapers(list->start);
@@ -215,20 +210,19 @@ void mainMenu(char* path, char const* file)
 		{
 			printf("code: ");
 			scanf(" %s", code);
-			
+
 			Paper* paper = searchPaper(list->start, code);
 
 			if(paper)
 			{
-				float quantityMinus, value;
-				printf("Quantity selled: ");
-				scanf(" %f", &quantityMinus);
-				
-				printf("Value of the paper selled: ");
+				printf("Quantity: ");
+				scanf(" %d", &quantity);
+
+				printf("value by unit: ");
 				scanf(" %f", &value);
-				
-				simulateSell(paper, value, quantityMinus);
+
 				failed = 0;
+				simulateTrade(paper, value, quantity);
 			}
 		}
 
