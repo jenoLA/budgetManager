@@ -60,17 +60,13 @@ int main(const int argc, char const *argv[])
 			if(paper)
 			{
 				if(!strcmp(argv[opt2_], "-t") || !strcmp(argv[opt2_], "--trade"))
+				{
 					failed = trade(list, paper, value, quantity);
-
-				if(!strcmp(argv[opt2_], "-T") || !strcmp(argv[opt2_], "--simulate-trade"))
+				}
+				else if(!strcmp(argv[opt2_], "-T") || !strcmp(argv[opt2_], "--simulate-trade"))
+				{
 					simulateTrade(paper, value, quantity);
-
-				else if(!strcmp(argv[opt2_], "-B") || !strcmp(argv[opt2_], "--simulate-buy"))
-					simulateBuy(paper, value, quantity);
-
-				else if(!strcmp(argv[opt2_], "-S") || !strcmp(argv[opt2_], "--simulate-sell"))
-					simulateSell(paper, value, quantity);
-
+				}
 			}
 
 			if(!strcmp(argv[opt2_], "-b") || !strcmp(argv[opt2_], "--buy"))

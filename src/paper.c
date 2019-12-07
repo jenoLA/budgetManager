@@ -170,29 +170,3 @@ void simulateTrade(Paper* paper, float value, int quantity)
 	printf("\nEarned by unit: %0.2f (%0.1f%%)\n", avgValue, percentage);
 	printf("Total: %0.2f R$\n\n", value * quantity * - 1);
 }
-
-void simulateSell(Paper* paper, float value, int quantityMinus)
-{	
-	if (quantityMinus > paper->actualQuantity)
-    {
-        printf("\nInvalid number, you cannot sell more than you have\n");
-		return;
-	}
-
-	float byUnit = value - paper->averageValue;
-	printf("\nEarned by unit: %0.2f\n", byUnit);
-	printf("\nTotal: %0.2f\n", byUnit * quantityMinus);
-}
-
-void simulateBuy(Paper* paper, float value, int quantityPlus)
-{	
-	if (quantityPlus > 0)
-    {
-        printf("\nInvalid number, you can't buy less than 1");
-		return;
-	}
-
-	float byUnit = (value * quantityPlus + paper->averageValue * paper->quantity) / paper->quantity + quantityPlus;
-	printf("\nAvg. value by unit: %0.2f\n", byUnit);
-	printf("\nTotal: %0.2f\n", byUnit * quantityPlus);
-}
