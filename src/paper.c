@@ -119,33 +119,32 @@ void listPapers(Paper* current)
 	printf("\n");
 }
 
-int sellPaper(List* list, Paper* paper, float value, int quantityMinus)
+int trade(List* list, Paper* paper, float value, int quantity)
 {
-	if (quantityMinus > paper->actualQuantity)
-	{
-		printf("\nInvalid entry, you can't sell more than you have");
-		return 1; //invalid entry
-	}
-	setWeek(paper->dayOfSell);
-	paper->actualQuantity -= quantityMinus;
-	paper->earned += (value * quantityMinus);
-	list->earned += (value * quantityMinus);
-	return 0;
-}
+	if(quantity == 0) return 1;
 
-int buyPaper(List* list, Paper* paper, float value, int quantityPlus)
-{
-	if(quantityPlus < 1)
+	if(quantity > 0)
 	{
-		printf("\nInvalid entry, you can't buy less than 1");
-		return 1;
+		list->totalValue += value * quantity;
+
+		paper->quantity += quantity;
+
+		paper->averageValue = (paper->averageValue * paper->actualQuantity + value * quantity) / paper->quantity;
+
+		paper->actualQuantity += quantity;
+		setWeek(paper->dayOfBuy);
 	}
-	setWeek(paper->dayOfBuy);
+
+	else
+	{
+		paper->actualQuantity += quantity;
+
+		paper->earned -= (value * quantity);
+		list->earned -= (value * quantity);
+		setWeek(paper->dayOfSell);
+	}
+
 	setWeek(list->lastModified);
-	list->totalValue += value * quantityPlus;
-	paper->quantity += quantityPlus;
-	paper->averageValue = (paper->averageValue * paper->actualQuantity + value * quantityPlus) / paper->quantity;
-	paper->actualQuantity += quantityPlus;
 	return 0;
 }
 
@@ -156,7 +155,7 @@ void simulateSell(Paper* paper, float value, int quantityMinus)
         printf("\nInvalid number, you cannot sell more than you have\n");
 		return;
 	}
-	
+
 	float byUnit = value - paper->averageValue;
 	printf("\nEarned by unit: %0.2f\n", byUnit);
 	printf("\nTotal: %0.2f\n", byUnit * quantityMinus);
@@ -169,7 +168,7 @@ void simulateBuy(Paper* paper, float value, int quantityPlus)
         printf("\nInvalid number, you can't buy less than 1");
 		return;
 	}
-	
+
 	float byUnit = (value * quantityPlus + paper->averageValue * paper->quantity) / paper->quantity + quantityPlus;
 	printf("\nAvg. value by unit: %0.2f\n", byUnit);
 	printf("\nTotal: %0.2f\n", byUnit * quantityPlus);

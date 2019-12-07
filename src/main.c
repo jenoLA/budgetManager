@@ -59,11 +59,8 @@ int main(const int argc, char const *argv[])
 
 			if(paper)
 			{
-				if(!strcmp(argv[opt2_], "-b") || !strcmp(argv[opt2_], "--buy"))
-					failed = buyPaper(list, paper, value, quantity);
-
-				else if(!strcmp(argv[opt2_], "-s") || !strcmp(argv[opt2_], "--sell"))
-					failed = sellPaper(list, paper, value, quantity);
+				else if(!strcmp(argv[opt2_], "-t") || !strcmp(argv[opt2_], "--trade"))
+					failed = trade(list, paper, value, quantity);
 
 				else if(!strcmp(argv[opt2_], "-B") || !strcmp(argv[opt2_], "--simulate-buy"))
 					simulateBuy(paper, value, quantity);
@@ -81,7 +78,6 @@ int main(const int argc, char const *argv[])
 		if(!failed)
 		{
 			memccpy(path + strlen(path), file, '\0', FILE_SIZE);
-				printf("path: %s\n", path);
 			saveList(list, path);
 		}
 

@@ -138,7 +138,7 @@ void mainMenu(char* path, char const* file)
 	{
 		failed = 1;// gonna be defined to 1 in each iteration to know if a entry was valid or not
 
-		printf("N)ew paper  L)ist papers  U)pdate paper  P)retend action  D)elete paper  Q)uit  S)ave\n");
+		printf("N)ew paper  L)ist papers  T)rade  P)retend action  D)elete paper  Q)uit  S)ave\n");
 
 		scanf(" %c", &option);
 
@@ -162,7 +162,7 @@ void mainMenu(char* path, char const* file)
 			failed = addPaper(list, createPaper(code, value, quantity));
 		}
 
-		else if(option == 'u')
+		else if(option == 't')
 		{
 			char code[6];
 			printf("Code: ");
@@ -172,35 +172,19 @@ void mainMenu(char* path, char const* file)
 			
 			if (paper)
 			{
-				float price; //for both situations
-				float quantityMinus;
-				
-				printf("Quantity selled: ");
-				scanf(" %f", &quantityMinus);
-				
-				if (quantityMinus > 0)
-				{
-					printf("Value of the paper selled: ");
-					scanf(" %f", &price); //sell price
-					failed = sellPaper(list, paper, price, quantityMinus);
-                }
+				float value; //for both situations
+				int quantity;
 
-                //buy part
-                else
-                {
-                    float quantityPlus;
-                    printf("Quantity brought: ");
-                    scanf(" %f", &quantityPlus);
+				printf("use a positive value for buy or negative to sell\n");
+				printf("Quantity: ");
+				scanf(" %d", &quantity);
+				
+				printf("value by unit: ");
+				scanf(" %f", &value);
 
-                    if (quantityPlus > 0)
-                    {
-                        printf("\nvalue by unit: ");
-                        scanf(" %f", &price);
-                        failed = buyPaper(list, paper, price, quantityPlus);
-                    }
-                }
+				trade(list, paper, value, quantity);
 			}
-		}	
+		}
 
 		else if (option == 'd')
 		{

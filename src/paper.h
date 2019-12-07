@@ -19,11 +19,7 @@ int deletePaper(List* list, char *code);
 // print all the info about the papers
 void listPapers(Paper* current);
 
-//update paper selling him
-int sellPaper(List* list, Paper* paper, float value, int quantity);
-
-//update paper buying him
-int buyPaper(List* list, Paper* paper, float value, int quantity);
+int trade(List* list, Paper* paper, float value, int quantity);
 
 // simulate a trade
 void simulateSell(Paper* paper, float value, int quantityMinus);
