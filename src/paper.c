@@ -148,6 +148,29 @@ int trade(List* list, Paper* paper, float value, int quantity)
 	return 0;
 }
 
+void simulateTrade(Paper* paper, float value, int quantity)
+{
+	if(quantity == 0) return;
+
+	float avgValue, percentage;
+	unsigned int totalQuantity = quantity + paper->actualQuantity;
+
+	if(quantity > 0)
+	{
+		totalQuantity = quantity + paper->actualQuantity;
+		avgValue = (value * quantity + paper->averageValue * paper->actualQuantity) / totalQuantity;
+		percentage = avgValue / paper->averageValue * 100 - 100;
+		printf("\nAvg. value by unit: %0.2f (+%0.1f%%)\n", avgValue, percentage);
+		printf("Total: %0.2f R$\n\n", avgValue * totalQuantity);
+		return;
+	}
+
+	avgValue = value - paper->averageValue;
+	percentage = value / paper->averageValue * 100 - 100;
+	printf("\nEarned by unit: %0.2f (%0.1f%%)\n", avgValue, percentage);
+	printf("Total: %0.2f R$\n\n", value * quantity * - 1);
+}
+
 void simulateSell(Paper* paper, float value, int quantityMinus)
 {	
 	if (quantityMinus > paper->actualQuantity)

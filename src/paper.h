@@ -21,6 +21,7 @@ void listPapers(Paper* current);
 
 int trade(List* list, Paper* paper, float value, int quantity);
 
+void simulateTrade(Paper* paper, float value, int quantity);
 // simulate a trade
 void simulateSell(Paper* paper, float value, int quantityMinus);
 
