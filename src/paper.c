@@ -10,7 +10,7 @@ List* initList(char* path, char const* file)
 	if (file)
 	{
 		char filePath[PATH_SIZE];
-		memccpy(memccpy(filePath, path, '\0', PATH_SIZE) -1, file, '\0', PATH_SIZE);
+		memccpy(memccpy(filePath, path, '\0', PATH_SIZE) - 1, file, '\0', PATH_SIZE);
 		return readList(filePath);
 	}
 
@@ -67,8 +67,7 @@ int addPaper(List* list, Paper* paper)
 	
 	Paper* current = list->start;
 	
-	for(register int i = 1; i < list->size; i++)
-		current = current->next;
+	for(register int i = 1; i < list->size; i++, current = current->next);
 
 	current->next = paper;
 	list->totalValue += paper->averageValue * paper->quantity;
@@ -80,8 +79,7 @@ int deletePaper(List* list, char *code)
 {
 	Paper* paperToDelete = searchPaper(list->start, code);
 
-	if (!paperToDelete)
-		return 1;
+	if (!paperToDelete) return 1;
 
 	if (list->start == paperToDelete)
 		list->start = paperToDelete->next;
@@ -96,7 +94,7 @@ int deletePaper(List* list, char *code)
 		before->next = paperToDelete->next;
 	}
 	
-	printf("paper %s deleted\n", paperToDelete->code);
+	printf("\"%s\" deleted\n", paperToDelete->code);
 	free(paperToDelete);
 	list->size--;
 	return 0;
@@ -107,7 +105,7 @@ void listPapers(Paper* current)
 	while(current)
 	{
 		printf("\nPaper code: %s\t\t\t%s\n", current->code, current->dayOfBuy);
-		printf(" Average value by unit: %0.2f R$\n", current->averageValue);
+		printf(" Avg. value by unit: %0.2f R$\n", current->averageValue);
 		printf(" Current quantity: %i\n", current->actualQuantity);
 
         if (current->actualQuantity == 0)
@@ -124,8 +122,10 @@ void listPapers(Paper* current)
 int sellPaper(List* list, Paper* paper, float value, int quantityMinus)
 {
 	if (quantityMinus > paper->actualQuantity)
+	{
+		printf("\nInvalid entry, you can't sell more than you have");
 		return 1; //invalid entry
-
+	}
 	setWeek(paper->dayOfSell);
 	paper->actualQuantity -= quantityMinus;
 	paper->earned += (value * quantityMinus);
@@ -135,6 +135,11 @@ int sellPaper(List* list, Paper* paper, float value, int quantityMinus)
 
 int buyPaper(List* list, Paper* paper, float value, int quantityPlus)
 {
+	if(quantityPlus < 1)
+	{
+		printf("\nInvalid entry, you can't buy less than 1");
+		return 1;
+	}
 	setWeek(paper->dayOfBuy);
 	setWeek(list->lastModified);
 	list->totalValue += value * quantityPlus;
@@ -148,24 +153,24 @@ void simulateSell(Paper* paper, float value, int quantityMinus)
 {	
 	if (quantityMinus > paper->actualQuantity)
     {
-        printf("\ninvalid number, you cannot sell more than you have\n");
+        printf("\nInvalid number, you cannot sell more than you have\n");
 		return;
 	}
 	
 	float byUnit = value - paper->averageValue;
-	printf("\nearned by unit: %0.2f\n", byUnit);
-	printf("\ntotal: %0.2f\n", byUnit * quantityMinus);
+	printf("\nEarned by unit: %0.2f\n", byUnit);
+	printf("\nTotal: %0.2f\n", byUnit * quantityMinus);
 }
 
 void simulateBuy(Paper* paper, float value, int quantityPlus)
 {	
 	if (quantityPlus > 0)
     {
-        printf("\ninvalid number, you can't buy zero or a non-positive number\n");
+        printf("\nInvalid number, you can't buy less than 1");
 		return;
 	}
 	
 	float byUnit = (value * quantityPlus + paper->averageValue * paper->quantity) / paper->quantity + quantityPlus;
-	printf("\naverage value by unit: %0.2f\n", byUnit);
-	printf("\ntotal: %0.2f\n", byUnit * quantityPlus);
+	printf("\nAvg. value by unit: %0.2f\n", byUnit);
+	printf("\nTotal: %0.2f\n", byUnit * quantityPlus);
 }
