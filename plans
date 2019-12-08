@@ -1,1 +1,13 @@
 make a TUI, and display a better menu
+
+make a getCode function to facilitate my life
+
+have a resume function that has a resume of what was done in the week
+
+fix the restore and backup functions to work with less memccpy calls
+
+have a --info function that details a paper
+
+refator string operations and how functions react to it
+
+make backup and restore functions work with numbers, and print the informations about each file of backup
