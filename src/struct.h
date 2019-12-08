@@ -6,7 +6,7 @@
 
 typedef struct paper_t
 {
-	char code[7];
+	char code[CODE_SIZE];
 	float averageValue;
 	float earned;
 	unsigned int quantity;
