@@ -5,6 +5,8 @@ void welcomeMessage();
 
 void printFilesInFolder(char* path);
 
+void copyContent(char *source, char *destination);
+
 void backup(char *path, char *file);
 
 void restore(char *path, char *file);

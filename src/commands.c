@@ -20,6 +20,30 @@ void welcomeMessage()
 	printf("==========================\n\n");
 }
 
+void copyContent(char* destination, char* source)
+{
+	FILE* src = fopen(source, "rb");
+	if(!src)
+	{
+		printf("Invalid file\n");
+		return;
+	}
+
+	FILE* dest = fopen(destination, "wb");
+	if(!dest)
+	{
+		printf("Invalid file\n");
+		return;
+	}
+
+	char ch;
+	while((ch = fgetc(src)) != EOF)
+		fputc(ch, dest);
+
+	fclose(src);
+	fclose(dest);
+}
+
 void printFilesInFolder(char* path)
 {
 	DIR* dir;
@@ -38,17 +62,7 @@ void printFilesInFolder(char* path)
 }
 
 void backup(char *path, char *file)
-{
-	char source_filename[PATH_SIZE];
-	memccpy(memccpy(source_filename, path, '\0', PATH_SIZE) - 1, file, '\0', PATH_SIZE);
-
-	FILE *src = fopen(source_filename, "r");
-	if (!src)
-	{
-		printf("\"%s\" not found\n", file);
-		exit(1);	
-	}
-
+{// change the whole thing, too much string handling for too little
 	char date[16];
 	struct tm* ts;
 	time_t now = time(NULL);
@@ -64,41 +78,56 @@ void backup(char *path, char *file)
 			, date, '\0', PATH_SIZE
 	);
 
-	printf("bakfile: %s\n", bakfile);
-	FILE *bkp = fopen(bakfile, "w+");
-	if(!bkp)
-	{
-		if(!mkdir(bak, 0700)) backup(path, file);
+	char source[PATH_SIZE];
+	memccpy(memccpy(source, path, '\0', PATH_SIZE) - 1, file, '\0', PATH_SIZE);
 
-		else
-		{
-			printf("some error happened, please report\n");
-			exit(1);
-		}
-	}
+	if(!mkdir(bak, 0700)) backup(path, file);
 
-	char ch;
-	while((ch = fgetc(src)) != EOF )
-	{
-		fputc(ch, bkp);
-	}
-
-	fclose(bkp);
-	fclose(src);
+	copyContent(bakfile, source);
 }
 
-// improve and verify if it is valid
 void restore(char *path, char *file)
 {
-	// same as backup, also show possibility of show the contents, papers
-//	char bak[PATH_SIZE];
-//	strncpy(bak, ".", 2);
-//	strncat(bak, file, PATH_SIZE);
-//	List* list = initList(path, bak);
-//	saveList(list, strncat(path, file, PATH_SIZE));
-//
-//	printf("%s restored!\n", file);
-//	exit(0);
+	DIR* dir;
+	struct dirent* entry;
+	char files[10][PATH_SIZE];
+	unsigned int index = 1;
+
+    if ((dir = opendir(path)))
+	{
+        while ((entry = readdir(dir)))
+		{
+			if (!memcmp(entry->d_name, file, strlen(file)))
+			{
+				printf("%d) %s\n", index, entry->d_name);
+				memccpy(memccpy(files[index++], path, '\0', PATH_SIZE) - 1, entry->d_name, '\0', FILE_SIZE);
+			}
+		}
+		closedir(dir);
+
+		if(index == 1)
+		{
+			printf("you have no backups for this file\n");
+			return;
+		}
+
+		if(index > 2)
+		{
+			printf("select the backup through the index number: ");
+			scanf(" %u", &index);
+		}
+
+		memccpy(memccpy(files[0], path, '\0', PATH_SIZE) - 6, file, '\0', PATH_SIZE);
+
+		copyContent(files[0], files[index]);
+	}
+
+	else
+	{
+		if(!mkdir(path, 0700)) return;
+
+		else printf("you have no backups for this file\n");
+	}
 }
 
 void deleteFile(char *path, char *file)
