@@ -36,9 +36,19 @@ void copyContent(char* destination, char* source)
 		return;
 	}
 
-	char ch;
-	while((ch = fgetc(src)) != EOF)
-		fputc(ch, dest);
+	// going to the end to know how much allocate
+	if(fseek(src, 0L, SEEK_END) == 0)
+	{
+		long bufsize = ftell(src);
+
+		rewind(src);
+
+		char *buf = malloc(sizeof(char) * bufsize);
+
+		fread(buf, sizeof(char), bufsize, src);
+		fwrite(buf, sizeof(char), bufsize, dest);
+	}
+	else printf("some error happened, report this\n");
 
 	fclose(src);
 	fclose(dest);
