@@ -12,12 +12,10 @@
 
 void welcomeMessage()
 {
-	printf("\033[m");
-	printf("\n=========================");
 	printf("\033[36m");
-	printf(" Budget Manager ");
+	printf(" Budget Manager");
 	printf("\033[m");
-	printf("==========================\n\n");
+	printf("\n\n");
 }
 
 void copyContent(char* destination, char* source)
