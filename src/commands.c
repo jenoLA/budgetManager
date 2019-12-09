@@ -191,13 +191,17 @@ void mainMenu(char* path, char const* file)
 			printf("Code: ");
 			scanf(" %s", code);
 
-			printf("Unitary value: ");
-			scanf(" %f", &value);
+			if(!searchPaper(list->start, code))
+			{
+				printf("Unitary value: ");
+				scanf(" %f", &value);
 
-			printf("Quantity: ");
-			scanf(" %i", &quantity);
-			printf("\n");
-			failed = addPaper(list, createPaper(code, value, quantity));
+				printf("Quantity: ");
+				scanf(" %i", &quantity);
+				printf("\n");
+				failed = addPaper(list, createPaper(code, value, quantity));
+			}
+			else printf("\"%s\" already exists", code);
 		}
 
 		else if(option == 't')
