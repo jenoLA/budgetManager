@@ -5,18 +5,6 @@
 
 #include "paper.h"
 
-List* initList(char* path, char const* file)
-{
-	if (file)
-	{
-		char filePath[PATH_SIZE];
-		memccpy(memccpy(filePath, path, '\0', PATH_SIZE) - 1, file, '\0', PATH_SIZE);
-		return readList(filePath);
-	}
-
-	return malloc(sizeof(List));
-}
-
 Paper* createPaper(char* code, float value, int quantity)
 {
 	Paper* temp = malloc(sizeof(Paper));

@@ -1,9 +1,6 @@
 #pragma once
 #include "struct.h"
 
-// create a list of papers
-List* initList(char* path, char const* file); 
-
 // user will be asked for the required data outside the function
 Paper* createPaper(char* code, float value, int quantity);
 

@@ -28,6 +28,8 @@ typedef struct list_t
 //return a string in the format dd/mm/yy DoW
 void setWeek(char* date);
 
+List* initList(char* path, char const* file);
+
 List* readList(char const *path);
 
 void saveList(List* list, char const* path);

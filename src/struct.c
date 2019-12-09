@@ -14,12 +14,24 @@ void setWeek(char* date)
 	strftime(date, DATE_SIZE, "%d/%m/%y %a", ts);
 }
 
+List* initList(char* path, char const* file)
+{
+	if (file)
+	{
+		char filePath[PATH_SIZE];
+		memccpy(memccpy(filePath, path, '\0', PATH_SIZE) - 1, file, '\0', PATH_SIZE);
+		return readList(filePath);
+	}
+
+	return malloc(sizeof(List));
+}
+
 List* readList(char const* path)
 {
 	FILE* pf;
 	List* list = malloc(sizeof(List));
 	pf = fopen(path, "r");
-	
+
 	if (!pf)
     {    
 		printf("File data not found\n");
