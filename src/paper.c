@@ -127,11 +127,7 @@ int trade(List* list, Paper* paper, float value, int quantity)
 	else
 	{
 		unsigned int q = quantity * -1;
-		if(q > paper->actualQuantity)
-		{
-			printf("Can't sell more than you have\n");
-			return 1;
-		}
+		if(q > paper->actualQuantity) return 1;
 
 		paper->actualQuantity -= q;
 
