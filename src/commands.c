@@ -179,49 +179,32 @@ void mainMenu(char* path, char const* file)
 	{
 		failed = 1;// gonna be defined to 1 in each iteration to know if a entry was valid or not
 
-		printf("N)ew paper  L)ist papers  T)rade  P)retend trade  D)elete paper  Q)uit  S)ave\n");
+		printf("T)rade  L)ist papers  P)retend trade  D)elete paper  Q)uit  S)ave\n");
 
 		scanf(" %c", &option);
 		clean_stdin();
 
 		if (option > 64 && option < 91) option += 32;
 
-		if (option == 'n')
+		if(option == 't')
 		{
 			printf("Code: ");
 			scanf(" %s", code);
 
-			if(!searchPaper(list->start, code))
-			{
-				printf("Unitary value: ");
-				scanf(" %f", &value);
+			printf("use a positive value for buy or negative to sell\n");
+			printf("Quantity: ");
+			scanf(" %i", &quantity);	
 
-				printf("Quantity: ");
-				scanf(" %i", &quantity);
-				printf("\n");
-				failed = addPaper(list, createPaper(code, value, quantity));
-			}
-			else printf("\"%s\" already exists", code);
-		}
+			printf("Unitary value: ");
+			scanf(" %f", &value);
 
-		else if(option == 't')
-		{
-			printf("Code: ");
-			scanf(" %s", code);
+			printf("\n");
 
 			Paper* paper = searchPaper(list->start, code);
 			
-			if (paper)
-			{
-				printf("use a positive value for buy or negative to sell\n");
-				printf("Quantity: ");
-				scanf(" %d", &quantity);
+			if (paper) failed = trade(list, paper, value, quantity);
 
-				printf("value by unit: ");
-				scanf(" %f", &value);
-
-				trade(list, paper, value, quantity);
-			}
+			else failed = addPaper(list, createPaper(code, value, quantity)); 
 		}
 
 		else if (option == 'd')
