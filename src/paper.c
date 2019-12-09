@@ -103,7 +103,7 @@ void listPapers(Paper* current)
 {
 	while(current)
 	{
-		printf("\nPaper code: %s\t\t\t%s\n", current->code, current->dayOfBuy);
+		printf("\nCode: %s\t\t\t%s\n", current->code, current->dayOfBuy);
 		printf(" Avg. value by unit: %0.2f R$\n", current->averageValue);
 		printf(" Current quantity: %i\n", current->actualQuantity);
 
@@ -111,7 +111,7 @@ void listPapers(Paper* current)
 			printf(" Total value: %0.2f R$\n", current->averageValue * current->quantity);
 
 		if (current->earned)
-			printf(" Earned: %0.2f R$\t\t\t%s\n", current->earned, current->dayOfSell);
+			printf(" Earned: %0.2f R$\t\t%s\n", current->earned, current->dayOfSell);
 
 		current = current->next;
 	}
@@ -136,6 +136,12 @@ int trade(List* list, Paper* paper, float value, int quantity)
 
 	else
 	{
+		if((quantity * -1) < paper->actualQuantity)
+		{
+			printf("Can't sell more than you have\n");
+			return 1;
+		}
+
 		paper->actualQuantity += quantity;
 
 		paper->earned -= (value * quantity);
@@ -166,6 +172,6 @@ void simulateTrade(Paper* paper, float value, int quantity)
 
 	avgValue = value - paper->averageValue;
 	percentage = value / paper->averageValue * 100 - 100;
-	printf("\nEarned by unit: %0.2f (%0.1f%%)\n", avgValue, percentage);
+	printf("\nby unit: %0.2f (%0.1f%%)\n", avgValue, percentage);
 	printf("Total: %0.2f R$\n\n", value * quantity * - 1);
 }
