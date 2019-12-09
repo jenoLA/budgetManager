@@ -66,10 +66,11 @@ int main(const int argc, char const *argv[])
 				else if(!strcmp(argv[opt2_], "-T") || !strcmp(argv[opt2_], "--simulate-trade"))
 				{
 					simulateTrade(paper, value, quantity);
+					exit(0);
 				}
 			}
 
-			if(!strcmp(argv[opt2_], "-b") || !strcmp(argv[opt2_], "--buy"))
+			else if(!strcmp(argv[opt2_], "-t") || !strcmp(argv[opt2_], "--trade"))
 				failed = addPaper(list, createPaper(code, value, quantity));
 
 		}
@@ -92,8 +93,10 @@ int main(const int argc, char const *argv[])
 		memccpy(file, argv[opt2_], '\0', FILE_SIZE);
 
 		if(!strcmp(argv[opt1_], "-r") || !strcmp(argv[opt1_], "--restore"))
+		{
+			memccpy(path + strlen(path), ".bck/", '\0', FILE_SIZE);
 			restore(path, file);
-
+		}
 		else if(!strcmp(argv[opt1_], "-b") || !strcmp(argv[opt1_], "--backup"))
 			backup(path, file);
 
