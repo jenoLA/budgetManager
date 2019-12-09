@@ -108,6 +108,8 @@ void listPapers(Paper* current)
 
 int trade(List* list, Paper* paper, float value, int quantity)
 {
+	if(value <= 0) return 1;
+
 	if(quantity == 0) return 1;
 
 	if(quantity > 0)
@@ -124,16 +126,17 @@ int trade(List* list, Paper* paper, float value, int quantity)
 
 	else
 	{
-		if((quantity * -1) < paper->actualQuantity)
+		unsigned int q = quantity * -1;
+		if(q > paper->actualQuantity)
 		{
 			printf("Can't sell more than you have\n");
 			return 1;
 		}
 
-		paper->actualQuantity += quantity;
+		paper->actualQuantity -= q;
 
-		paper->earned -= (value * quantity);
-		list->earned -= (value * quantity);
+		paper->earned += (value * q);
+		list->earned += (value * q);
 		setWeek(paper->dayOfSell);
 	}
 
