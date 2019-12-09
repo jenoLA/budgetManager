@@ -102,6 +102,6 @@ int main(const int argc, char const *argv[])
 
 		else if(!strcmp(argv[opt1_], "-d") || !strcmp(argv[opt1_], "--delete"))
 			deleteFile(path, file);
-	
+
 	}
 }
