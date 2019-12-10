@@ -92,7 +92,7 @@ void listPapers(Paper* current)
 	while(current)
 	{
 		printf("\nCode: %s\t\t\t%s\n", current->code, current->dayOfBuy);
-		printf(" Avg. value by unit: %0.2f R$\n", current->averageValue);
+		printf(" Unitary value: %0.2f R$\n", current->averageValue);
 		printf(" Current quantity: %i\n", current->actualQuantity);
 
         if (current->actualQuantity == 0)
