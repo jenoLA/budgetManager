@@ -20,6 +20,10 @@ int main(const int argc, char const *argv[])
 
 	if (argc == 1) mainMenu(path, NULL);
 
+	else if(!strcmp(argv[opt1_], "-h") || !strcmp(argv[opt1_], "--help"))
+	{
+		helpMessage();
+	}
 	else if(!strcmp(argv[opt1_], "-l") || !strcmp(argv[opt1_], "--list"))
 	{
 		printFilesInFolder(path);
