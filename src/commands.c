@@ -18,6 +18,46 @@ void welcomeMessage()
 	printf("\n\n");
 }
 
+void helpMessage()
+{
+	const char const* turnTextYellow = "\033[33m";
+	const char const* turnTextBlue = "\033[36m";
+	const char const* turnTextWhite = "\033[m";
+	printf("A command line utility to manage financial actives.\n");
+	printf("You can use it by its menu or via command line parameters.\n");
+	printf("[usage]: bgtmanager %s[PARAMETERS] %s...%s\n", turnTextBlue, turnTextYellow, turnTextWhite);
+	printf("         bgtmanager %s<datafile> %s...%s\n", turnTextYellow, turnTextBlue, turnTextWhite);
+	printf(" with no arguments goes to menu\n\n");
+	printf("%s[PARAMETERS]%s:\n\n", turnTextBlue, turnTextWhite);
+
+	printf("%s -l, --list%s\n", turnTextBlue, turnTextWhite);
+	printf("	print out all saved files\n\n");
+
+	printf("%s -r, --restore %s<data file>%s\n", turnTextBlue, turnTextYellow, turnTextWhite);
+	printf("	restore the given data file to a early state\n\n");
+
+	printf("%s -d, --delete %s<data file>%s\n", turnTextBlue, turnTextYellow, turnTextWhite);
+	printf("	delete the given data file\n\n");
+
+	printf("%s -b, --backup %s<data file>%s\n", turnTextBlue, turnTextYellow, turnTextWhite);
+	printf("	backup the given data file\n\n");
+
+	printf("%s <datafile> %s...%s :\n", turnTextYellow, turnTextBlue, turnTextWhite);
+	printf("	load given data file and if no more argument is provided goes to the menu\n\n");
+
+	printf("%s <datafile> %s-l, --list%s\n", turnTextYellow, turnTextBlue, turnTextWhite);
+	printf("	print out all the actives in the file\n\n");
+
+	printf("%s <datafile> %s-d, --delete <code>%s\n", turnTextYellow, turnTextBlue, turnTextWhite);
+	printf("	delete an existing paper\n\n");
+
+	printf("%s <data file> %s-t, --trade <code> <value> <quantity>%s\n", turnTextYellow, turnTextBlue, turnTextWhite);
+	printf("	trade an existing paper, negative quantity means sell, positive quantity means buy\n\n");
+
+	printf("%s <data file> %s-T, --simulate-trade <code> <value> <quantity>%s\n", turnTextYellow, turnTextBlue, turnTextWhite);
+	printf("	simulate a trade of an existing paper\n\n");
+}
+
 void copyContent(char* destination, char* source)
 {
 	FILE* src = fopen(source, "rb");

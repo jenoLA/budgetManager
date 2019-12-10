@@ -3,6 +3,8 @@
 
 void welcomeMessage();
 
+void helpMessage();
+
 void printFilesInFolder(char* path);
 
 void copyContent(char *source, char *destination);
