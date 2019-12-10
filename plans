@@ -1,15 +1,31 @@
 make a TUI, and display a better menu
+	ncurses
 
 do a history place where paper with quantity currently 0 stays, kind of a history, resume should be related
+	history()
 
-make a getCode function to facilitate my life
-
+maybe{
+	make a getCode function to facilitate my life
+		getCode()
+		getValue()
+		getQuantity()
+}
 have a resume function that has a resume of what was done in the week
+	maybe{
+		enum{week, day, month, year};
+	}
+	resume(int period)
 
 fix the restore and backup functions to work with less memccpy calls
+	maybe{
+		make backup and restore functions work with numbers, and print the informations about each file of backup
+	}
+	print out come basic info of what is in the file rather than the time
+	maybe{if no name was passed just put the date in the file name}
 
 have a --info function that details a paper
+	showPaper(Paper *paper)
 
 refator string operations and how functions react to it
+	see how make it more simple and understandable
 
-make backup and restore functions work with numbers, and print the informations about each file of backup
