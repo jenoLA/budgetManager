@@ -30,7 +30,7 @@ List* readList(char const* path)
 {
 	FILE* pf;
 	List* list = malloc(sizeof(List));
-	pf = fopen(path, "r");
+	pf = fopen(path, "rb");
 
 	if (!pf)
     {    
@@ -45,8 +45,8 @@ List* readList(char const* path)
 	}
 
 	fscanf(pf, "totalValue: %f\n", &(list->totalValue));
-
 	fscanf(pf, "earned: %f\n", &(list->earned));
+	fscanf(pf, "lastModified: \"%[^\"]\"\n", list->lastModified);
 	fscanf(pf, "\n");
 
 	Paper** paper = &list->start;
@@ -74,7 +74,7 @@ List* readList(char const* path)
 void saveList(List* list, char const* path)
 {
 	FILE* pf;
-	pf = fopen(path, "w+");
+	pf = fopen(path, "wb+");
 	
 	if (!pf)
 	{
@@ -85,6 +85,7 @@ void saveList(List* list, char const* path)
 	fprintf(pf, "size: %u\n", list->size);
 	fprintf(pf, "totalValue: %f\n", list->totalValue);
 	fprintf(pf, "earned: %f\n", list->earned);
+	fprintf(pf, "lastModified: \"%s\"\n", list->lastModified);
 	fprintf(pf, "\n");
 
 	Paper** paper = &list->start;
