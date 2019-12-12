@@ -26,7 +26,7 @@ void helpMessage()
 	printf("A command line utility to manage financial actives.\n");
 	printf("You can use it by its menu or via command line parameters.\n");
 	printf("[usage]: bgtmanager %s[PARAMETERS] %s...%s\n", turnTextBlue, turnTextYellow, turnTextWhite);
-	printf("         bgtmanager %s<datafile> %s...%s\n", turnTextYellow, turnTextBlue, turnTextWhite);
+	printf("         bgtmanager %s<data file> %s...%s\n", turnTextYellow, turnTextBlue, turnTextWhite);
 	printf(" with no arguments goes to menu\n\n");
 	printf("%s[PARAMETERS]%s:\n\n", turnTextBlue, turnTextWhite);
 
@@ -42,13 +42,13 @@ void helpMessage()
 	printf("%s -b, --backup %s<data file>%s\n", turnTextBlue, turnTextYellow, turnTextWhite);
 	printf("	backup the given data file\n\n");
 
-	printf("%s <datafile> %s...%s :\n", turnTextYellow, turnTextBlue, turnTextWhite);
+	printf("%s <data file> %s...%s :\n", turnTextYellow, turnTextBlue, turnTextWhite);
 	printf("	load given data file and if no more argument is provided goes to the menu\n\n");
 
-	printf("%s <datafile> %s-l, --list%s\n", turnTextYellow, turnTextBlue, turnTextWhite);
+	printf("%s <data file> %s-l, --list%s\n", turnTextYellow, turnTextBlue, turnTextWhite);
 	printf("	print out all the actives in the file\n\n");
 
-	printf("%s <datafile> %s-d, --delete <code>%s\n", turnTextYellow, turnTextBlue, turnTextWhite);
+	printf("%s <data file> %s-d, --delete <code>%s\n", turnTextYellow, turnTextBlue, turnTextWhite);
 	printf("	delete an existing paper\n\n");
 
 	printf("%s <data file> %s-t, --trade <code> <value> <quantity>%s\n", turnTextYellow, turnTextBlue, turnTextWhite);
