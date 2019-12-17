@@ -7,6 +7,8 @@
 
 Paper* createPaper(char* code, float value, int quantity)
 {
+	if (quantity <= 0 || value <= 0) return NULL;
+
 	Paper* temp = malloc(sizeof(Paper));
 	setWeek(temp->dayOfBuy);
 
@@ -41,6 +43,8 @@ Paper* searchPaper(Paper* paper, char *code)
 // puts on the last position
 int addPaper(List* list, Paper* paper)
 {
+	if (!paper) return 1;
+
     memccpy(list->lastModified, paper->dayOfBuy, '\0', DATE_SIZE);
 	list->lastModified[DATE_SIZE - 1] = '\0';
     
@@ -60,6 +64,11 @@ int addPaper(List* list, Paper* paper)
 	list->totalValue += paper->averageValue * paper->quantity;
 	list->size++;
 	return 0;
+}
+
+void showPaper(Paper *paper)
+{
+
 }
 
 int deletePaper(List* list, char *code)

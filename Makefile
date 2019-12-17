@@ -1,4 +1,4 @@
-CC = gcc
+CC = clang
 Cflags = -Wall -Wextra \
 		 -pedantic -pedantic
 

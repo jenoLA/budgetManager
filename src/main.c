@@ -16,7 +16,9 @@ int main(const int argc, char const *argv[])
 {
 	char path[PATH_SIZE];
 	char file[FILE_SIZE];
-	memccpy(memccpy(path, HOME, '\0', PATH_SIZE) - 1, "/.bgtManager/", '\0', PATH_SIZE);
+	char* lastElementCh;
+	lastElementCh = (char*) memccpy(path, HOME, '\0', PATH_SIZE) - 1;
+	memccpy(lastElementCh, "/.bgtManager/", '\0', PATH_SIZE);
 
 	if (argc == 1) mainMenu(path, NULL);
 
@@ -32,7 +34,6 @@ int main(const int argc, char const *argv[])
 	else if(argv[opt1_][0] != '-')
 	{
 		memccpy(file, argv[opt1_], '\0', FILE_SIZE);
-		int failed = 1;
 
 		if(argc == 2) mainMenu(path, file);
 
@@ -48,7 +49,7 @@ int main(const int argc, char const *argv[])
 		{
 			if(!strcmp(argv[opt2_], "-d") || !strcmp(argv[opt2_], "--delete"))
 			{
-				failed = deletePaper(list, (char*) argv[code_]);
+				deletePaper(list, (char*) argv[code_]);
 			}
 		}
 
@@ -57,15 +58,27 @@ int main(const int argc, char const *argv[])
 			char code[CODE_SIZE];
 			memccpy(code, argv[code_], '\0', CODE_SIZE);
 
-			int quantity = atoi(argv[quantity_]);
+			int quantity;
+			if (!sscanf(argv[quantity_], "%i", &quantity))
+			{
+				printf("invalid quantity\n");
+				exit(1);
+			}
+
 			float value = atof(argv[value_]);
+			if (!sscanf(argv[value_], "%f", &value))
+			{
+				printf("invalid value\n");
+				exit(1);
+			}
+
 			Paper* paper = searchPaper(list->start, code);
 
 			if(paper)
 			{
 				if(!strcmp(argv[opt2_], "-t") || !strcmp(argv[opt2_], "--trade"))
 				{
-					failed = trade(list, paper, value, quantity);
+					trade(list, paper, value, quantity);
 				}
 				else if(!strcmp(argv[opt2_], "-T") || !strcmp(argv[opt2_], "--simulate-trade"))
 				{
@@ -75,21 +88,14 @@ int main(const int argc, char const *argv[])
 			}
 
 			else if(!strcmp(argv[opt2_], "-t") || !strcmp(argv[opt2_], "--trade"))
-				failed = addPaper(list, createPaper(code, value, quantity));
-
+			{
+				addPaper(list, createPaper(code, value, quantity));
+			}
 		}
 
-		if(!failed)
-		{
-			memccpy(path + strlen(path), file, '\0', FILE_SIZE);
-			saveList(list, path);
-		}
+		memccpy(path + strlen(path), file, '\0', FILE_SIZE);
+		saveList(list, path);
 
-		else
-		{
-			printf("invalid entry\n");
-			exit(1);
-		}
 	}
 
 	else if (argc == 3)
@@ -102,10 +108,12 @@ int main(const int argc, char const *argv[])
 			restore(path, file);
 		}
 		else if(!strcmp(argv[opt1_], "-b") || !strcmp(argv[opt1_], "--backup"))
+		{
 			backup(path, file);
-
+		}
 		else if(!strcmp(argv[opt1_], "-d") || !strcmp(argv[opt1_], "--delete"))
+		{
 			deleteFile(path, file);
-
+		}
 	}
 }

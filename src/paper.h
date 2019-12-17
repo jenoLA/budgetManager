@@ -13,6 +13,8 @@ int addPaper(List* list, Paper* paper);
 //delete a paper
 int deletePaper(List* list, char *code);
 
+void showPaper(Paper *paper);
+
 // print all the info about the papers
 void listPapers(Paper* current);
 

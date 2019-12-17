@@ -19,7 +19,11 @@ List* initList(char* path, char const* file)
 	if (file)
 	{
 		char filePath[PATH_SIZE];
-		memccpy(memccpy(filePath, path, '\0', PATH_SIZE) - 1, file, '\0', PATH_SIZE);
+		char* lastElementCh;
+
+		lastElementCh = (char*) memccpy(filePath, path, '\0', PATH_SIZE) - 1;
+		memccpy(lastElementCh, file, '\0', PATH_SIZE);
+
 		return readList(filePath);
 	}
 

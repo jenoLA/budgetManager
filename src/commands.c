@@ -20,9 +20,9 @@ void welcomeMessage()
 
 void helpMessage()
 {
-	const char const* turnTextYellow = "\033[33m";
-	const char const* turnTextBlue = "\033[36m";
-	const char const* turnTextWhite = "\033[m";
+	const char* turnTextYellow = "\033[33m";
+	const char* turnTextBlue = "\033[36m";
+	const char* turnTextWhite = "\033[m";
 	printf("A command line utility to manage financial actives.\n");
 	printf("You can use it by its menu or via command line parameters.\n");
 	printf("[usage]: bgtmanager %s[PARAMETERS] %s...%s\n", turnTextBlue, turnTextYellow, turnTextWhite);
@@ -118,16 +118,16 @@ void backup(char *path, char *file)
 	strftime(date, 16, "\040%d-%m-%y\040%H:%M", ts);
 
 	char bak[PATH_SIZE], bakfile[PATH_SIZE];
-	memccpy(memccpy(bak, path, '\0', PATH_SIZE) - 1, ".bck/", '\0', PATH_SIZE);
-	memccpy(
-			memccpy(
-				memccpy(bakfile, bak, '\0', PATH_SIZE) - 1
-				, file, '\0', PATH_SIZE) - 1
-			, date, '\0', PATH_SIZE
-	);
+	char* lastElementCh = (char*) memccpy(bak, path, '\0', PATH_SIZE) - 1;
+	lastElementCh = (char*) memccpy(lastElementCh, ".bck/", '\0', PATH_SIZE) - 1;
+
+	lastElementCh = (char*) memccpy(bakfile, bak, '\0', PATH_SIZE) - 1;
+	lastElementCh = (char*) memccpy(lastElementCh, file, '\0', PATH_SIZE) - 1;
+	lastElementCh = (char*) memccpy(lastElementCh, date, '\0', PATH_SIZE);
 
 	char source[PATH_SIZE];
-	memccpy(memccpy(source, path, '\0', PATH_SIZE) - 1, file, '\0', PATH_SIZE);
+	lastElementCh = (char*) memccpy(source, path, '\0', PATH_SIZE) - 1;
+	memccpy(lastElementCh, file, '\0', PATH_SIZE);
 
 	if(!mkdir(bak, 0700)) backup(path, file);
 
@@ -140,6 +140,7 @@ void restore(char *path, char *file)
 	struct dirent* entry;
 	char files[10][PATH_SIZE];
 	unsigned int index = 1;
+	char* lastElementCh;
 
     if ((dir = opendir(path)))
 	{
@@ -148,7 +149,8 @@ void restore(char *path, char *file)
 			if (!memcmp(entry->d_name, file, strlen(file)))
 			{
 				printf("%d) %s\n", index, entry->d_name);
-				memccpy(memccpy(files[index++], path, '\0', PATH_SIZE) - 1, entry->d_name, '\0', FILE_SIZE);
+				lastElementCh = (char*) memccpy(files[index++], path, '\0', PATH_SIZE) - 1;
+				memccpy(lastElementCh, entry->d_name, '\0', FILE_SIZE);
 			}
 		}
 		closedir(dir);
@@ -165,7 +167,8 @@ void restore(char *path, char *file)
 			scanf(" %u", &index);
 		}
 
-		memccpy(memccpy(files[0], path, '\0', PATH_SIZE) - 6, file, '\0', PATH_SIZE);
+		lastElementCh = (char*) memccpy(files[0], path, '\0', PATH_SIZE) - 6;
+		memccpy(lastElementCh, file, '\0', PATH_SIZE);
 
 		copyContent(files[0], files[index]);
 	}
@@ -181,7 +184,10 @@ void restore(char *path, char *file)
 void deleteFile(char *path, char *file)
 {
 	char toDelete[PATH_SIZE];
-	memccpy(memccpy(toDelete, path, '\0', PATH_SIZE) - 1, file, '\0', PATH_SIZE);
+	char* lastElementCh;
+	lastElementCh = (char*) memccpy(toDelete, path, '\0', PATH_SIZE) - 1;
+	memccpy(lastElementCh, file, '\0', PATH_SIZE);
+
 	if (!remove(toDelete))
 	{
 		printf("\"%s\" deleted\n", file);
