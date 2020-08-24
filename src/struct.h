@@ -6,23 +6,23 @@
 
 typedef struct paper_t
 {
-	char code[CODE_SIZE];
-	float averageValue;
-	float earned;
-	unsigned int quantity;
-	unsigned int actualQuantity;
-	char dayOfBuy[DATE_SIZE];
-	char dayOfSell[DATE_SIZE];
-	struct paper_t* next;
+    char code[CODE_SIZE];
+    float averageValue;
+    float earned;
+    unsigned int quantity;
+    unsigned int actualQuantity;
+    char dayOfBuy[DATE_SIZE];
+    char dayOfSell[DATE_SIZE];
+    struct paper_t* next;
 } Paper;
 
 typedef struct list_t
 {
-	Paper* start;
-	unsigned int size;
-	float totalValue;
-	float earned;
-	char lastModified[DATE_SIZE];
+    Paper* start;
+    unsigned int size;
+    float totalValue;
+    float earned;
+    char lastModified[DATE_SIZE];
 } List;
 
 //return a string in the format dd/mm/yy DoW
